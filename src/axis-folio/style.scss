@@ -1,0 +1,85 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-create-block-axis-folio {
+	color: #fff;
+	padding: 2px;
+}
+
+/* --- Masonry Responsive Logic --- */
+        .masonry-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            column-gap: 20px;
+            /* Default for Big Screens */
+            column-count: 2;
+        }
+
+        /* Desktop / Tablet Landscape */
+        @media (max-width: 1024px) {
+            .masonry-container {
+                column-count: 3;
+            }
+        }
+
+        /* Mobile / Small Screens */
+        @media (max-width: 600px) {
+            .masonry-container {
+                column-count: 1;
+            }
+        }
+
+        /* --- Card Styling --- */
+        .card {
+            background: #ffffff;
+            display: inline-block; /* Prevents card from breaking between columns */
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out;
+            border: 1px solid #e1e4e8;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .card img {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #2d3436;
+            margin-bottom: 12px;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag {
+            background: #6c5ce7;
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
