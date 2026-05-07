@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       Axis Folio
- * Description:       Native Masonry Portfolio Block (Tags at Bottom).
- * Version:           1.9.0
+ * Description:       Native Masonry Portfolio Block with dynamic gaps and zoom.
+ * Version:           2.0.0
  * Author:            Najubudeen
  */
 
@@ -20,56 +20,63 @@ function axis_folio_render_handler( $attributes, $content ) {
     $cols_d = $attributes['columnsDesktop'] ?? 3;
     $cols_t = $attributes['columnsTablet'] ?? 2;
     $cols_m = $attributes['columnsMobile'] ?? 1;
+    $gap    = $attributes['gridGap'] ?? 20;
     $radius = $attributes['borderRadius'] ?? 8;
     $bg_col = $attributes['cardBgColor'] ?? '#ffffff';
     $shadow = $attributes['hasShadow'] ?? true;
     $sh_col = $attributes['shadowColor'] ?? 'rgba(0,0,0,0.1)';
     
-    $has_zoom = $attributes['hasZoom'] ?? true;
-    $zoom_scale = $attributes['zoomScale'] ?? 1.15; // Slightly higher default for image-only zoom
+    $has_zoom   = $attributes['hasZoom'] ?? true;
+    $zoom_scale = $attributes['zoomScale'] ?? 1.15;
+    $show_line  = $attributes['showTagLine'] ?? true;
 
     $final_shadow = $shadow ? "0 4px 12px {$sh_col}" : "none";
+    $border_top   = $show_line ? "1px solid #eee" : "none";
 
     $css = "
         #{$id} { display: block !important; width: 100% !important; margin: 40px auto !important; }
-        #{$id} .portfolio-grid { position: relative; width: 100% !important; display: block !important; }
+        #{$id} .portfolio-grid { position: relative; width: 100% !important; }
         
+        /* Width Calculation including Gap */
+        #{$id} .portfolio-item, #{$id} .grid-sizer {
+            width: calc( (100% / {$cols_d}) - ({$gap}px * ({$cols_d} - 1) / {$cols_d}) ) !important;
+        }
+
+        #{$id} .gutter-sizer { width: {$gap}px !important; }
+
         #{$id} .portfolio-item {
-            width: calc( (100% / {$cols_d}) - 20px ) !important;
-            margin-bottom: 20px;
+            margin-bottom: {$gap}px !important;
             background: {$bg_col} !important;
             border-radius: {$radius}px !important;
             box-shadow: {$final_shadow} !important;
-            overflow: hidden !important; /* Keep zoom contained within the card */
-            float: left;
+            overflow: hidden !important;
         }
 
-        #{$id} .portfolio-image {
-            overflow: hidden !important; /* This is the 'window' for the zoom */
-            line-height: 0;
-        }
-
+        #{$id} .portfolio-image { overflow: hidden !important; line-height: 0; }
         #{$id} .portfolio-image img {
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-            display: block;
-            width: 100%;
-            height: auto;
+            display: block; width: 100%; height: auto;
+        }
+
+        #{$id} .portfolio-tags { 
+            display: flex; flex-wrap: wrap; gap: 6px; 
+            border-top: {$border_top} !important; 
+            padding-top: 12px; 
         }
 
         @media (max-width: 1024px) {
-            #{$id} .portfolio-item { width: calc( (100% / {$cols_t}) - 15px ) !important; }
+            #{$id} .portfolio-item, #{$id} .grid-sizer { 
+                width: calc( (100% / {$cols_t}) - ({$gap}px * ({$cols_t} - 1) / {$cols_t}) ) !important; 
+            }
         }
         @media (max-width: 600px) {
-            #{$id} .portfolio-item { width: 100% !important; float: none !important; margin-bottom: 20px !important; }
+            #{$id} .portfolio-item, #{$id} .grid-sizer { width: 100% !important; }
+            #{$id} .gutter-sizer { width: 0px !important; }
         }
     ";
 
     if ( $has_zoom ) {
-        $css .= "
-            #{$id} .portfolio-item:hover .portfolio-image img {
-                transform: scale({$zoom_scale}) !important;
-            }
-        ";
+        $css .= "#{$id} .portfolio-item:hover .portfolio-image img { transform: scale({$zoom_scale}) !important; }";
     }
 
     wp_register_style( 'axis-folio-runtime', false );
@@ -79,10 +86,7 @@ function axis_folio_render_handler( $attributes, $content ) {
     ob_start();
     $path = plugin_dir_path( __FILE__ ) . 'build/axis-folio/render.php';
     if ( ! file_exists( $path ) ) $path = plugin_dir_path( __FILE__ ) . 'src/render.php';
-    
-    if ( file_exists( $path ) ) {
-        include $path;
-    }
+    if ( file_exists( $path ) ) include $path;
     return ob_get_clean();
 }
 

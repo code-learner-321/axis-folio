@@ -61,6 +61,14 @@
     "zoomScale": {
       "type": "number",
       "default": 1.05
+    },
+    "showTagLine": {
+      "type": "boolean",
+      "default": true
+    },
+    "gridGap": {
+      "type": "number",
+      "default": 20
     }
   },
   "supports": {

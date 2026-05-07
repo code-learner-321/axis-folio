@@ -66,6 +66,14 @@ return array(
 			'zoomScale' => array(
 				'type' => 'number',
 				'default' => 1.05
+			),
+			'showTagLine' => array(
+				'type' => 'boolean',
+				'default' => true
+			),
+			'gridGap' => array(
+				'type' => 'number',
+				'default' => 20
 			)
 		),
 		'supports' => array(

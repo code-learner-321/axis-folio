@@ -13,6 +13,9 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $id ] );
 
 <div <?php echo $wrapper_attributes; ?>>
     <div class="portfolio-grid">
+        <div class="grid-sizer"></div>
+        <div class="gutter-sizer"></div>
+
         <?php if ( ! empty( $items ) ) : ?>
             <?php foreach ( $items as $item ) : ?>
                 <div class="portfolio-item">
@@ -34,7 +37,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $id ] );
 
                         <?php if ( $show_tags && ! empty( $item['tags'] ) ) : 
                             $tags = explode( ',', $item['tags'] ); ?>
-                            <div class="portfolio-tags" style="display: flex; flex-wrap: wrap; gap: 6px; border-top: 1px solid #eee; padding-top: 12px;">
+                            <div class="portfolio-tags">
                                 <?php foreach ( $tags as $tag ) : ?>
                                     <span class="tag" style="font-size: 11px; padding: 3px 10px; border-radius: 4px; font-weight: 600; text-transform: uppercase; 
                                         background-color: <?php echo esc_attr( $tag_bg_color ); ?>; 

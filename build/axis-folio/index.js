@@ -40,10 +40,12 @@ function Edit({
     columnsDesktop,
     columnsTablet,
     columnsMobile,
+    gridGap,
     borderRadius,
     hasShadow,
     shadowColor,
     showTags,
+    showTagLine,
     cardBgColor,
     tagBgColor,
     tagTextColor,
@@ -73,6 +75,14 @@ function Edit({
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Grid Layout', 'masionary'),
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Grid Gap', 'masionary'),
+          value: gridGap,
+          onChange: val => setAttributes({
+            gridGap: val
+          }),
+          min: 0,
+          max: 50
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Columns (Desktop)', 'masionary'),
           value: columnsDesktop,
           onChange: val => setAttributes({
@@ -159,22 +169,33 @@ function Edit({
           max: 1.5,
           step: 0.01
         })]
-      }), showTags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.PanelColorSettings, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tag Colors', 'masionary'),
-        initialOpen: false,
-        colorSettings: [{
-          value: tagBgColor,
-          onChange: colorValue => setAttributes({
-            tagBgColor: colorValue
-          }),
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tag Background', 'masionary')
-        }, {
-          value: tagTextColor,
-          onChange: colorValue => setAttributes({
-            tagTextColor: colorValue
-          }),
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tag Text', 'masionary')
-        }]
+      }), showTags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tag Settings', 'masionary'),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Separator Line Above Tags', 'masionary'),
+            checked: showTagLine,
+            onChange: val => setAttributes({
+              showTagLine: val
+            })
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.PanelColorSettings, {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tag Colors', 'masionary'),
+          initialOpen: false,
+          colorSettings: [{
+            value: tagBgColor,
+            onChange: val => setAttributes({
+              tagBgColor: val
+            }),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tag Background', 'masionary')
+          }, {
+            value: tagTextColor,
+            onChange: val => setAttributes({
+              tagTextColor: val
+            }),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tag Text', 'masionary')
+          }]
+        })]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "portfolio-grid-editor",
@@ -186,8 +207,7 @@ function Edit({
           padding: '15px',
           marginBottom: '15px',
           borderRadius: `${borderRadius}px`,
-          boxShadow: hasShadow ? `0 4px 12px ${shadowColor || 'rgba(0,0,0,0.1)'}` : 'none',
-          overflow: 'hidden' // Important for the "only image" effect
+          boxShadow: hasShadow ? `0 4px 12px ${shadowColor || 'rgba(0,0,0,0.1)'}` : 'none'
         },
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           style: {
@@ -226,8 +246,7 @@ function Edit({
                 padding: '20px',
                 textAlign: 'center',
                 cursor: 'pointer',
-                marginBottom: '15px',
-                overflow: 'hidden'
+                marginBottom: '15px'
               },
               children: item.url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
                 src: item.url,
@@ -413,7 +432,7 @@ module.exports = window["wp"]["i18n"];
   \***********************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/axis-folio","version":"0.1.0","title":"Axis Folio","category":"widgets","icon":"layout","attributes":{"uniqueId":{"type":"string"},"items":{"type":"array","default":[]},"columnsDesktop":{"type":"number","default":3},"columnsTablet":{"type":"number","default":2},"columnsMobile":{"type":"number","default":1},"borderRadius":{"type":"number","default":8},"hasShadow":{"type":"boolean","default":true},"showTags":{"type":"boolean","default":true},"cardBgColor":{"type":"string","default":"#ffffff"},"shadowColor":{"type":"string","default":"rgba(0,0,0,0.1)"},"tagBgColor":{"type":"string","default":"#f0f0f0"},"tagTextColor":{"type":"string","default":"#555555"},"hasZoom":{"type":"boolean","default":true},"zoomScale":{"type":"number","default":1.05}},"supports":{"align":["wide","full"],"html":false},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/axis-folio","version":"0.1.0","title":"Axis Folio","category":"widgets","icon":"layout","attributes":{"uniqueId":{"type":"string"},"items":{"type":"array","default":[]},"columnsDesktop":{"type":"number","default":3},"columnsTablet":{"type":"number","default":2},"columnsMobile":{"type":"number","default":1},"borderRadius":{"type":"number","default":8},"hasShadow":{"type":"boolean","default":true},"showTags":{"type":"boolean","default":true},"cardBgColor":{"type":"string","default":"#ffffff"},"shadowColor":{"type":"string","default":"rgba(0,0,0,0.1)"},"tagBgColor":{"type":"string","default":"#f0f0f0"},"tagTextColor":{"type":"string","default":"#555555"},"hasZoom":{"type":"boolean","default":true},"zoomScale":{"type":"number","default":1.05},"showTagLine":{"type":"boolean","default":true},"gridGap":{"type":"number","default":20}},"supports":{"align":["wide","full"],"html":false},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ }
 

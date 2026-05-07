@@ -20,7 +20,9 @@
 		"tagBgColor": { "type": "string", "default": "#f0f0f0" },
         "tagTextColor": { "type": "string", "default": "#555555" },
 		"hasZoom": { "type": "boolean", "default": true },
-		"zoomScale": { "type": "number", "default": 1.05 }
+		"zoomScale": { "type": "number", "default": 1.05 },
+        "showTagLine": { "type": "boolean", "default": true },
+        "gridGap": { "type": "number", "default": 20 }
     },
     "supports": {
         "align": ["wide", "full"],
