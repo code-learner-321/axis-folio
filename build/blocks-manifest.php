@@ -9,18 +9,74 @@ return array(
 		'title' => 'Axis Folio',
 		'category' => 'widgets',
 		'icon' => 'layout',
-		'description' => 'Example block scaffolded with Create Block tool.',
-		'example' => array(
-			
+		'attributes' => array(
+			'uniqueId' => array(
+				'type' => 'string'
+			),
+			'items' => array(
+				'type' => 'array',
+				'default' => array(
+					
+				)
+			),
+			'columnsDesktop' => array(
+				'type' => 'number',
+				'default' => 3
+			),
+			'columnsTablet' => array(
+				'type' => 'number',
+				'default' => 2
+			),
+			'columnsMobile' => array(
+				'type' => 'number',
+				'default' => 1
+			),
+			'borderRadius' => array(
+				'type' => 'number',
+				'default' => 8
+			),
+			'hasShadow' => array(
+				'type' => 'boolean',
+				'default' => true
+			),
+			'showTags' => array(
+				'type' => 'boolean',
+				'default' => true
+			),
+			'cardBgColor' => array(
+				'type' => 'string',
+				'default' => '#ffffff'
+			),
+			'shadowColor' => array(
+				'type' => 'string',
+				'default' => 'rgba(0,0,0,0.1)'
+			),
+			'tagBgColor' => array(
+				'type' => 'string',
+				'default' => '#f0f0f0'
+			),
+			'tagTextColor' => array(
+				'type' => 'string',
+				'default' => '#555555'
+			),
+			'hasZoom' => array(
+				'type' => 'boolean',
+				'default' => true
+			),
+			'zoomScale' => array(
+				'type' => 'number',
+				'default' => 1.05
+			)
 		),
 		'supports' => array(
+			'align' => array(
+				'wide',
+				'full'
+			),
 			'html' => false
 		),
-		'textdomain' => 'axis-folio',
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => 'file:./index.css',
-		'style' => 'file:./style-index.css',
-		'render' => 'file:./render.php',
-		'viewScript' => 'file:./view.js'
+		'style' => 'file:./style-index.css'
 	)
 );

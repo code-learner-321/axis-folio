@@ -1,38 +1,52 @@
 <?php
-// 1. The Data (Keep this identical to your JS array for consistency)
-$portfolio_items = [
-    ['id' => 1, 'title' => 'Data Visualization', 'tags' => ['D3.js', 'React'], 'height' => 500],
-    ['id' => 2, 'title' => 'Secure Gateway', 'tags' => ['Go', 'Docker'], 'height' => 300],
-    ['id' => 3, 'title' => 'Mobile Banking', 'tags' => ['Flutter', 'Firebase'], 'height' => 600],
-    ['id' => 4, 'title' => 'AI Content Writer', 'tags' => ['Python', 'GPT-4'], 'height' => 400],
-    ['id' => 5, 'title' => 'Smart Home Hub', 'tags' => ['IoT', 'Node.js'], 'height' => 700],
-    ['id' => 6, 'title' => 'Crypto Portfolio', 'tags' => ['Vue', 'Web3'], 'height' => 350],
-    ['id' => 7, 'title' => 'E-Learning Portal', 'tags' => ['Next.js', 'PostgreSQL'], 'height' => 550],
-    ['id' => 8, 'title' => 'Fitness Tracker', 'tags' => ['Swift', 'HealthKit'], 'height' => 450],
-    ['id' => 9, 'title' => 'Event Manager', 'tags' => ['Laravel', 'MySQL'], 'height' => 650],
-    ['id' => 10, 'title' => 'Photo Lab', 'tags' => ['Canvas API', 'JS'], 'height' => 380],
-];
+/**
+ * Render template for Axis Folio
+ */
 
-// 2. The HTML Structure
-// use get_block_wrapper_attributes() to ensure Gutenberg styles/classes work
+$items = $attributes['items'] ?? [];
+$show_tags = $attributes['showTags'] ?? true;
+$tag_bg_color   = $attributes['tagBgColor'] ?? '#f0f0f0';
+$tag_text_color = $attributes['tagTextColor'] ?? '#555';
+
+$wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $id ] );
 ?>
-<div <?php echo get_block_wrapper_attributes(); ?>>
-    <div class="masonry-container">
-        <?php foreach ( $portfolio_items as $item ) : ?>
-            <div class="card">
-                <img 
-                    src="https://picsum.photos/400/<?php echo esc_attr( $item['height'] ); ?>?sig=<?php echo esc_attr( $item['id'] ); ?>" 
-                    alt="<?php echo esc_attr( $item['title'] ); ?>"
-                >
-                <div class="card-body">
-                    <h3 class="card-title"><?php echo esc_html( $item['title'] ); ?></h3>
-                    <div class="tags-container">
-                        <?php foreach ( $item['tags'] as $tag ) : ?>
-                            <span class="tag"><?php echo esc_html( $tag ); ?></span>
-                        <?php endforeach; ?>
+
+<div <?php echo $wrapper_attributes; ?>>
+    <div class="portfolio-grid">
+        <?php if ( ! empty( $items ) ) : ?>
+            <?php foreach ( $items as $item ) : ?>
+                <div class="portfolio-item">
+                    <?php if ( ! empty( $item['url'] ) ) : ?>
+                        <div class="portfolio-image">
+                            <img src="<?php echo esc_url( $item['url'] ); ?>" 
+                                 alt="<?php echo esc_attr( $item['title'] ?? '' ); ?>" />
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div class="portfolio-content" style="padding: 20px;">
+                        <h3 style="margin: 0 0 8px 0; font-size: 1.25rem; font-weight: 700; line-height: 1.2;">
+                            <?php echo esc_html( $item['title'] ?? '' ); ?>
+                        </h3>
+
+                        <p style="margin: 0 0 15px 0; font-size: 1rem; color: #666; line-height: 1.6;">
+                            <?php echo esc_html( $item['description'] ?? '' ); ?>
+                        </p>
+
+                        <?php if ( $show_tags && ! empty( $item['tags'] ) ) : 
+                            $tags = explode( ',', $item['tags'] ); ?>
+                            <div class="portfolio-tags" style="display: flex; flex-wrap: wrap; gap: 6px; border-top: 1px solid #eee; padding-top: 12px;">
+                                <?php foreach ( $tags as $tag ) : ?>
+                                    <span class="tag" style="font-size: 11px; padding: 3px 10px; border-radius: 4px; font-weight: 600; text-transform: uppercase; 
+                                        background-color: <?php echo esc_attr( $tag_bg_color ); ?>; 
+                                        color: <?php echo esc_attr( $tag_text_color ); ?>;">
+                                        <?php echo esc_html( trim( $tag ) ) ; ?>
+                                    </span>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </div>

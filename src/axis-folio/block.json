@@ -1,20 +1,32 @@
 {
-	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
-	"name": "create-block/axis-folio",
-	"version": "0.1.0",
-	"title": "Axis Folio",
-	"category": "widgets",
-	"icon": "layout",
-	"description": "Example block scaffolded with Create Block tool.",
-	"example": {},
-	"supports": {
-		"html": false
-	},
-	"textdomain": "axis-folio",
-	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
-	"render": "file:./render.php",
-	"viewScript": "file:./view.js"
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "create-block/axis-folio",
+    "version": "0.1.0",
+    "title": "Axis Folio",
+    "category": "widgets",
+    "icon": "layout",
+    "attributes": {
+        "uniqueId": { "type": "string" },
+        "items": { "type": "array", "default": [] },
+        "columnsDesktop": { "type": "number", "default": 3 },
+        "columnsTablet": { "type": "number", "default": 2 },
+        "columnsMobile": { "type": "number", "default": 1 },
+        "borderRadius": { "type": "number", "default": 8 },
+        "hasShadow": { "type": "boolean", "default": true },
+        "showTags": { "type": "boolean", "default": true },
+        "cardBgColor": { "type": "string", "default": "#ffffff" },
+        "shadowColor": { "type": "string", "default": "rgba(0,0,0,0.1)" },
+		"tagBgColor": { "type": "string", "default": "#f0f0f0" },
+        "tagTextColor": { "type": "string", "default": "#555555" },
+		"hasZoom": { "type": "boolean", "default": true },
+		"zoomScale": { "type": "number", "default": 1.05 }
+    },
+    "supports": {
+        "align": ["wide", "full"],
+        "html": false
+    },
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css"
 }

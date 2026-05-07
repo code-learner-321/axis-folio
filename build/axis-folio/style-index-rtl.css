@@ -1,81 +1,27 @@
 /*!**************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/axis-folio/style.scss ***!
   \**************************************************************************************************************************************************************************************************************************************************/
-/**
- * The following styles get applied both on the front of your site
- * and in the editor.
- *
- * Replace them with your own styles or remove the file completely.
- */
 .wp-block-create-block-axis-folio {
-  color: #fff;
-  padding: 2px;
-}
-/* --- Masonry Responsive Logic --- */
-.masonry-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  -moz-column-gap: 20px;
-       column-gap: 20px;
-  /* Default for Big Screens */
-  -moz-column-count: 2;
-       column-count: 2;
-}
-/* Desktop / Tablet Landscape */
-@media (max-width: 1024px) {
-  .masonry-container {
-    -moz-column-count: 3;
-         column-count: 3;
-  }
-}
-/* Mobile / Small Screens */
-@media (max-width: 600px) {
-  .masonry-container {
-    -moz-column-count: 1;
-         column-count: 1;
-  }
-}
-/* --- Card Styling --- */
-.card {
-  background: #ffffff;
-  display: inline-block; /* Prevents card from breaking between columns */
+  box-sizing: border-box;
+  display: block !important;
   width: 100%;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  transition: transform 0.2s ease-in-out;
-  border: 1px solid #e1e4e8;
 }
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+.wp-block-create-block-axis-folio .portfolio-grid {
+  display: block !important;
+  -moz-column-fill: auto;
+       column-fill: auto;
 }
-.card img {
-  width: 100%;
-  display: block;
-  height: auto;
+.wp-block-create-block-axis-folio .portfolio-item {
+  display: inline-block !important;
+  width: 100% !important;
+  margin: 0 0 25px 0 !important;
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  transform: translateZ(0);
 }
-.card-body {
-  padding: 16px;
-}
-.card-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #2d3436;
-  margin-bottom: 12px;
-}
-.tags-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.tag {
-  background: #6c5ce7;
-  color: white;
-  font-size: 0.7rem;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-weight: 600;
-  text-transform: uppercase;
+.wp-block-create-block-axis-folio .portfolio-item img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
 }
