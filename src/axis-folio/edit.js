@@ -20,9 +20,11 @@ import { useEffect } from '@wordpress/element';
 export default function Edit( { attributes, setAttributes, clientId } ) {
     const { 
         uniqueId, items = [], columnsDesktop, columnsTablet, columnsMobile, gridGap,
-        borderRadius, hasShadow, cardBgColor,
-        titleColor, descColor,
+        borderRadius, hasShadow, cardBgColor, hCardBgColor,
+        titleColor, descColor, tagBgColor, tagTextColor, tagFontSize,
+        showTags,
         enableLoadMore, postsPerPage, loadMoreText, btnBgColor, btnTextColor,
+        hasZoom, zoomScale,
         // Shadow attributes
         shadowX, shadowY, shadowBlur, shadowSpread, shadowColor,
         hShadowX, hShadowY, hShadowBlur, hShadowSpread, hShadowColor
@@ -68,15 +70,57 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             borderRadius: `${borderRadius}px`,
             boxShadow: hasShadow ? `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` : 'none',
             border: hasShadow ? 'none' : '1px solid #ccc',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            overflow: 'hidden',
+            position: 'relative'
+        },
+        imageWrapper: {
+            overflow: 'hidden',
+            borderRadius: '4px',
+            marginBottom: '10px',
+            lineHeight: 0
+        },
+        image: {
+            width: '100%',
+            height: 'auto',
+            transition: 'transform 0.5s ease',
+            maxHeight: '150px',
+            objectFit: 'cover'
+        },
+        tagItem: {
+            padding: '3px 10px',
+            borderRadius: '4px',
+            fontWeight: '600',
+            textTransform: 'uppercase',
+            backgroundColor: tagBgColor,
+            color: tagTextColor,
+            fontSize: `${tagFontSize}px`,
+            display: 'inline-block',
+            marginRight: '5px',
+            marginBottom: '5px'
         },
         header: { display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' },
         mediaPlaceholder: { background: '#eee', padding: '20px', textAlign: 'center', cursor: 'pointer', marginBottom: '10px', border: '1px dashed #bbb' },
         footer: { textAlign: 'center', marginTop: '30px', paddingTop: '20px', borderTop: '1px solid #eee' }
     };
 
+    // Create dynamic hover CSS for the editor
+    const hoverCSS = `
+        #${uniqueId}-editor .portfolio-edit-card:hover {
+            background: ${hCardBgColor || cardBgColor} !important;
+            box-shadow: ${hasShadow ? `${hShadowX}px ${hShadowY}px ${hShadowBlur}px ${hShadowSpread}px ${hShadowColor}` : 'none'} !important;
+        }
+        ${hasZoom ? `
+        #${uniqueId}-editor .portfolio-edit-card:hover .portfolio-edit-image {
+            transform: scale(${zoomScale}) !important;
+        }
+        ` : ''}
+    `;
+
     return (
         <div { ...useBlockProps() }>
+            <style>{ hoverCSS }</style>
+            
             { /* SETTINGS TAB */ }
             <InspectorControls>
                 <PanelBody title={ __( 'Grid Layout', 'axis-folio' ) }>
@@ -98,6 +142,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 <PanelBody title={ __( 'Card Appearance', 'axis-folio' ) }>
                     <RangeControl label="Border Radius" value={ borderRadius } onChange={ ( val ) => setAttributes( { borderRadius: val } ) } min={ 0 } max={ 50 } />
                     <ToggleControl label="Enable Box Shadow" checked={ hasShadow } onChange={ ( val ) => setAttributes( { hasShadow: val } ) } />
+                    <ToggleControl label="Show Tags" checked={ showTags } onChange={ ( val ) => setAttributes( { showTags: val } ) } />
                 </PanelBody>
 
                 { hasShadow && (
@@ -110,7 +155,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         
                         <hr style={{ margin: '20px 0' }} />
                         
-                        <p><strong>{ __( 'Hover State (Visualized on Frontend)', 'axis-folio' ) }</strong></p>
+                        <p><strong>{ __( 'Hover State', 'axis-folio' ) }</strong></p>
                         <RangeControl label="Hover Blur" value={ hShadowBlur } onChange={ ( val ) => setAttributes( { hShadowBlur: val } ) } min={ 0 } max={ 100 } />
                         <RangeControl label="Hover Spread" value={ hShadowSpread } onChange={ ( val ) => setAttributes( { hShadowSpread: val } ) } min={ -20 } max={ 50 } />
                         <RangeControl label="Hover Offset X" value={ hShadowX } onChange={ ( val ) => setAttributes( { hShadowX: val } ) } min={ -50 } max={ 50 } />
@@ -123,18 +168,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                     initialOpen={ false }
                     colorSettings={ [
                         { value: cardBgColor, onChange: ( val ) => setAttributes( { cardBgColor: val } ), label: "Card Background" },
+                        { value: hCardBgColor, onChange: ( val ) => setAttributes( { hCardBgColor: val } ), label: "Hover Card Background" },
                         { value: shadowColor, onChange: ( val ) => setAttributes( { shadowColor: val } ), label: "Shadow Color" },
                         { value: hShadowColor, onChange: ( val ) => setAttributes( { hShadowColor: val } ), label: "Hover Shadow Color" },
+                        { value: tagBgColor, onChange: ( val ) => setAttributes( { tagBgColor: val } ), label: "Tag Background" },
+                        { value: tagTextColor, onChange: ( val ) => setAttributes( { tagTextColor: val } ), label: "Tag Text Color" },
                         { value: btnBgColor, onChange: ( val ) => setAttributes( { btnBgColor: val } ), label: "Button Background" },
                     ] }
                 />
             </InspectorControls>
 
             { /* EDITOR CANVAS */ }
-            <div className="portfolio-editor-wrapper" style={ editorStyles.container }>
+            <div id={ `${uniqueId}-editor` } className="portfolio-editor-wrapper" style={ editorStyles.container }>
                 <div style={ editorStyles.grid }>
                     { items.map( ( item, index ) => (
-                        <div key={ index } style={ editorStyles.card }>
+                        <div key={ index } className="portfolio-edit-card" style={ editorStyles.card }>
                             <div style={ editorStyles.header }>
                                 <strong style={{ color: titleColor }}>ITEM { index + 1 }</strong>
                                 <Button isDestructive icon="trash" onClick={ () => removeItem( index ) } />
@@ -144,8 +192,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     onSelect={ ( media ) => updateItem( index, 'url', media.url ) }
                                     allowedTypes={ [ 'image' ] }
                                     render={ ( { open } ) => (
-                                        <div onClick={ open } style={ editorStyles.mediaPlaceholder }>
-                                            { item.url ? <img src={ item.url } style={ { maxHeight: '80px', borderRadius: '4px' } } alt="" /> : <Dashicon icon="format-image" /> }
+                                        <div onClick={ open } style={ editorStyles.imageWrapper }>
+                                            { item.url ? (
+                                                <img 
+                                                    src={ item.url } 
+                                                    className="portfolio-edit-image" 
+                                                    style={ editorStyles.image } 
+                                                    alt="" 
+                                                />
+                                            ) : (
+                                                <div style={ editorStyles.mediaPlaceholder }><Dashicon icon="format-image" /></div>
+                                            ) }
                                         </div>
                                     ) }
                                 />
@@ -162,6 +219,22 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                 onChange={ ( val ) => updateItem( index, 'description', val ) } 
                                 style={{ color: descColor }}
                             />
+                            <TextControl 
+                                label={ __( "Tags (Comma separated)", "axis-folio" ) } 
+                                value={ item.tags } 
+                                onChange={ ( val ) => updateItem( index, 'tags', val ) } 
+                            />
+                            
+                            { /* Visual Tag Preview in Editor */ }
+                            { showTags && item.tags && (
+                                <div style={{ marginTop: '10px' }}>
+                                    { item.tags.split(',').map( ( tag, i ) => (
+                                        <span key={ i } style={ editorStyles.tagItem }>
+                                            { tag.trim() }
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ) ) }
                 </div>

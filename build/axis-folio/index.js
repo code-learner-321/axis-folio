@@ -42,13 +42,20 @@ function Edit({
     borderRadius,
     hasShadow,
     cardBgColor,
+    hCardBgColor,
     titleColor,
     descColor,
+    tagBgColor,
+    tagTextColor,
+    tagFontSize,
+    showTags,
     enableLoadMore,
     postsPerPage,
     loadMoreText,
     btnBgColor,
     btnTextColor,
+    hasZoom,
+    zoomScale,
     // Shadow attributes
     shadowX,
     shadowY,
@@ -114,7 +121,34 @@ function Edit({
       borderRadius: `${borderRadius}px`,
       boxShadow: hasShadow ? `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` : 'none',
       border: hasShadow ? 'none' : '1px solid #ccc',
-      transition: 'all 0.3s ease'
+      transition: 'all 0.3s ease',
+      overflow: 'hidden',
+      position: 'relative'
+    },
+    imageWrapper: {
+      overflow: 'hidden',
+      borderRadius: '4px',
+      marginBottom: '10px',
+      lineHeight: 0
+    },
+    image: {
+      width: '100%',
+      height: 'auto',
+      transition: 'transform 0.5s ease',
+      maxHeight: '150px',
+      objectFit: 'cover'
+    },
+    tagItem: {
+      padding: '3px 10px',
+      borderRadius: '4px',
+      fontWeight: '600',
+      textTransform: 'uppercase',
+      backgroundColor: tagBgColor,
+      color: tagTextColor,
+      fontSize: `${tagFontSize}px`,
+      display: 'inline-block',
+      marginRight: '5px',
+      marginBottom: '5px'
     },
     header: {
       display: 'flex',
@@ -137,9 +171,24 @@ function Edit({
       borderTop: '1px solid #eee'
     }
   };
+
+  // Create dynamic hover CSS for the editor
+  const hoverCSS = `
+        #${uniqueId}-editor .portfolio-edit-card:hover {
+            background: ${hCardBgColor || cardBgColor} !important;
+            box-shadow: ${hasShadow ? `${hShadowX}px ${hShadowY}px ${hShadowBlur}px ${hShadowSpread}px ${hShadowColor}` : 'none'} !important;
+        }
+        ${hasZoom ? `
+        #${uniqueId}-editor .portfolio-edit-card:hover .portfolio-edit-image {
+            transform: scale(${zoomScale}) !important;
+        }
+        ` : ''}
+    `;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("style", {
+      children: hoverCSS
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Grid Layout', 'axis-folio'),
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
@@ -211,6 +260,12 @@ function Edit({
           onChange: val => setAttributes({
             hasShadow: val
           })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          label: "Show Tags",
+          checked: showTags,
+          onChange: val => setAttributes({
+            showTags: val
+          })
         })]
       }), hasShadow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Shadow Controls', 'axis-folio'),
@@ -257,7 +312,7 @@ function Edit({
           }
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover State (Visualized on Frontend)', 'axis-folio')
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover State', 'axis-folio')
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
           label: "Hover Blur",
@@ -302,6 +357,12 @@ function Edit({
           }),
           label: "Card Background"
         }, {
+          value: hCardBgColor,
+          onChange: val => setAttributes({
+            hCardBgColor: val
+          }),
+          label: "Hover Card Background"
+        }, {
           value: shadowColor,
           onChange: val => setAttributes({
             shadowColor: val
@@ -314,6 +375,18 @@ function Edit({
           }),
           label: "Hover Shadow Color"
         }, {
+          value: tagBgColor,
+          onChange: val => setAttributes({
+            tagBgColor: val
+          }),
+          label: "Tag Background"
+        }, {
+          value: tagTextColor,
+          onChange: val => setAttributes({
+            tagTextColor: val
+          }),
+          label: "Tag Text Color"
+        }, {
           value: btnBgColor,
           onChange: val => setAttributes({
             btnBgColor: val
@@ -322,11 +395,13 @@ function Edit({
         }]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      id: `${uniqueId}-editor`,
       className: "portfolio-editor-wrapper",
       style: editorStyles.container,
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         style: editorStyles.grid,
         children: items.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "portfolio-edit-card",
           style: editorStyles.card,
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             style: editorStyles.header,
@@ -348,16 +423,17 @@ function Edit({
                 open
               }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                 onClick: open,
-                style: editorStyles.mediaPlaceholder,
+                style: editorStyles.imageWrapper,
                 children: item.url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
                   src: item.url,
-                  style: {
-                    maxHeight: '80px',
-                    borderRadius: '4px'
-                  },
+                  className: "portfolio-edit-image",
+                  style: editorStyles.image,
                   alt: ""
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
-                  icon: "format-image"
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  style: editorStyles.mediaPlaceholder,
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
+                    icon: "format-image"
+                  })
                 })
               })
             })
@@ -375,6 +451,18 @@ function Edit({
             style: {
               color: descColor
             }
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Tags (Comma separated)", "axis-folio"),
+            value: item.tags,
+            onChange: val => updateItem(index, 'tags', val)
+          }), showTags && item.tags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            style: {
+              marginTop: '10px'
+            },
+            children: item.tags.split(',').map((tag, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+              style: editorStyles.tagItem,
+              children: tag.trim()
+            }, i))
           })]
         }, index))
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
