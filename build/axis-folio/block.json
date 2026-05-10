@@ -89,6 +89,26 @@
     "tagFontSize": {
       "type": "number",
       "default": 11
+    },
+    "enableLoadMore": {
+      "type": "boolean",
+      "default": false
+    },
+    "postsPerPage": {
+      "type": "number",
+      "default": 6
+    },
+    "loadMoreText": {
+      "type": "string",
+      "default": "Load More"
+    },
+    "btnBgColor": {
+      "type": "string",
+      "default": "#111111"
+    },
+    "btnTextColor": {
+      "type": "string",
+      "default": "#ffffff"
     }
   },
   "supports": {

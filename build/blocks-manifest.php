@@ -94,6 +94,26 @@ return array(
 			'tagFontSize' => array(
 				'type' => 'number',
 				'default' => 11
+			),
+			'enableLoadMore' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
+			'postsPerPage' => array(
+				'type' => 'number',
+				'default' => 6
+			),
+			'loadMoreText' => array(
+				'type' => 'string',
+				'default' => 'Load More'
+			),
+			'btnBgColor' => array(
+				'type' => 'string',
+				'default' => '#111111'
+			),
+			'btnTextColor' => array(
+				'type' => 'string',
+				'default' => '#ffffff'
 			)
 		),
 		'supports' => array(
