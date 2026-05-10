@@ -47,10 +47,6 @@ return array(
 				'type' => 'string',
 				'default' => '#ffffff'
 			),
-			'shadowColor' => array(
-				'type' => 'string',
-				'default' => 'rgba(0,0,0,0.1)'
-			),
 			'tagBgColor' => array(
 				'type' => 'string',
 				'default' => '#f0f0f0'
@@ -114,6 +110,52 @@ return array(
 			'btnTextColor' => array(
 				'type' => 'string',
 				'default' => '#ffffff'
+			),
+			'/* Shadow Attributes */' => array(
+				'type' => 'string'
+			),
+			'shadowX' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'shadowY' => array(
+				'type' => 'number',
+				'default' => 4
+			),
+			'shadowBlur' => array(
+				'type' => 'number',
+				'default' => 12
+			),
+			'shadowSpread' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'shadowColor' => array(
+				'type' => 'string',
+				'default' => 'rgba(0,0,0,0.1)'
+			),
+			'/* Hover Shadow Attributes */' => array(
+				'type' => 'string'
+			),
+			'hShadowX' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'hShadowY' => array(
+				'type' => 'number',
+				'default' => 8
+			),
+			'hShadowBlur' => array(
+				'type' => 'number',
+				'default' => 20
+			),
+			'hShadowSpread' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'hShadowColor' => array(
+				'type' => 'string',
+				'default' => 'rgba(0,0,0,0.2)'
 			)
 		),
 		'supports' => array(

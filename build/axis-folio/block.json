@@ -42,10 +42,6 @@
       "type": "string",
       "default": "#ffffff"
     },
-    "shadowColor": {
-      "type": "string",
-      "default": "rgba(0,0,0,0.1)"
-    },
     "tagBgColor": {
       "type": "string",
       "default": "#f0f0f0"
@@ -109,6 +105,52 @@
     "btnTextColor": {
       "type": "string",
       "default": "#ffffff"
+    },
+    "/* Shadow Attributes */": {
+      "type": "string"
+    },
+    "shadowX": {
+      "type": "number",
+      "default": 0
+    },
+    "shadowY": {
+      "type": "number",
+      "default": 4
+    },
+    "shadowBlur": {
+      "type": "number",
+      "default": 12
+    },
+    "shadowSpread": {
+      "type": "number",
+      "default": 0
+    },
+    "shadowColor": {
+      "type": "string",
+      "default": "rgba(0,0,0,0.1)"
+    },
+    "/* Hover Shadow Attributes */": {
+      "type": "string"
+    },
+    "hShadowX": {
+      "type": "number",
+      "default": 0
+    },
+    "hShadowY": {
+      "type": "number",
+      "default": 8
+    },
+    "hShadowBlur": {
+      "type": "number",
+      "default": 20
+    },
+    "hShadowSpread": {
+      "type": "number",
+      "default": 0
+    },
+    "hShadowColor": {
+      "type": "string",
+      "default": "rgba(0,0,0,0.2)"
     }
   },
   "supports": {
