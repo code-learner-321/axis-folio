@@ -69,6 +69,26 @@
     "gridGap": {
       "type": "number",
       "default": 20
+    },
+    "titleColor": {
+      "type": "string",
+      "default": "#111111"
+    },
+    "titleFontSize": {
+      "type": "number",
+      "default": 20
+    },
+    "descColor": {
+      "type": "string",
+      "default": "#666666"
+    },
+    "descFontSize": {
+      "type": "number",
+      "default": 16
+    },
+    "tagFontSize": {
+      "type": "number",
+      "default": 11
     }
   },
   "supports": {

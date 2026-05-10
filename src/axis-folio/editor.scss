@@ -1,9 +1,32 @@
-/**
- * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
- */
+.portfolio-editor-wrapper {
+    background: #fdfdfd; // Light background to distinguish the zone
+    padding: 30px 15px;
+    border: 1px dashed #d1d1d1;
+    border-radius: 12px;
+    margin: 20px 0;
 
-.wp-block-create-block-axis-folio {
-	border: 1px dotted #f00;
+    .portfolio-grid-editor {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center; // This centers the cards
+        align-items: flex-start;
+    }
+
+    .item-card-wrapper {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: all 0.2s ease-in-out;
+        
+        &:hover {
+            border-color: #3858e9 !important; // Highlight on hover
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .components-base-control__label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #555;
+        }
+    }
 }

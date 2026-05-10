@@ -1,0 +1,77 @@
+/* Layout & Masonry */
+.axis-masonry-container {
+    display: grid;
+    grid-auto-rows: 1px;
+    width: 100%;
+    align-items: start;
+}
+
+.axis-ms-item { 
+    display: none; 
+}
+
+.axis-ms-item.is-visible { 
+    display: block !important; 
+}
+
+.axis-ms-card {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.axis-img-wrapper { 
+    overflow: hidden; 
+    width: 100%; 
+    line-height: 0; 
+}
+
+.axis-ms-card img { 
+    width: 100%; 
+    height: auto; 
+    display: block; 
+    transition: transform 0.4s ease; 
+}
+
+.axis-ms-content h3 { 
+    margin: 0 0 10px 0; 
+}
+
+.axis-ms-description { 
+    margin: 0; 
+}
+
+.axis-ms-divider { 
+    border-top-style: solid; 
+    border-bottom: none; 
+    border-left: none; 
+    border-right: none; 
+    width: 100%; 
+}
+
+.axis-ms-tags-container { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+}
+
+.axis-ms-tag { 
+    border-radius: 4px; 
+    font-size: 11px; 
+    font-weight: bold; 
+    display: inline-block; 
+}
+
+.axis-load-more-wrap { 
+    width: 100%; 
+    margin-top: 30px; 
+}
+
+.axis-btn-load-more { 
+    border: none; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    display: inline-block; 
+}

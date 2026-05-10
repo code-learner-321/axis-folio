@@ -74,6 +74,26 @@ return array(
 			'gridGap' => array(
 				'type' => 'number',
 				'default' => 20
+			),
+			'titleColor' => array(
+				'type' => 'string',
+				'default' => '#111111'
+			),
+			'titleFontSize' => array(
+				'type' => 'number',
+				'default' => 20
+			),
+			'descColor' => array(
+				'type' => 'string',
+				'default' => '#666666'
+			),
+			'descFontSize' => array(
+				'type' => 'number',
+				'default' => 16
+			),
+			'tagFontSize' => array(
+				'type' => 'number',
+				'default' => 11
 			)
 		),
 		'supports' => array(

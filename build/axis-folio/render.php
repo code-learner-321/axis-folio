@@ -5,8 +5,15 @@
 
 $items = $attributes['items'] ?? [];
 $show_tags = $attributes['showTags'] ?? true;
+
+// Dynamic Typography & Colors
+$title_color    = $attributes['titleColor'] ?? '#111';
+$title_size     = $attributes['titleFontSize'] ?? 20;
+$desc_color     = $attributes['descColor'] ?? '#666';
+$desc_size      = $attributes['descFontSize'] ?? 16;
 $tag_bg_color   = $attributes['tagBgColor'] ?? '#f0f0f0';
 $tag_text_color = $attributes['tagTextColor'] ?? '#555';
+$tag_size       = $attributes['tagFontSize'] ?? 11;
 
 $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $id ] );
 ?>
@@ -21,17 +28,20 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $id ] );
                 <div class="portfolio-item">
                     <?php if ( ! empty( $item['url'] ) ) : ?>
                         <div class="portfolio-image">
-                            <img src="<?php echo esc_url( $item['url'] ); ?>" 
-                                 alt="<?php echo esc_attr( $item['title'] ?? '' ); ?>" />
+                            <img src="<?php echo esc_url( $item['url'] ); ?>" alt="" />
                         </div>
                     <?php endif; ?>
                     
                     <div class="portfolio-content" style="padding: 20px;">
-                        <h3 style="margin: 0 0 8px 0; font-size: 1.25rem; font-weight: 700; line-height: 1.2;">
+                        <h3 style="margin: 0 0 8px 0; line-height: 1.2; font-weight: 700; 
+                            color: <?php echo esc_attr( $title_color ); ?>; 
+                            font-size: <?php echo esc_attr( $title_size ); ?>px;">
                             <?php echo esc_html( $item['title'] ?? '' ); ?>
                         </h3>
 
-                        <p style="margin: 0 0 15px 0; font-size: 1rem; color: #666; line-height: 1.6;">
+                        <p style="margin: 0 0 15px 0; line-height: 1.6; 
+                            color: <?php echo esc_attr( $desc_color ); ?>; 
+                            font-size: <?php echo esc_attr( $desc_size ); ?>px;">
                             <?php echo esc_html( $item['description'] ?? '' ); ?>
                         </p>
 
@@ -39,9 +49,10 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $id ] );
                             $tags = explode( ',', $item['tags'] ); ?>
                             <div class="portfolio-tags">
                                 <?php foreach ( $tags as $tag ) : ?>
-                                    <span class="tag" style="font-size: 11px; padding: 3px 10px; border-radius: 4px; font-weight: 600; text-transform: uppercase; 
+                                    <span class="tag" style="padding: 3px 10px; border-radius: 4px; font-weight: 600; text-transform: uppercase; 
                                         background-color: <?php echo esc_attr( $tag_bg_color ); ?>; 
-                                        color: <?php echo esc_attr( $tag_text_color ); ?>;">
+                                        color: <?php echo esc_attr( $tag_text_color ); ?>;
+                                        font-size: <?php echo esc_attr( $tag_size ); ?>px;">
                                         <?php echo esc_html( trim( $tag ) ) ; ?>
                                     </span>
                                 <?php endforeach; ?>

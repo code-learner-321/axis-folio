@@ -3,111 +3,462 @@
 namespace Axis_Folio_Widget_Addon\widgets;
 
 if (!defined('ABSPATH')) {
-    exit;
+    exit; // Exit if accessed directly
 }
 
 use Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+use Elementor\Repeater;
+use Elementor\Group_Control_Typography;
+use Elementor\Utils;
 
 class Axis_Folio_Widget extends Widget_Base
 {
-    public function __construct($data = [], $args = null)
-    {
-        parent::__construct($data, $args);
-    }
+    public function get_name() { return 'axis-folio-widget'; }
+    public function get_title() { return \esc_html__('Axis Folio Widget', 'axis-folio'); }
+    public function get_icon() { return 'eicon-inner-section'; }
+    public function get_categories() { return ['general']; }
 
-    public function get_script_depends()
-    {
-        return ['jquery', 'axis-folio-script'];
-    }
-    public function get_style_depends()
-    {
+    public function get_style_depends() {
         return ['axis-folio-style'];
     }
-    public function get_name()
-    {
-        return 'axis-folio-widget';
+
+    public function get_script_depends() {
+        return ['jquery', 'axis-folio-script'];
     }
 
-    public function get_title()
-    {
-        return \esc_html__('Axis Folio Widget', 'axis-folio');
-    }
+    protected function register_controls() {
+        // --- CONTENT SECTION ---
+        $this->start_controls_section('content_section', [
+            'label' => \esc_html__('Portfolio Items', 'axis-folio'),
+            'tab' => Controls_Manager::TAB_CONTENT,
+        ]);
 
-    public function get_icon()
-    {
-        return 'eicon-inner-section';
-    }
+        $repeater = new Repeater();
+        $repeater->add_control('list_title', [
+            'label' => \esc_html__('Title', 'axis-folio'), 
+            'type' => Controls_Manager::TEXT, 
+            'default' => \esc_html__('Project Title', 'axis-folio')
+        ]);
+        $repeater->add_control('list_image', [
+            'label' => \esc_html__('Image', 'axis-folio'), 
+            'type' => Controls_Manager::MEDIA, 
+            'default' => ['url' => Utils::get_placeholder_image_src()]
+        ]);
 
-    public function get_keywords(): array
-    {
-        return ['masionary', 'grid', 'gallery', 'portfolio', 'axis folio'];
-    }
+        // Added URL Control with New Tab / Same Tab options
+        $repeater->add_control('list_url', [
+            'label' => \esc_html__('Link', 'axis-folio'),
+            'type' => Controls_Manager::URL,
+            'placeholder' => \esc_html__('https://your-link.com', 'axis-folio'),
+            'show_external' => true,
+            'default' => [
+                'url' => '',
+                'is_external' => false,
+                'nofollow' => false,
+            ],
+        ]);
 
-    public function get_categories()
-    {
-        return ['general'];
-    }
+        $repeater->add_control('list_description', [
+            'label' => \esc_html__('Description', 'axis-folio'), 
+            'type' => Controls_Manager::TEXTAREA
+        ]);
+        $repeater->add_control('list_tags', [
+            'label' => \esc_html__('Tags (Comma Separated)', 'axis-folio'), 
+            'type' => Controls_Manager::TEXT
+        ]);
 
-    protected function register_controls()
-    {
-        $this->start_controls_section(
-            'content_section',
-            [
-                'label' => esc_html__('Settings', 'axis-folio'),
-                'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
-            ]
-        );
+        $this->add_control('portfolio_list', [
+            'label' => \esc_html__('Portfolio Items', 'axis-folio'),
+            'type' => Controls_Manager::REPEATER,
+            'fields' => $repeater->get_controls(),
+            'title_field' => '{{{ list_title }}}',
+        ]);
 
-        $this->add_control(
-            'limit',
-            [
-                'label' => esc_html__('Limit', 'axis-folio'),
-                'type' => \Elementor\Controls_Manager::NUMBER,
-                'default' => 10,
-            ]
-        );
+        $this->add_control('items_to_show', [
+            'label' => \esc_html__('Initial Items to Show', 'axis-folio'),
+            'type' => Controls_Manager::NUMBER,
+            'default' => 4,
+        ]);
+        
+        $this->add_control('load_more_text', [
+            'label' => \esc_html__('Button Text', 'axis-folio'),
+            'type' => Controls_Manager::TEXT,
+            'default' => \esc_html__('Load More', 'axis-folio'),
+        ]);
+        $this->end_controls_section();
 
+        // --- STYLE: GRID & CARD ---
+        $this->start_controls_section('style_grid', [
+            'label' => \esc_html__('Grid & Card', 'axis-folio'), 
+            'tab' => Controls_Manager::TAB_STYLE
+        ]);
+        
+        $this->add_responsive_control('columns', [
+            'label' => \esc_html__('Columns', 'axis-folio'),
+            'type' => Controls_Manager::SELECT,
+            'default' => '2',
+            'options' => ['1'=>'1', '2'=>'2', '3'=>'3', '4'=>'4'],
+            'selectors' => [
+                '{{WRAPPER}} .axis-masonry-container' => 'grid-template-columns: repeat({{VALUE}}, 1fr);',
+            ],
+        ]);
 
+        $this->add_control('grid_gap', [
+            'label' => \esc_html__('Grid Gap', 'axis-folio'), 
+            'type' => Controls_Manager::SLIDER, 
+            'default' => ['size' => 20],
+            'selectors' => [
+                '{{WRAPPER}} .axis-masonry-container' => 'grid-gap: {{SIZE}}{{UNIT}};',
+            ],
+        ]);
+
+        $this->add_control('card_bg', [
+            'label' => \esc_html__('Card Background', 'axis-folio'), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#ffffff',
+            'selectors' => [
+                '{{WRAPPER}} .axis-ms-card' => 'background: {{VALUE}};',
+            ],
+        ]);
+
+        $this->add_control('card_radius', [
+            'label' => \esc_html__('Corner Radius', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
+            'default' => ['size' => 12],
+            'selectors' => ['{{WRAPPER}} .axis-ms-card' => 'border-radius: {{SIZE}}{{UNIT}};']
+        ]);
+
+        $this->add_control('enable_shadow', [
+            'label' => \esc_html__('Enable Box Shadow', 'axis-folio'),
+            'type' => Controls_Manager::SWITCHER,
+            'default' => 'yes',
+        ]);
+
+        $this->add_control('shadow_color', [
+            'label' => \esc_html__('Shadow Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => 'rgba(0,0,0,0.05)',
+            'condition' => ['enable_shadow' => 'yes'],
+            'selectors' => [
+                '{{WRAPPER}} .axis-ms-card' => 'box-shadow: 0 10px 30px {{VALUE}};',
+            ],
+        ]);
+
+        $this->add_responsive_control('content_padding', [
+            'label' => \esc_html__('Main Content Padding', 'axis-folio'),
+            'type' => Controls_Manager::DIMENSIONS,
+            'selectors' => ['{{WRAPPER}} .axis-ms-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'],
+            'default' => ['top' => 20, 'right' => 20, 'bottom' => 20, 'left' => 20, 'unit' => 'px'],
+            'separator' => 'before'
+        ]);
+        $this->end_controls_section();
+
+        // --- STYLE: HOVER EFFECTS ---
+        $this->start_controls_section('style_hover', [
+            'label' => \esc_html__('Hover Effects', 'axis-folio'), 
+            'tab' => Controls_Manager::TAB_STYLE
+        ]);
+        $this->add_control('hover_shadow_color', [
+            'label' => \esc_html__('Hover Shadow Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => 'rgba(0,0,0,0.15)',
+            'selectors' => [
+                '{{WRAPPER}} .axis-ms-card:hover' => 'box-shadow: 0 15px 30px {{VALUE}};',
+            ],
+        ]);
+        $this->add_control('zoom_intensity', [
+            'label' => \esc_html__('Image Zoom Scale', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
+            'range' => ['px' => ['min' => 1, 'max' => 1.5, 'step' => 0.01]],
+            'default' => ['size' => 1.1],
+            'selectors' => ['{{WRAPPER}} .axis-ms-card:hover img' => 'transform: scale({{SIZE}});'],
+        ]);
+        $this->end_controls_section();
+
+        // --- STYLE: DESCRIPTION ---
+        $this->start_controls_section('style_description', [
+            'label' => \esc_html__('Description Text', 'axis-folio'),
+            'tab' => Controls_Manager::TAB_STYLE
+        ]);
+
+        $this->add_group_control(Group_Control_Typography::get_type(), [
+            'name' => 'desc_typography',
+            'selector' => '{{WRAPPER}} .axis-ms-description',
+        ]);
+
+        $this->add_control('desc_text_color', [
+            'label' => \esc_html__('Text Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#666',
+            'selectors' => ['{{WRAPPER}} .axis-ms-description' => 'color: {{VALUE}};'],
+        ]);
+
+        $this->add_control('desc_text_bg', [
+            'label' => \esc_html__('Text Background Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .axis-ms-description' => 'background-color: {{VALUE}};'],
+        ]);
+
+        $this->add_responsive_control('desc_text_padding', [
+            'label' => \esc_html__('Text Inner Padding', 'axis-folio'),
+            'type' => Controls_Manager::DIMENSIONS,
+            'size_units' => ['px', 'em', '%'],
+            'selectors' => ['{{WRAPPER}} .axis-ms-description' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'],
+        ]);
+
+        $this->add_responsive_control('desc_bottom_spacing', [
+            'label' => \esc_html__('Bottom Spacing (Margin)', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
+            'size_units' => ['px', 'em'],
+            'range' => ['px' => ['min' => 0, 'max' => 100]],
+            'default' => ['size' => 15],
+            'selectors' => ['{{WRAPPER}} .axis-ms-description' => 'margin-bottom: {{SIZE}}{{UNIT}};'],
+        ]);
+
+        $this->add_control('desc_display', [
+            'label' => \esc_html__('Display Mode', 'axis-folio'),
+            'type' => Controls_Manager::SELECT,
+            'default' => 'block',
+            'options' => [
+                'block' => \esc_html__('Full Width (Block)', 'axis-folio'),
+                'inline-block' => \esc_html__('Fit Content (Inline Block)', 'axis-folio'),
+            ],
+            'selectors' => ['{{WRAPPER}} .axis-ms-description' => 'display: {{VALUE}};'],
+        ]);
+
+        $this->end_controls_section();
+
+        // --- STYLE: SEPARATOR LINE ---
+        $this->start_controls_section('style_separator', [
+            'label' => \esc_html__('Separator Line', 'axis-folio'),
+            'tab' => Controls_Manager::TAB_STYLE,
+        ]);
+
+        $this->add_control('show_separator', [
+            'label' => \esc_html__('Show Line', 'axis-folio'),
+            'type' => Controls_Manager::SWITCHER,
+            'default' => 'yes',
+        ]);
+
+        $this->add_control('sep_color', [
+            'label' => \esc_html__('Line Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#eeeeee',
+            'selectors' => ['{{WRAPPER}} .axis-ms-divider' => 'border-top-color: {{VALUE}};'],
+            'condition' => ['show_separator' => 'yes'],
+        ]);
+
+        $this->add_control('sep_weight', [
+            'label' => \esc_html__('Thickness', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
+            'default' => ['size' => 1],
+            'selectors' => ['{{WRAPPER}} .axis-ms-divider' => 'border-top-width: {{SIZE}}{{UNIT}};'],
+            'condition' => ['show_separator' => 'yes'],
+        ]);
+
+        $this->add_responsive_control('sep_spacing', [
+            'label' => \esc_html__('Vertical Spacing', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
+            'default' => ['size' => 15],
+            'selectors' => ['{{WRAPPER}} .axis-ms-divider' => 'margin-top: {{SIZE}}{{UNIT}}; margin-bottom: {{SIZE}}{{UNIT}};'],
+            'condition' => ['show_separator' => 'yes'],
+        ]);
+        $this->end_controls_section();
+
+        // --- STYLE: TITLE & TAGS ---
+        $this->start_controls_section('style_title_tags', [
+            'label' => \esc_html__('Title & Tags', 'axis-folio'), 
+            'tab' => Controls_Manager::TAB_STYLE
+        ]);
+        
+        $this->add_control('title_color', [
+            'label' => \esc_html__('Title Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#333',
+            'selectors' => ['{{WRAPPER}} .axis-ms-content h3' => 'color: {{VALUE}};'],
+        ]);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'title_typography', 'selector' => '{{WRAPPER}} .axis-ms-content h3']);
+        
+        $this->add_control('tag_heading', [
+            'label' => \esc_html__('Tags Styling', 'axis-folio'),
+            'type' => Controls_Manager::HEADING,
+            'separator' => 'before',
+        ]);
+
+        $this->add_control('tag_color', [
+            'label' => \esc_html__('Tag Color', 'axis-folio'), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#61ce70', 
+            'selectors' => ['{{WRAPPER}} .axis-ms-tag' => 'color: {{VALUE}};']
+        ]);
+        
+        $this->add_control('tag_bg', [
+            'label' => \esc_html__('Tag Background', 'axis-folio'), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#61ce7015', 
+            'selectors' => ['{{WRAPPER}} .axis-ms-tag' => 'background-color: {{VALUE}};']
+        ]);
+
+        $this->add_responsive_control('tag_padding', [
+            'label' => \esc_html__('Tag Padding', 'axis-folio'),
+            'type' => Controls_Manager::DIMENSIONS,
+            'size_units' => ['px', 'em'],
+            'default' => ['top' => 4, 'right' => 10, 'bottom' => 4, 'left' => 10, 'unit' => 'px'],
+            'selectors' => ['{{WRAPPER}} .axis-ms-tag' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'],
+        ]);
+
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'tag_typography', 'selector' => '{{WRAPPER}} .axis-ms-tag']);
+        $this->end_controls_section();
+
+        // --- STYLE: LOAD MORE BUTTON ---
+        $this->start_controls_section('style_button', [
+            'label' => \esc_html__('Load More Button', 'axis-folio'),
+            'tab' => Controls_Manager::TAB_STYLE,
+        ]);
+
+        $this->add_responsive_control('btn_align', [
+            'label' => \esc_html__('Alignment', 'axis-folio'),
+            'type' => Controls_Manager::CHOOSE,
+            'options' => [
+                'left' => ['title' => \esc_html__('Left', 'axis-folio'), 'icon' => 'eicon-text-align-left'],
+                'center' => ['title' => \esc_html__('Center', 'axis-folio'), 'icon' => 'eicon-text-align-center'],
+                'right' => ['title' => \esc_html__('Right', 'axis-folio'), 'icon' => 'eicon-text-align-right'],
+            ],
+            'default' => 'center',
+            'selectors' => ['{{WRAPPER}} .axis-load-more-wrap' => 'text-align: {{VALUE}};'],
+        ]);
+
+        $this->add_group_control(Group_Control_Typography::get_type(), [
+            'name' => 'btn_typography',
+            'selector' => '{{WRAPPER}} .axis-btn-load-more',
+        ]);
+
+        $this->start_controls_tabs('btn_tabs');
+        $this->start_controls_tab('btn_normal', ['label' => \esc_html__('Normal', 'axis-folio')]);
+        $this->add_control('btn_color', [
+            'label' => \esc_html__('Text Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#ffffff',
+            'selectors' => ['{{WRAPPER}} .axis-btn-load-more' => 'color: {{VALUE}};'],
+        ]);
+        $this->add_control('btn_bg', [
+            'label' => \esc_html__('Background Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#333333',
+            'selectors' => ['{{WRAPPER}} .axis-btn-load-more' => 'background-color: {{VALUE}};'],
+        ]);
+        $this->end_controls_tab();
+
+        $this->start_controls_tab('btn_hover', ['label' => \esc_html__('Hover', 'axis-folio')]);
+        $this->add_control('btn_color_hover', [
+            'label' => \esc_html__('Text Color (Hover)', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#ffffff',
+            'selectors' => ['{{WRAPPER}} .axis-btn-load-more:hover' => 'color: {{VALUE}};'],
+        ]);
+        $this->add_control('btn_bg_hover', [
+            'label' => \esc_html__('Background Color (Hover)', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#555555',
+            'selectors' => ['{{WRAPPER}} .axis-btn-load-more:hover' => 'background-color: {{VALUE}};'],
+        ]);
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
+
+        $this->add_control('btn_radius', [
+            'label' => \esc_html__('Border Radius', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
+            'default' => ['size' => 4],
+            'selectors' => ['{{WRAPPER}} .axis-btn-load-more' => 'border-radius: {{SIZE}}{{UNIT}};'],
+            'separator' => 'before'
+        ]);
         $this->end_controls_section();
     }
 
-    protected function render()
-    {
-        // 1. The Data (Identical to Gutenberg for a true Hybrid experience)
-        $portfolio_items = [
-            ['id' => 1, 'title' => 'Data Visualization', 'tags' => ['D3.js', 'React'], 'height' => 500],
-            ['id' => 2, 'title' => 'Secure Gateway', 'tags' => ['Go', 'Docker'], 'height' => 300],
-            ['id' => 3, 'title' => 'Mobile Banking', 'tags' => ['Flutter', 'Firebase'], 'height' => 600],
-            ['id' => 4, 'title' => 'AI Content Writer', 'tags' => ['Python', 'GPT-4'], 'height' => 400],
-            ['id' => 5, 'title' => 'Smart Home Hub', 'tags' => ['IoT', 'Node.js'], 'height' => 700],
-            ['id' => 6, 'title' => 'Crypto Portfolio', 'tags' => ['Vue', 'Web3'], 'height' => 350],
-            ['id' => 7, 'title' => 'E-Learning Portal', 'tags' => ['Next.js', 'PostgreSQL'], 'height' => 550],
-            ['id' => 8, 'title' => 'Fitness Tracker', 'tags' => ['Swift', 'HealthKit'], 'height' => 450],
-            ['id' => 9, 'title' => 'Event Manager', 'tags' => ['Laravel', 'MySQL'], 'height' => 650],
-            ['id' => 10, 'title' => 'Photo Lab', 'tags' => ['Canvas API', 'JS'], 'height' => 380],
-        ];
+    protected function render() {
+        $settings = $this->get_settings_for_display();
+        $id = $this->get_id();
+        $items = $settings['portfolio_list'];
+        $limit = intval($settings['items_to_show'] ?: 4);
+        
+        if ( empty( $items ) ) {
+            return;
+        }
+        ?>
 
-        // 2. The HTML Structure
-?>
-        <div class="axis-folio-elementor-wrapper">
-            <div class="masonry-container">
-                <?php foreach ($portfolio_items as $item) : ?>
-                    <div class="card">
-                        <img
-                            src="https://picsum.photos/400/<?php echo esc_attr($item['height']); ?>?sig=<?php echo esc_attr($item['id']); ?>"
-                            alt="<?php echo esc_attr($item['title']); ?>">
-                        <div class="card-body">
-                            <h3 class="card-title"><?php echo esc_html($item['title']); ?></h3>
-                            <div class="tags-container">
-                                <?php foreach ($item['tags'] as $tag) : ?>
-                                    <span class="tag"><?php echo esc_html($tag); ?></span>
-                                <?php endforeach; ?>
+        <div id="axis-wrapper-<?php echo esc_attr($id); ?>" class="axis-masonry-wrapper">
+            <div class="axis-masonry-container" id="axis-grid-<?php echo esc_attr($id); ?>" data-limit="<?php echo esc_attr($limit); ?>">
+                <?php foreach ($items as $index => $item) : 
+                    $visible = ($index < $limit) ? 'is-visible' : '';
+                    $img_id = !empty($item['list_image']['id']) ? $item['list_image']['id'] : false;
+                    $img_alt = $img_id ? get_post_meta($img_id, '_wp_attachment_image_alt', true) : '';
+                    if (empty($img_alt)) $img_alt = $item['list_title'];
+
+                    // URL Logic
+                    $link_key = 'link_' . $index;
+                    if ( ! empty( $item['list_url']['url'] ) ) {
+                        $this->add_link_attributes( $link_key, $item['list_url'] );
+                    }
+                ?>
+                    <div class="axis-ms-item <?php echo esc_attr($visible); ?>">
+                        <div class="axis-ms-card">
+                            <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
+                                <a <?php echo $this->get_render_attribute_string( $link_key ); ?>>
+                            <?php endif; ?>
+
+                            <?php if (!empty($item['list_image']['url'])) : ?>
+                                <div class="axis-img-wrapper">
+                                    <img src="<?php echo esc_url($item['list_image']['url']); ?>" alt="<?php echo esc_attr($img_alt); ?>" class="ms-img">
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
+                                </a>
+                            <?php endif; ?>
+
+                            <div class="axis-ms-content">
+                                <h3>
+                                    <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
+                                        <a <?php echo $this->get_render_attribute_string( $link_key ); ?> style="color: inherit; text-decoration: none;">
+                                    <?php endif; ?>
+                                    <?php echo esc_html($item['list_title']); ?>
+                                    <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
+                                        </a>
+                                    <?php endif; ?>
+                                </h3>
+                                
+                                <p class="axis-ms-description"><?php echo esc_html($item['list_description']); ?></p>
+                                
+                                <?php if ($settings['show_separator'] === 'yes') : ?>
+                                    <hr class="axis-ms-divider">
+                                <?php endif; ?>
+
+                                <div class="axis-ms-tags-container">
+                                    <?php 
+                                    $tags = explode(',', $item['list_tags']);
+                                    foreach ($tags as $tag) {
+                                        $trimmed = trim($tag);
+                                        if (!empty($trimmed)) {
+                                            echo '<span class="axis-ms-tag">' . esc_html($trimmed) . '</span>';
+                                        }
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
+
+            <?php if (count($items) > $limit) : ?>
+                <div class="axis-load-more-wrap">
+                    <button id="load-more-<?php echo esc_attr($id); ?>" class="axis-btn-load-more">
+                        <?php echo esc_html($settings['load_more_text']); ?>
+                    </button>
+                </div>
+            <?php endif; ?>
         </div>
-<?php
+        <?php
     }
 }

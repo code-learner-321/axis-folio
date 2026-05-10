@@ -95,4 +95,26 @@ add_action( 'wp_enqueue_scripts', function() {
     wp_enqueue_script( 'masonry' );
     wp_enqueue_script( 'imagesloaded' );
     wp_enqueue_script( 'axis-folio-js', plugin_dir_url( __FILE__ ) . 'assets/js/my-jquery.js', array('jquery', 'masonry', 'imagesloaded'), '1.0', true );
+    
+    wp_enqueue_style(
+        'elementor-axis-folio-style',
+        plugin_dir_url(__FILE__) . 'assets/css/axis-folio-widget-style.css',
+        array(),
+        '1.0.0'
+    );
+    wp_enqueue_script( 'axis-folio-script', plugin_dir_url( __FILE__ ) . 'assets/js/axis-folio-widget-script.js', array('jquery', 'masonry', 'imagesloaded'), '1.0', true );
 });
+
+/**
+ * Elementor Widget Initialization
+ */
+function elementor_axis_folio_addon() {
+    // Check if Elementor is installed and active
+    if ( ! did_action( 'elementor/loaded' ) ) {
+        return;
+    }
+
+    require_once( __DIR__ . '/includes/plugin.php' );
+    \Axis_Folio_Plugin_Addon\Plugin::instance();
+}
+add_action( 'plugins_loaded', 'elementor_axis_folio_addon' );

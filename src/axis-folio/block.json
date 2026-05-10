@@ -22,7 +22,12 @@
 		"hasZoom": { "type": "boolean", "default": true },
 		"zoomScale": { "type": "number", "default": 1.05 },
         "showTagLine": { "type": "boolean", "default": true },
-        "gridGap": { "type": "number", "default": 20 }
+        "gridGap": { "type": "number", "default": 20 },
+        "titleColor": { "type": "string", "default": "#111111" },
+        "titleFontSize": { "type": "number", "default": 20 },
+        "descColor": { "type": "string", "default": "#666666" },
+        "descFontSize": { "type": "number", "default": 16 },
+        "tagFontSize": { "type": "number", "default": 11 }
     },
     "supports": {
         "align": ["wide", "full"],
