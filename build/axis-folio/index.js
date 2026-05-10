@@ -94,23 +94,27 @@ function Edit({
       }]
     });
   };
+
+  // --- Dynamic Editor UI Styles ---
   const editorStyles = {
     container: {
       padding: '20px',
-      background: '#f9f9f9',
+      background: '#f0f0f0',
       border: '1px solid #ddd',
       borderRadius: '4px'
     },
     grid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-      gap: '20px'
+      gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`,
+      gap: `${gridGap}px`
     },
     card: {
-      background: '#fff',
-      border: '1px solid #ccc',
+      background: cardBgColor,
       padding: '15px',
-      borderRadius: '8px'
+      borderRadius: `${borderRadius}px`,
+      boxShadow: hasShadow ? `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` : 'none',
+      border: hasShadow ? 'none' : '1px solid #ccc',
+      transition: 'all 0.3s ease'
     },
     header: {
       display: 'flex',
@@ -253,7 +257,7 @@ function Edit({
           }
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover State', 'axis-folio')
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover State (Visualized on Frontend)', 'axis-folio')
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
           label: "Hover Blur",
@@ -327,6 +331,9 @@ function Edit({
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             style: editorStyles.header,
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("strong", {
+              style: {
+                color: titleColor
+              },
               children: ["ITEM ", index + 1]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
               isDestructive: true,
@@ -345,7 +352,8 @@ function Edit({
                 children: item.url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
                   src: item.url,
                   style: {
-                    maxHeight: '80px'
+                    maxHeight: '80px',
+                    borderRadius: '4px'
                   },
                   alt: ""
                 }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
@@ -354,13 +362,19 @@ function Edit({
               })
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-            label: "Title",
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Title", "axis-folio"),
             value: item.title,
-            onChange: val => updateItem(index, 'title', val)
+            onChange: val => updateItem(index, 'title', val),
+            style: {
+              color: titleColor
+            }
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
-            label: "Description",
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Description", "axis-folio"),
             value: item.description,
-            onChange: val => updateItem(index, 'description', val)
+            onChange: val => updateItem(index, 'description', val),
+            style: {
+              color: descColor
+            }
           })]
         }, index))
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {

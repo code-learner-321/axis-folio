@@ -49,10 +49,27 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         setAttributes( { items: [ ...items, { title: '', description: '', url: '', tags: '' } ] } );
     };
 
+    // --- Dynamic Editor UI Styles ---
     const editorStyles = {
-        container: { padding: '20px', background: '#f9f9f9', border: '1px solid #ddd', borderRadius: '4px' },
-        grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' },
-        card: { background: '#fff', border: '1px solid #ccc', padding: '15px', borderRadius: '8px' },
+        container: { 
+            padding: '20px', 
+            background: '#f0f0f0', 
+            border: '1px solid #ddd', 
+            borderRadius: '4px' 
+        },
+        grid: { 
+            display: 'grid', 
+            gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`, 
+            gap: `${gridGap}px` 
+        },
+        card: { 
+            background: cardBgColor, 
+            padding: '15px', 
+            borderRadius: `${borderRadius}px`,
+            boxShadow: hasShadow ? `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` : 'none',
+            border: hasShadow ? 'none' : '1px solid #ccc',
+            transition: 'all 0.3s ease'
+        },
         header: { display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' },
         mediaPlaceholder: { background: '#eee', padding: '20px', textAlign: 'center', cursor: 'pointer', marginBottom: '10px', border: '1px dashed #bbb' },
         footer: { textAlign: 'center', marginTop: '30px', paddingTop: '20px', borderTop: '1px solid #eee' }
@@ -93,7 +110,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         
                         <hr style={{ margin: '20px 0' }} />
                         
-                        <p><strong>{ __( 'Hover State', 'axis-folio' ) }</strong></p>
+                        <p><strong>{ __( 'Hover State (Visualized on Frontend)', 'axis-folio' ) }</strong></p>
                         <RangeControl label="Hover Blur" value={ hShadowBlur } onChange={ ( val ) => setAttributes( { hShadowBlur: val } ) } min={ 0 } max={ 100 } />
                         <RangeControl label="Hover Spread" value={ hShadowSpread } onChange={ ( val ) => setAttributes( { hShadowSpread: val } ) } min={ -20 } max={ 50 } />
                         <RangeControl label="Hover Offset X" value={ hShadowX } onChange={ ( val ) => setAttributes( { hShadowX: val } ) } min={ -50 } max={ 50 } />
@@ -119,7 +136,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                     { items.map( ( item, index ) => (
                         <div key={ index } style={ editorStyles.card }>
                             <div style={ editorStyles.header }>
-                                <strong>ITEM { index + 1 }</strong>
+                                <strong style={{ color: titleColor }}>ITEM { index + 1 }</strong>
                                 <Button isDestructive icon="trash" onClick={ () => removeItem( index ) } />
                             </div>
                             <MediaUploadCheck>
@@ -128,13 +145,23 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     allowedTypes={ [ 'image' ] }
                                     render={ ( { open } ) => (
                                         <div onClick={ open } style={ editorStyles.mediaPlaceholder }>
-                                            { item.url ? <img src={ item.url } style={ { maxHeight: '80px' } } alt="" /> : <Dashicon icon="format-image" /> }
+                                            { item.url ? <img src={ item.url } style={ { maxHeight: '80px', borderRadius: '4px' } } alt="" /> : <Dashicon icon="format-image" /> }
                                         </div>
                                     ) }
                                 />
                             </MediaUploadCheck>
-                            <TextControl label="Title" value={ item.title } onChange={ ( val ) => updateItem( index, 'title', val ) } />
-                            <TextareaControl label="Description" value={ item.description } onChange={ ( val ) => updateItem( index, 'description', val ) } />
+                            <TextControl 
+                                label={ __( "Title", "axis-folio" ) } 
+                                value={ item.title } 
+                                onChange={ ( val ) => updateItem( index, 'title', val ) } 
+                                style={{ color: titleColor }}
+                            />
+                            <TextareaControl 
+                                label={ __( "Description", "axis-folio" ) } 
+                                value={ item.description } 
+                                onChange={ ( val ) => updateItem( index, 'description', val ) } 
+                                style={{ color: descColor }}
+                            />
                         </div>
                     ) ) }
                 </div>
