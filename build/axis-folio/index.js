@@ -105,15 +105,17 @@ function Edit({
   // --- Dynamic Editor UI Styles ---
   const editorStyles = {
     container: {
-      padding: '20px',
+      padding: '25px',
       background: '#f0f0f0',
       border: '1px solid #ddd',
-      borderRadius: '4px'
+      borderRadius: '8px',
+      boxSizing: 'border-box'
     },
-    grid: {
-      display: 'grid',
-      gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`,
-      gap: `${gridGap}px`
+    masonryGrid: {
+      columnCount: columnsDesktop,
+      columnGap: `${gridGap}px`,
+      width: '100%',
+      display: 'block'
     },
     card: {
       background: cardBgColor,
@@ -123,20 +125,30 @@ function Edit({
       border: hasShadow ? 'none' : '1px solid #ccc',
       transition: 'all 0.3s ease',
       overflow: 'hidden',
-      position: 'relative'
+      position: 'relative',
+      marginBottom: `${gridGap}px`,
+      breakInside: 'avoid',
+      display: 'inline-block',
+      width: '100%',
+      verticalAlign: 'top',
+      // Prevents baseline overlapping issues
+      boxSizing: 'border-box'
     },
     imageWrapper: {
+      width: '100%',
       overflow: 'hidden',
       borderRadius: '4px',
-      marginBottom: '10px',
-      lineHeight: 0
+      marginBottom: '15px',
+      backgroundColor: '#e5e5e5',
+      display: 'block',
+      cursor: 'pointer',
+      lineHeight: 0 // Removes extra bottom gap in wrapper
     },
     image: {
       width: '100%',
-      height: 'auto',
-      transition: 'transform 0.5s ease',
-      maxHeight: '150px',
-      objectFit: 'cover'
+      height: 'auto !important',
+      display: 'block',
+      transition: 'transform 0.5s ease'
     },
     tagItem: {
       padding: '3px 10px',
@@ -156,23 +168,15 @@ function Edit({
       marginBottom: '10px',
       alignItems: 'center'
     },
-    mediaPlaceholder: {
-      background: '#eee',
-      padding: '20px',
-      textAlign: 'center',
-      cursor: 'pointer',
-      marginBottom: '10px',
-      border: '1px dashed #bbb'
-    },
     footer: {
       textAlign: 'center',
-      marginTop: '30px',
+      marginTop: '20px',
       paddingTop: '20px',
-      borderTop: '1px solid #eee'
+      borderTop: '1px solid #eee',
+      width: '100%',
+      clear: 'both'
     }
   };
-
-  // Create dynamic hover CSS for the editor
   const hoverCSS = `
         #${uniqueId}-editor .portfolio-edit-card:hover {
             background: ${hCardBgColor || cardBgColor} !important;
@@ -399,7 +403,7 @@ function Edit({
       className: "portfolio-editor-wrapper",
       style: editorStyles.container,
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        style: editorStyles.grid,
+        style: editorStyles.masonryGrid,
         children: items.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "portfolio-edit-card",
           style: editorStyles.card,
@@ -430,7 +434,10 @@ function Edit({
                   style: editorStyles.image,
                   alt: ""
                 }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-                  style: editorStyles.mediaPlaceholder,
+                  style: {
+                    padding: '40px',
+                    textAlign: 'center'
+                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
                     icon: "format-image"
                   })

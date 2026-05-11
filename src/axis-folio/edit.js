@@ -54,15 +54,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     // --- Dynamic Editor UI Styles ---
     const editorStyles = {
         container: { 
-            padding: '20px', 
+            padding: '25px', 
             background: '#f0f0f0', 
             border: '1px solid #ddd', 
-            borderRadius: '4px' 
+            borderRadius: '8px',
+            boxSizing: 'border-box'
         },
-        grid: { 
-            display: 'grid', 
-            gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`, 
-            gap: `${gridGap}px` 
+        masonryGrid: { 
+            columnCount: columnsDesktop, 
+            columnGap: `${gridGap}px`,
+            width: '100%',
+            display: 'block'
         },
         card: { 
             background: cardBgColor, 
@@ -72,20 +74,29 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             border: hasShadow ? 'none' : '1px solid #ccc',
             transition: 'all 0.3s ease',
             overflow: 'hidden',
-            position: 'relative'
+            position: 'relative',
+            marginBottom: `${gridGap}px`, 
+            breakInside: 'avoid', 
+            display: 'inline-block', 
+            width: '100%',
+            verticalAlign: 'top', // Prevents baseline overlapping issues
+            boxSizing: 'border-box'
         },
         imageWrapper: {
+            width: '100%',
             overflow: 'hidden',
             borderRadius: '4px',
-            marginBottom: '10px',
-            lineHeight: 0
+            marginBottom: '15px',
+            backgroundColor: '#e5e5e5',
+            display: 'block',
+            cursor: 'pointer',
+            lineHeight: 0 // Removes extra bottom gap in wrapper
         },
         image: {
             width: '100%',
-            height: 'auto',
-            transition: 'transform 0.5s ease',
-            maxHeight: '150px',
-            objectFit: 'cover'
+            height: 'auto !important',
+            display: 'block',
+            transition: 'transform 0.5s ease'
         },
         tagItem: {
             padding: '3px 10px',
@@ -100,11 +111,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             marginBottom: '5px'
         },
         header: { display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' },
-        mediaPlaceholder: { background: '#eee', padding: '20px', textAlign: 'center', cursor: 'pointer', marginBottom: '10px', border: '1px dashed #bbb' },
-        footer: { textAlign: 'center', marginTop: '30px', paddingTop: '20px', borderTop: '1px solid #eee' }
+        footer: { textAlign: 'center', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #eee', width: '100%', clear: 'both' }
     };
 
-    // Create dynamic hover CSS for the editor
     const hoverCSS = `
         #${uniqueId}-editor .portfolio-edit-card:hover {
             background: ${hCardBgColor || cardBgColor} !important;
@@ -121,7 +130,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         <div { ...useBlockProps() }>
             <style>{ hoverCSS }</style>
             
-            { /* SETTINGS TAB */ }
             <InspectorControls>
                 <PanelBody title={ __( 'Grid Layout', 'axis-folio' ) }>
                     <RangeControl label="Columns (Desktop)" value={ columnsDesktop } onChange={ ( val ) => setAttributes( { columnsDesktop: val } ) } min={ 1 } max={ 6 } />
@@ -137,7 +145,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 </PanelBody>
             </InspectorControls>
 
-            { /* STYLES TAB */ }
             <InspectorControls group="styles">
                 <PanelBody title={ __( 'Card Appearance', 'axis-folio' ) }>
                     <RangeControl label="Border Radius" value={ borderRadius } onChange={ ( val ) => setAttributes( { borderRadius: val } ) } min={ 0 } max={ 50 } />
@@ -152,9 +159,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         <RangeControl label="Spread" value={ shadowSpread } onChange={ ( val ) => setAttributes( { shadowSpread: val } ) } min={ -20 } max={ 50 } />
                         <RangeControl label="Offset X" value={ shadowX } onChange={ ( val ) => setAttributes( { shadowX: val } ) } min={ -50 } max={ 50 } />
                         <RangeControl label="Offset Y" value={ shadowY } onChange={ ( val ) => setAttributes( { shadowY: val } ) } min={ -50 } max={ 50 } />
-                        
                         <hr style={{ margin: '20px 0' }} />
-                        
                         <p><strong>{ __( 'Hover State', 'axis-folio' ) }</strong></p>
                         <RangeControl label="Hover Blur" value={ hShadowBlur } onChange={ ( val ) => setAttributes( { hShadowBlur: val } ) } min={ 0 } max={ 100 } />
                         <RangeControl label="Hover Spread" value={ hShadowSpread } onChange={ ( val ) => setAttributes( { hShadowSpread: val } ) } min={ -20 } max={ 50 } />
@@ -178,9 +183,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 />
             </InspectorControls>
 
-            { /* EDITOR CANVAS */ }
             <div id={ `${uniqueId}-editor` } className="portfolio-editor-wrapper" style={ editorStyles.container }>
-                <div style={ editorStyles.grid }>
+                <div style={ editorStyles.masonryGrid }>
                     { items.map( ( item, index ) => (
                         <div key={ index } className="portfolio-edit-card" style={ editorStyles.card }>
                             <div style={ editorStyles.header }>
@@ -201,7 +205,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                                     alt="" 
                                                 />
                                             ) : (
-                                                <div style={ editorStyles.mediaPlaceholder }><Dashicon icon="format-image" /></div>
+                                                <div style={{ padding: '40px', textAlign: 'center' }}><Dashicon icon="format-image" /></div>
                                             ) }
                                         </div>
                                     ) }
@@ -225,7 +229,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                 onChange={ ( val ) => updateItem( index, 'tags', val ) } 
                             />
                             
-                            { /* Visual Tag Preview in Editor */ }
                             { showTags && item.tags && (
                                 <div style={{ marginTop: '10px' }}>
                                     { item.tags.split(',').map( ( tag, i ) => (
