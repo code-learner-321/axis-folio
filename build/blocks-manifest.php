@@ -10,6 +10,10 @@ return array(
 		'category' => 'widgets',
 		'icon' => 'layout',
 		'attributes' => array(
+			'btnBorderRadius' => array(
+				'type' => 'number',
+				'default' => 4
+			),
 			'uniqueId' => array(
 				'type' => 'string'
 			),

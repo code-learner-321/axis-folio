@@ -24,7 +24,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         titleColor, descColor, tagBgColor, tagTextColor, tagFontSize,
         showTags,
         enableLoadMore, postsPerPage, loadMoreText, btnBgColor, btnTextColor,
-        btnHovBgColor, btnHovTextColor, // New button hover attributes
+        btnHovBgColor, btnHovTextColor, btnBorderRadius,
         hasZoom, zoomScale,
         // Shadow attributes
         shadowX, shadowY, shadowBlur, shadowSpread, shadowColor,
@@ -126,7 +126,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         },
         loadMorePreview: {
             padding: '10px 25px',
-            borderRadius: '4px',
+            borderRadius: `${btnBorderRadius}px`,
             backgroundColor: btnBgColor,
             color: btnTextColor,
             fontWeight: '600',
@@ -139,7 +139,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         }
     };
 
-    // Updated dynamic hover CSS to include Load More button
     const hoverCSS = `
         #${uniqueId}-editor .portfolio-edit-card:hover {
             background: ${hCardBgColor || cardBgColor} !important;
@@ -160,6 +159,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         <div { ...useBlockProps() }>
             <style>{ hoverCSS }</style>
             
+            {/* --- SETTINGS TAB (General) --- */}
             <InspectorControls>
                 <PanelBody title={ __( 'Grid Layout', 'axis-folio' ) }>
                     <RangeControl label="Columns (Desktop)" value={ columnsDesktop } onChange={ ( val ) => setAttributes( { columnsDesktop: val } ) } min={ 1 } max={ 6 } />
@@ -178,12 +178,25 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 </PanelBody>
             </InspectorControls>
 
+            {/* --- STYLES TAB (Appearance) --- */}
             <InspectorControls group="styles">
                 <PanelBody title={ __( 'Card Appearance', 'axis-folio' ) }>
-                    <RangeControl label="Border Radius" value={ borderRadius } onChange={ ( val ) => setAttributes( { borderRadius: val } ) } min={ 0 } max={ 50 } />
+                    <RangeControl label="Card Border Radius" value={ borderRadius } onChange={ ( val ) => setAttributes( { borderRadius: val } ) } min={ 0 } max={ 50 } />
                     <ToggleControl label="Enable Box Shadow" checked={ hasShadow } onChange={ ( val ) => setAttributes( { hasShadow: val } ) } />
                     <ToggleControl label="Show Tags" checked={ showTags } onChange={ ( val ) => setAttributes( { showTags: val } ) } />
                 </PanelBody>
+
+                { enableLoadMore && (
+                    <PanelBody title={ __( 'Button Styles', 'axis-folio' ) } initialOpen={ false }>
+                        <RangeControl 
+                            label="Button Border Radius" 
+                            value={ btnBorderRadius } 
+                            onChange={ ( val ) => setAttributes( { btnBorderRadius: val } ) } 
+                            min={ 0 } 
+                            max={ 50 } 
+                        />
+                    </PanelBody>
+                )}
 
                 { hasShadow && (
                     <PanelBody title={ __( 'Shadow Controls', 'axis-folio' ) } initialOpen={ false }>

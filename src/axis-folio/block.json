@@ -7,6 +7,7 @@
     "category": "widgets",
     "icon": "layout",
     "attributes": {
+        "btnBorderRadius": { "type": "number", "default": 4 },
         "uniqueId": { "type": "string" },
         "items": { "type": "array", "default": [] },
         "columnsDesktop": { "type": "number", "default": 3 },

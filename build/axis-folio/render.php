@@ -12,6 +12,10 @@ $enable_load_more = $attributes['enableLoadMore'] ?? false;
 $posts_per_page   = $attributes['postsPerPage'] ?? 3;
 $load_more_text   = $attributes['loadMoreText'] ?? 'Load More';
 
+// Style Attributes
+$card_radius      = $attributes['borderRadius'] ?? 8; // Card border radius
+$btn_radius       = $attributes['btnBorderRadius'] ?? 4; // Button border radius
+
 // Dynamic Typography & Colors
 $title_color    = $attributes['titleColor'] ?? '#111';
 $title_size     = $attributes['titleFontSize'] ?? 20;
@@ -33,7 +37,8 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id ] );
             <?php foreach ( $items as $index => $item ) : 
                 $is_hidden = ($enable_load_more && $index >= $posts_per_page);
                 $item_class = 'portfolio-item' . ($is_hidden ? ' is-hidden' : '');
-                $item_style = $is_hidden ? 'display: none;' : 'display: block;';
+                // Apply card border radius here
+                $item_style = ($is_hidden ? 'display: none;' : 'display: block;') . " border-radius: {$card_radius}px;";
                 ?>
                 <div class="<?php echo esc_attr($item_class); ?>" style="<?php echo esc_attr($item_style); ?>">
                     <?php if ( ! empty( $item['url'] ) ) : ?>
@@ -78,7 +83,8 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id ] );
         <div class="portfolio-load-more-wrapper" style="text-align: center; margin-top: 40px; clear: both;">
             <button class="portfolio-load-more-btn" 
                     data-perpage="<?php echo esc_attr( $posts_per_page ); ?>"
-                    style="padding: 12px 30px; border: none; cursor: pointer; border-radius: 4px; font-weight: 600;">
+                    style="padding: 12px 30px; border: none; cursor: pointer; font-weight: 600; 
+                    border-radius: <?php echo esc_attr( $btn_radius ); ?>px;">
                 <?php echo esc_html( $load_more_text ); ?>
             </button>
         </div>
