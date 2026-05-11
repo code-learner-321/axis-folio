@@ -131,7 +131,6 @@ function Edit({
       display: 'inline-block',
       width: '100%',
       verticalAlign: 'top',
-      // Prevents baseline overlapping issues
       boxSizing: 'border-box'
     },
     imageWrapper: {
@@ -142,7 +141,7 @@ function Edit({
       backgroundColor: '#e5e5e5',
       display: 'block',
       cursor: 'pointer',
-      lineHeight: 0 // Removes extra bottom gap in wrapper
+      lineHeight: 0
     },
     image: {
       width: '100%',
@@ -174,7 +173,23 @@ function Edit({
       paddingTop: '20px',
       borderTop: '1px solid #eee',
       width: '100%',
-      clear: 'both'
+      clear: 'both',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '15px',
+      alignItems: 'center'
+    },
+    loadMorePreview: {
+      padding: '10px 25px',
+      borderRadius: '4px',
+      backgroundColor: btnBgColor,
+      color: btnTextColor,
+      fontWeight: '600',
+      fontSize: '14px',
+      display: 'inline-block',
+      cursor: 'default',
+      marginTop: '10px',
+      border: 'none'
     }
   };
   const hoverCSS = `
@@ -236,14 +251,22 @@ function Edit({
           onChange: val => setAttributes({
             enableLoadMore: val
           })
-        }), enableLoadMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Items Per Page",
-          value: postsPerPage,
-          onChange: val => setAttributes({
-            postsPerPage: val
-          }),
-          min: 1,
-          max: 20
+        }), enableLoadMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+            label: "Button Text",
+            value: loadMoreText,
+            onChange: val => setAttributes({
+              loadMoreText: val
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+            label: "Items Per Page",
+            value: postsPerPage,
+            onChange: val => setAttributes({
+              postsPerPage: val
+            }),
+            min: 1,
+            max: 20
+          })]
         })]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
@@ -396,6 +419,12 @@ function Edit({
             btnBgColor: val
           }),
           label: "Button Background"
+        }, {
+          value: btnTextColor,
+          onChange: val => setAttributes({
+            btnTextColor: val
+          }),
+          label: "Button Text Color"
         }]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -472,14 +501,33 @@ function Edit({
             }, i))
           })]
         }, index))
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         style: editorStyles.footer,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
           isPrimary: true,
           icon: "plus",
           onClick: addNewItem,
-          children: "Add New Item"
-        })
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add New Item', 'axis-folio')
+        }), enableLoadMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          style: {
+            borderTop: '1px dashed #ccc',
+            width: '100%',
+            marginTop: '10px',
+            paddingTop: '20px'
+          },
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+            style: {
+              fontSize: '11px',
+              color: '#888',
+              textTransform: 'uppercase',
+              marginBottom: '5px'
+            },
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Load More Preview', 'axis-folio')
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            style: editorStyles.loadMorePreview,
+            children: loadMoreText || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Load More', 'axis-folio')
+          })]
+        })]
       })]
     })]
   });

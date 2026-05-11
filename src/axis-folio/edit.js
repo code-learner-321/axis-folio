@@ -79,7 +79,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             breakInside: 'avoid', 
             display: 'inline-block', 
             width: '100%',
-            verticalAlign: 'top', // Prevents baseline overlapping issues
+            verticalAlign: 'top',
             boxSizing: 'border-box'
         },
         imageWrapper: {
@@ -90,7 +90,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             backgroundColor: '#e5e5e5',
             display: 'block',
             cursor: 'pointer',
-            lineHeight: 0 // Removes extra bottom gap in wrapper
+            lineHeight: 0
         },
         image: {
             width: '100%',
@@ -111,7 +111,30 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             marginBottom: '5px'
         },
         header: { display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' },
-        footer: { textAlign: 'center', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #eee', width: '100%', clear: 'both' }
+        footer: { 
+            textAlign: 'center', 
+            marginTop: '20px', 
+            paddingTop: '20px', 
+            borderTop: '1px solid #eee', 
+            width: '100%', 
+            clear: 'both',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '15px',
+            alignItems: 'center'
+        },
+        loadMorePreview: {
+            padding: '10px 25px',
+            borderRadius: '4px',
+            backgroundColor: btnBgColor,
+            color: btnTextColor,
+            fontWeight: '600',
+            fontSize: '14px',
+            display: 'inline-block',
+            cursor: 'default',
+            marginTop: '10px',
+            border: 'none'
+        }
     };
 
     const hoverCSS = `
@@ -140,7 +163,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 <PanelBody title={ __( 'Pagination', 'axis-folio' ) }>
                     <ToggleControl label="Enable Load More" checked={ enableLoadMore } onChange={ ( val ) => setAttributes( { enableLoadMore: val } ) } />
                     { enableLoadMore && (
-                        <RangeControl label="Items Per Page" value={ postsPerPage } onChange={ ( val ) => setAttributes( { postsPerPage: val } ) } min={ 1 } max={ 20 } />
+                        <>
+                            <TextControl label="Button Text" value={ loadMoreText } onChange={ ( val ) => setAttributes( { loadMoreText: val } ) } />
+                            <RangeControl label="Items Per Page" value={ postsPerPage } onChange={ ( val ) => setAttributes( { postsPerPage: val } ) } min={ 1 } max={ 20 } />
+                        </>
                     )}
                 </PanelBody>
             </InspectorControls>
@@ -179,6 +205,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         { value: tagBgColor, onChange: ( val ) => setAttributes( { tagBgColor: val } ), label: "Tag Background" },
                         { value: tagTextColor, onChange: ( val ) => setAttributes( { tagTextColor: val } ), label: "Tag Text Color" },
                         { value: btnBgColor, onChange: ( val ) => setAttributes( { btnBgColor: val } ), label: "Button Background" },
+                        { value: btnTextColor, onChange: ( val ) => setAttributes( { btnTextColor: val } ), label: "Button Text Color" },
                     ] }
                 />
             </InspectorControls>
@@ -241,8 +268,23 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         </div>
                     ) ) }
                 </div>
+                
                 <div style={ editorStyles.footer }>
-                    <Button isPrimary icon="plus" onClick={ addNewItem }>Add New Item</Button>
+                    <Button isPrimary icon="plus" onClick={ addNewItem }>
+                        { __( 'Add New Item', 'axis-folio' ) }
+                    </Button>
+
+                    { /* LOAD MORE BUTTON PREVIEW */ }
+                    { enableLoadMore && (
+                        <div style={{ borderTop: '1px dashed #ccc', width: '100%', marginTop: '10px', paddingTop: '20px' }}>
+                            <p style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase', marginBottom: '5px' }}>
+                                { __( 'Load More Preview', 'axis-folio' ) }
+                            </p>
+                            <div style={ editorStyles.loadMorePreview }>
+                                { loadMoreText || __( 'Load More', 'axis-folio' ) }
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
