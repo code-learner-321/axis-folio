@@ -42,6 +42,10 @@
       "type": "string",
       "default": "#ffffff"
     },
+    "hCardBgColor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
     "tagBgColor": {
       "type": "string",
       "default": "#f0f0f0"
@@ -106,8 +110,13 @@
       "type": "string",
       "default": "#ffffff"
     },
-    "/* Shadow Attributes */": {
-      "type": "string"
+    "btnHovBgColor": {
+      "type": "string",
+      "default": "#333333"
+    },
+    "btnHovTextColor": {
+      "type": "string",
+      "default": "#ffffff"
     },
     "shadowX": {
       "type": "number",
@@ -128,9 +137,6 @@
     "shadowColor": {
       "type": "string",
       "default": "rgba(0,0,0,0.1)"
-    },
-    "/* Hover Shadow Attributes */": {
-      "type": "string"
     },
     "hShadowX": {
       "type": "number",

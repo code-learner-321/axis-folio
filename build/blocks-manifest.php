@@ -47,6 +47,10 @@ return array(
 				'type' => 'string',
 				'default' => '#ffffff'
 			),
+			'hCardBgColor' => array(
+				'type' => 'string',
+				'default' => '#ffffff'
+			),
 			'tagBgColor' => array(
 				'type' => 'string',
 				'default' => '#f0f0f0'
@@ -111,8 +115,13 @@ return array(
 				'type' => 'string',
 				'default' => '#ffffff'
 			),
-			'/* Shadow Attributes */' => array(
-				'type' => 'string'
+			'btnHovBgColor' => array(
+				'type' => 'string',
+				'default' => '#333333'
+			),
+			'btnHovTextColor' => array(
+				'type' => 'string',
+				'default' => '#ffffff'
 			),
 			'shadowX' => array(
 				'type' => 'number',
@@ -133,9 +142,6 @@ return array(
 			'shadowColor' => array(
 				'type' => 'string',
 				'default' => 'rgba(0,0,0,0.1)'
-			),
-			'/* Hover Shadow Attributes */' => array(
-				'type' => 'string'
 			),
 			'hShadowX' => array(
 				'type' => 'number',

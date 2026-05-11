@@ -24,6 +24,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         titleColor, descColor, tagBgColor, tagTextColor, tagFontSize,
         showTags,
         enableLoadMore, postsPerPage, loadMoreText, btnBgColor, btnTextColor,
+        btnHovBgColor, btnHovTextColor, // New button hover attributes
         hasZoom, zoomScale,
         // Shadow attributes
         shadowX, shadowY, shadowBlur, shadowSpread, shadowColor,
@@ -131,12 +132,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             fontWeight: '600',
             fontSize: '14px',
             display: 'inline-block',
-            cursor: 'default',
+            cursor: 'pointer',
             marginTop: '10px',
-            border: 'none'
+            border: 'none',
+            transition: 'all 0.3s ease'
         }
     };
 
+    // Updated dynamic hover CSS to include Load More button
     const hoverCSS = `
         #${uniqueId}-editor .portfolio-edit-card:hover {
             background: ${hCardBgColor || cardBgColor} !important;
@@ -147,6 +150,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             transform: scale(${zoomScale}) !important;
         }
         ` : ''}
+        #${uniqueId}-editor .portfolio-load-more-preview:hover {
+            background: ${btnHovBgColor} !important;
+            color: ${btnHovTextColor} !important;
+        }
     `;
 
     return (
@@ -206,6 +213,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         { value: tagTextColor, onChange: ( val ) => setAttributes( { tagTextColor: val } ), label: "Tag Text Color" },
                         { value: btnBgColor, onChange: ( val ) => setAttributes( { btnBgColor: val } ), label: "Button Background" },
                         { value: btnTextColor, onChange: ( val ) => setAttributes( { btnTextColor: val } ), label: "Button Text Color" },
+                        { value: btnHovBgColor, onChange: ( val ) => setAttributes( { btnHovBgColor: val } ), label: "Button Hover Background" },
+                        { value: btnHovTextColor, onChange: ( val ) => setAttributes( { btnHovTextColor: val } ), label: "Button Hover Text Color" },
                     ] }
                 />
             </InspectorControls>
@@ -274,13 +283,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         { __( 'Add New Item', 'axis-folio' ) }
                     </Button>
 
-                    { /* LOAD MORE BUTTON PREVIEW */ }
                     { enableLoadMore && (
                         <div style={{ borderTop: '1px dashed #ccc', width: '100%', marginTop: '10px', paddingTop: '20px' }}>
                             <p style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase', marginBottom: '5px' }}>
                                 { __( 'Load More Preview', 'axis-folio' ) }
                             </p>
-                            <div style={ editorStyles.loadMorePreview }>
+                            <div className="portfolio-load-more-preview" style={ editorStyles.loadMorePreview }>
                                 { loadMoreText || __( 'Load More', 'axis-folio' ) }
                             </div>
                         </div>

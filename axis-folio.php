@@ -45,9 +45,10 @@ function axis_folio_render_handler( $attributes, $content ) {
     
     $has_zoom   = $attributes['hasZoom'] ?? true;
     $zoom_scale = $attributes['zoomScale'] ?? 1.15;
-    $show_line  = $attributes['showTagLine'] ?? true;
     $btn_bg     = $attributes['btnBgColor'] ?? '#111';
-    $btn_color = $attributes['btnTextColor'] ?? '#fff';
+    $btn_color  = $attributes['btnTextColor'] ?? '#fff';
+    $btn_h_bg   = $attributes['btnHovBgColor'] ?? '#333';
+    $btn_h_color = $attributes['btnHovTextColor'] ?? '#fff';
 
     $css = "
         #{$id} .portfolio-item {
@@ -81,7 +82,15 @@ function axis_folio_render_handler( $attributes, $content ) {
             transition: transform 0.5s ease !important; 
             display: block;
         }
-        #{$id} .portfolio-load-more-btn { background: {$btn_bg} !important; color: {$btn_color} !important; }
+        #{$id} .portfolio-load-more-btn { 
+            background: {$btn_bg} !important; 
+            color: {$btn_color} !important; 
+            transition: all 0.3s ease !important;
+        }
+        #{$id} .portfolio-load-more-btn:hover { 
+            background: {$btn_h_bg} !important; 
+            color: {$btn_h_color} !important; 
+        }
 
         @media (max-width: 1024px) {
             #{$id} .portfolio-item, #{$id} .grid-sizer { 
