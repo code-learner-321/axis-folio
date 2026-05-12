@@ -7,14 +7,20 @@ $items = $attributes['items'] ?? [];
 $unique_id = $attributes['uniqueId'] ?? 'af-' . wp_generate_password( 4, false );
 $show_tags = $attributes['showTags'] ?? true;
 
+// Divider Logic
+$show_divider  = $attributes['showTagDivider'] ?? false;
+$divider_w     = $attributes['dividerWidth'] ?? 100;
+$divider_h     = $attributes['dividerHeight'] ?? 1;
+$divider_color = $attributes['dividerColor'] ?? '#eeeeee';
+
 // Pagination Attributes
 $enable_load_more = $attributes['enableLoadMore'] ?? false;
 $posts_per_page   = $attributes['postsPerPage'] ?? 3;
 $load_more_text   = $attributes['loadMoreText'] ?? 'Load More';
 
 // Style Attributes
-$card_radius      = $attributes['borderRadius'] ?? 8; // Card border radius
-$btn_radius       = $attributes['btnBorderRadius'] ?? 4; // Button border radius
+$card_radius      = $attributes['borderRadius'] ?? 8;
+$btn_radius       = $attributes['btnBorderRadius'] ?? 4;
 
 // Dynamic Typography & Colors
 $title_color    = $attributes['titleColor'] ?? '#111';
@@ -37,7 +43,6 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id ] );
             <?php foreach ( $items as $index => $item ) : 
                 $is_hidden = ($enable_load_more && $index >= $posts_per_page);
                 $item_class = 'portfolio-item' . ($is_hidden ? ' is-hidden' : '');
-                // Apply card border radius here
                 $item_style = ($is_hidden ? 'display: none;' : 'display: block;') . " border-radius: {$card_radius}px;";
                 ?>
                 <div class="<?php echo esc_attr($item_class); ?>" style="<?php echo esc_attr($item_style); ?>">
@@ -59,6 +64,10 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id ] );
                             font-size: <?php echo esc_attr( $desc_size ); ?>px;">
                             <?php echo esc_html( $item['description'] ?? '' ); ?>
                         </p>
+
+                        <?php if ( $show_divider ) : ?>
+                            <div class="tag-divider" style="width: <?php echo esc_attr($divider_w); ?>%; height: <?php echo esc_attr($divider_h); ?>px; background-color: <?php echo esc_attr($divider_color); ?>; margin: 15px 0;"></div>
+                        <?php endif; ?>
 
                         <?php if ( $show_tags && ! empty( $item['tags'] ) ) : 
                             $tags = explode( ',', $item['tags'] ); ?>

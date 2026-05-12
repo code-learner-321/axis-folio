@@ -166,6 +166,34 @@ return array(
 			'hShadowColor' => array(
 				'type' => 'string',
 				'default' => 'rgba(0,0,0,0.2)'
+			),
+			'showTagDivider' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
+			'dividerWidth' => array(
+				'type' => 'number',
+				'default' => 100
+			),
+			'dividerHeight' => array(
+				'type' => 'number',
+				'default' => 1
+			),
+			'dividerColor' => array(
+				'type' => 'string',
+				'default' => '#eeeeee'
+			),
+			'titleFontFamily' => array(
+				'type' => 'string',
+				'default' => 'inherit'
+			),
+			'descFontFamily' => array(
+				'type' => 'string',
+				'default' => 'inherit'
+			),
+			'tagFontFamily' => array(
+				'type' => 'string',
+				'default' => 'inherit'
 			)
 		),
 		'supports' => array(

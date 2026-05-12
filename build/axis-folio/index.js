@@ -59,7 +59,6 @@ function Edit({
     btnBorderRadius,
     hasZoom,
     zoomScale,
-    // Shadow attributes
     shadowX,
     shadowY,
     shadowBlur,
@@ -69,7 +68,16 @@ function Edit({
     hShadowY,
     hShadowBlur,
     hShadowSpread,
-    hShadowColor
+    hShadowColor,
+    showTagDivider,
+    dividerWidth,
+    dividerHeight,
+    dividerColor,
+    titleFontFamily,
+    descFontFamily,
+    tagFontFamily,
+    titleFontSize,
+    descFontSize
   } = attributes;
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
     if (!uniqueId) {
@@ -104,8 +112,25 @@ function Edit({
       }]
     });
   };
-
-  // --- Dynamic Editor UI Styles ---
+  const fontOptions = [{
+    label: 'Default',
+    value: 'inherit'
+  }, {
+    label: 'Arial',
+    value: 'Arial, sans-serif'
+  }, {
+    label: 'Georgia',
+    value: 'Georgia, serif'
+  }, {
+    label: 'Helvetica',
+    value: 'Helvetica, sans-serif'
+  }, {
+    label: 'Times New Roman',
+    value: 'Times New Roman, serif'
+  }, {
+    label: 'Verdana',
+    value: 'Verdana, sans-serif'
+  }];
   const editorStyles = {
     container: {
       padding: '25px',
@@ -160,9 +185,17 @@ function Edit({
       backgroundColor: tagBgColor,
       color: tagTextColor,
       fontSize: `${tagFontSize}px`,
+      fontFamily: tagFontFamily,
       display: 'inline-block',
       marginRight: '5px',
       marginBottom: '5px'
+    },
+    divider: {
+      width: `${dividerWidth}%`,
+      height: `${dividerHeight}px`,
+      backgroundColor: dividerColor || '#eee',
+      margin: '10px 0',
+      display: showTagDivider ? 'block' : 'none'
     },
     header: {
       display: 'flex',
@@ -301,6 +334,112 @@ function Edit({
           onChange: val => setAttributes({
             showTags: val
           })
+        }), showTags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+            label: "Show Divider Above Tags",
+            checked: showTagDivider,
+            onChange: val => setAttributes({
+              showTagDivider: val
+            })
+          }), showTagDivider && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+              label: "Divider Width (%)",
+              value: dividerWidth,
+              onChange: val => setAttributes({
+                dividerWidth: val
+              }),
+              min: 10,
+              max: 100
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+              label: "Divider Height (px)",
+              value: dividerHeight,
+              onChange: val => setAttributes({
+                dividerHeight: val
+              }),
+              min: 1,
+              max: 10
+            })]
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Typography', 'axis-folio'),
+        initialOpen: false,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Title', 'axis-folio')
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+          label: "Font Family",
+          value: titleFontFamily,
+          options: fontOptions,
+          onChange: val => setAttributes({
+            titleFontFamily: val
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+          label: "Font Size",
+          value: titleFontSize,
+          onChange: val => setAttributes({
+            titleFontSize: val
+          }),
+          min: 10,
+          max: 100
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Description', 'axis-folio')
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+          label: "Font Family",
+          value: descFontFamily,
+          options: fontOptions,
+          onChange: val => setAttributes({
+            descFontFamily: val
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+          label: "Font Size",
+          value: descFontSize,
+          onChange: val => setAttributes({
+            descFontSize: val
+          }),
+          min: 10,
+          max: 50
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tags', 'axis-folio')
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+          label: "Font Family",
+          value: tagFontFamily,
+          options: fontOptions,
+          onChange: val => setAttributes({
+            tagFontFamily: val
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+          label: "Font Size",
+          value: tagFontSize,
+          onChange: val => setAttributes({
+            tagFontSize: val
+          }),
+          min: 8,
+          max: 30
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Image Controls', 'axis-folio'),
+        initialOpen: false,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          label: "Enable Image Zoom",
+          checked: hasZoom,
+          onChange: val => setAttributes({
+            hasZoom: val
+          })
+        }), hasZoom && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+          label: "Zoom Scale",
+          value: zoomScale,
+          onChange: val => setAttributes({
+            zoomScale: val
+          }),
+          min: 1,
+          max: 2,
+          step: 0.01
         })]
       }), enableLoadMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Button Styles', 'axis-folio'),
@@ -434,6 +573,12 @@ function Edit({
           }),
           label: "Tag Text Color"
         }, {
+          value: dividerColor,
+          onChange: val => setAttributes({
+            dividerColor: val
+          }),
+          label: "Divider Color"
+        }, {
           value: btnBgColor,
           onChange: val => setAttributes({
             btnBgColor: val
@@ -510,19 +655,23 @@ function Edit({
             value: item.title,
             onChange: val => updateItem(index, 'title', val),
             style: {
-              color: titleColor
+              color: titleColor,
+              fontFamily: titleFontFamily
             }
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Description", "axis-folio"),
             value: item.description,
             onChange: val => updateItem(index, 'description', val),
             style: {
-              color: descColor
+              color: descColor,
+              fontFamily: descFontFamily
             }
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Tags (Comma separated)", "axis-folio"),
             value: item.tags,
             onChange: val => updateItem(index, 'tags', val)
+          }), showTagDivider && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            style: editorStyles.divider
           }), showTags && item.tags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             style: {
               marginTop: '10px'
@@ -694,7 +843,7 @@ module.exports = window["wp"]["i18n"];
   \***********************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/axis-folio","version":"0.1.0","title":"Axis Folio","category":"widgets","icon":"layout","attributes":{"btnBorderRadius":{"type":"number","default":4},"uniqueId":{"type":"string"},"items":{"type":"array","default":[]},"columnsDesktop":{"type":"number","default":3},"columnsTablet":{"type":"number","default":2},"columnsMobile":{"type":"number","default":1},"borderRadius":{"type":"number","default":8},"hasShadow":{"type":"boolean","default":true},"showTags":{"type":"boolean","default":true},"cardBgColor":{"type":"string","default":"#ffffff"},"hCardBgColor":{"type":"string","default":"#ffffff"},"tagBgColor":{"type":"string","default":"#f0f0f0"},"tagTextColor":{"type":"string","default":"#555555"},"hasZoom":{"type":"boolean","default":true},"zoomScale":{"type":"number","default":1.05},"showTagLine":{"type":"boolean","default":true},"gridGap":{"type":"number","default":20},"titleColor":{"type":"string","default":"#111111"},"titleFontSize":{"type":"number","default":20},"descColor":{"type":"string","default":"#666666"},"descFontSize":{"type":"number","default":16},"tagFontSize":{"type":"number","default":11},"enableLoadMore":{"type":"boolean","default":false},"postsPerPage":{"type":"number","default":6},"loadMoreText":{"type":"string","default":"Load More"},"btnBgColor":{"type":"string","default":"#111111"},"btnTextColor":{"type":"string","default":"#ffffff"},"btnHovBgColor":{"type":"string","default":"#333333"},"btnHovTextColor":{"type":"string","default":"#ffffff"},"shadowX":{"type":"number","default":0},"shadowY":{"type":"number","default":4},"shadowBlur":{"type":"number","default":12},"shadowSpread":{"type":"number","default":0},"shadowColor":{"type":"string","default":"rgba(0,0,0,0.1)"},"hShadowX":{"type":"number","default":0},"hShadowY":{"type":"number","default":8},"hShadowBlur":{"type":"number","default":20},"hShadowSpread":{"type":"number","default":0},"hShadowColor":{"type":"string","default":"rgba(0,0,0,0.2)"}},"supports":{"align":["wide","full"],"html":false},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/axis-folio","version":"0.1.0","title":"Axis Folio","category":"widgets","icon":"layout","attributes":{"btnBorderRadius":{"type":"number","default":4},"uniqueId":{"type":"string"},"items":{"type":"array","default":[]},"columnsDesktop":{"type":"number","default":3},"columnsTablet":{"type":"number","default":2},"columnsMobile":{"type":"number","default":1},"borderRadius":{"type":"number","default":8},"hasShadow":{"type":"boolean","default":true},"showTags":{"type":"boolean","default":true},"cardBgColor":{"type":"string","default":"#ffffff"},"hCardBgColor":{"type":"string","default":"#ffffff"},"tagBgColor":{"type":"string","default":"#f0f0f0"},"tagTextColor":{"type":"string","default":"#555555"},"hasZoom":{"type":"boolean","default":true},"zoomScale":{"type":"number","default":1.05},"showTagLine":{"type":"boolean","default":true},"gridGap":{"type":"number","default":20},"titleColor":{"type":"string","default":"#111111"},"titleFontSize":{"type":"number","default":20},"descColor":{"type":"string","default":"#666666"},"descFontSize":{"type":"number","default":16},"tagFontSize":{"type":"number","default":11},"enableLoadMore":{"type":"boolean","default":false},"postsPerPage":{"type":"number","default":6},"loadMoreText":{"type":"string","default":"Load More"},"btnBgColor":{"type":"string","default":"#111111"},"btnTextColor":{"type":"string","default":"#ffffff"},"btnHovBgColor":{"type":"string","default":"#333333"},"btnHovTextColor":{"type":"string","default":"#ffffff"},"shadowX":{"type":"number","default":0},"shadowY":{"type":"number","default":4},"shadowBlur":{"type":"number","default":12},"shadowSpread":{"type":"number","default":0},"shadowColor":{"type":"string","default":"rgba(0,0,0,0.1)"},"hShadowX":{"type":"number","default":0},"hShadowY":{"type":"number","default":8},"hShadowBlur":{"type":"number","default":20},"hShadowSpread":{"type":"number","default":0},"hShadowColor":{"type":"string","default":"rgba(0,0,0,0.2)"},"showTagDivider":{"type":"boolean","default":false},"dividerWidth":{"type":"number","default":100},"dividerHeight":{"type":"number","default":1},"dividerColor":{"type":"string","default":"#eeeeee"},"titleFontFamily":{"type":"string","default":"inherit"},"descFontFamily":{"type":"string","default":"inherit"},"tagFontFamily":{"type":"string","default":"inherit"}},"supports":{"align":["wide","full"],"html":false},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ }
 

@@ -50,6 +50,11 @@ function axis_folio_render_handler( $attributes, $content ) {
     $btn_h_bg   = $attributes['btnHovBgColor'] ?? '#333';
     $btn_h_color = $attributes['btnHovTextColor'] ?? '#fff';
 
+    // Typography
+    $t_ff = $attributes['titleFontFamily'] ?? 'inherit';
+    $d_ff = $attributes['descFontFamily'] ?? 'inherit';
+    $tg_ff = $attributes['tagFontFamily'] ?? 'inherit';
+
     $css = "
         #{$id} .portfolio-item {
             margin-bottom: {$gap}px !important;
@@ -64,6 +69,10 @@ function axis_folio_render_handler( $attributes, $content ) {
             background: {$h_bg_col} !important;
             box-shadow: {$hover_shadow} !important;
         }
+        #{$id} .portfolio-content h3 { font-family: {$t_ff} !important; }
+        #{$id} .portfolio-content p { font-family: {$d_ff} !important; }
+        #{$id} .portfolio-tags .tag { font-family: {$tg_ff} !important; }
+
         #{$id} .portfolio-grid { position: relative; width: 100% !important; }
         #{$id} .portfolio-item, #{$id} .grid-sizer {
             width: calc( (100% / {$cols_d}) - ({$gap}px * ({$cols_d} - 1) / {$cols_d}) ) !important;

@@ -13,7 +13,8 @@ import {
     TextareaControl, 
     Dashicon, 
     RangeControl, 
-    ToggleControl 
+    ToggleControl,
+    SelectControl
 } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 
@@ -26,9 +27,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         enableLoadMore, postsPerPage, loadMoreText, btnBgColor, btnTextColor,
         btnHovBgColor, btnHovTextColor, btnBorderRadius,
         hasZoom, zoomScale,
-        // Shadow attributes
         shadowX, shadowY, shadowBlur, shadowSpread, shadowColor,
-        hShadowX, hShadowY, hShadowBlur, hShadowSpread, hShadowColor
+        hShadowX, hShadowY, hShadowBlur, hShadowSpread, hShadowColor,
+        showTagDivider, dividerWidth, dividerHeight, dividerColor,
+        titleFontFamily, descFontFamily, tagFontFamily,
+        titleFontSize, descFontSize
     } = attributes;
 
     useEffect( () => {
@@ -52,21 +55,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         setAttributes( { items: [ ...items, { title: '', description: '', url: '', tags: '' } ] } );
     };
 
-    // --- Dynamic Editor UI Styles ---
+    const fontOptions = [
+        { label: 'Default', value: 'inherit' },
+        { label: 'Arial', value: 'Arial, sans-serif' },
+        { label: 'Georgia', value: 'Georgia, serif' },
+        { label: 'Helvetica', value: 'Helvetica, sans-serif' },
+        { label: 'Times New Roman', value: 'Times New Roman, serif' },
+        { label: 'Verdana', value: 'Verdana, sans-serif' }
+    ];
+
     const editorStyles = {
-        container: { 
-            padding: '25px', 
-            background: '#f0f0f0', 
-            border: '1px solid #ddd', 
-            borderRadius: '8px',
-            boxSizing: 'border-box'
-        },
-        masonryGrid: { 
-            columnCount: columnsDesktop, 
-            columnGap: `${gridGap}px`,
-            width: '100%',
-            display: 'block'
-        },
+        container: { padding: '25px', background: '#f0f0f0', border: '1px solid #ddd', borderRadius: '8px', boxSizing: 'border-box' },
+        masonryGrid: { columnCount: columnsDesktop, columnGap: `${gridGap}px`, width: '100%', display: 'block' },
         card: { 
             background: cardBgColor, 
             padding: '15px', 
@@ -83,22 +83,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             verticalAlign: 'top',
             boxSizing: 'border-box'
         },
-        imageWrapper: {
-            width: '100%',
-            overflow: 'hidden',
-            borderRadius: '4px',
-            marginBottom: '15px',
-            backgroundColor: '#e5e5e5',
-            display: 'block',
-            cursor: 'pointer',
-            lineHeight: 0
-        },
-        image: {
-            width: '100%',
-            height: 'auto !important',
-            display: 'block',
-            transition: 'transform 0.5s ease'
-        },
+        imageWrapper: { width: '100%', overflow: 'hidden', borderRadius: '4px', marginBottom: '15px', backgroundColor: '#e5e5e5', display: 'block', cursor: 'pointer', lineHeight: 0 },
+        image: { width: '100%', height: 'auto !important', display: 'block', transition: 'transform 0.5s ease' },
         tagItem: {
             padding: '3px 10px',
             borderRadius: '4px',
@@ -107,36 +93,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             backgroundColor: tagBgColor,
             color: tagTextColor,
             fontSize: `${tagFontSize}px`,
+            fontFamily: tagFontFamily,
             display: 'inline-block',
             marginRight: '5px',
             marginBottom: '5px'
         },
-        header: { display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' },
-        footer: { 
-            textAlign: 'center', 
-            marginTop: '20px', 
-            paddingTop: '20px', 
-            borderTop: '1px solid #eee', 
-            width: '100%', 
-            clear: 'both',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '15px',
-            alignItems: 'center'
+        divider: {
+            width: `${dividerWidth}%`,
+            height: `${dividerHeight}px`,
+            backgroundColor: dividerColor || '#eee',
+            margin: '10px 0',
+            display: showTagDivider ? 'block' : 'none'
         },
-        loadMorePreview: {
-            padding: '10px 25px',
-            borderRadius: `${btnBorderRadius}px`,
-            backgroundColor: btnBgColor,
-            color: btnTextColor,
-            fontWeight: '600',
-            fontSize: '14px',
-            display: 'inline-block',
-            cursor: 'pointer',
-            marginTop: '10px',
-            border: 'none',
-            transition: 'all 0.3s ease'
-        }
+        header: { display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' },
+        footer: { textAlign: 'center', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #eee', width: '100%', clear: 'both', display: 'flex', flexDirection: 'column', gap: '15px', alignItems: 'center' },
+        loadMorePreview: { padding: '10px 25px', borderRadius: `${btnBorderRadius}px`, backgroundColor: btnBgColor, color: btnTextColor, fontWeight: '600', fontSize: '14px', display: 'inline-block', cursor: 'pointer', marginTop: '10px', border: 'none', transition: 'all 0.3s ease' }
     };
 
     const hoverCSS = `
@@ -159,7 +130,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         <div { ...useBlockProps() }>
             <style>{ hoverCSS }</style>
             
-            {/* --- SETTINGS TAB (General) --- */}
             <InspectorControls>
                 <PanelBody title={ __( 'Grid Layout', 'axis-folio' ) }>
                     <RangeControl label="Columns (Desktop)" value={ columnsDesktop } onChange={ ( val ) => setAttributes( { columnsDesktop: val } ) } min={ 1 } max={ 6 } />
@@ -178,23 +148,48 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 </PanelBody>
             </InspectorControls>
 
-            {/* --- STYLES TAB (Appearance) --- */}
             <InspectorControls group="styles">
                 <PanelBody title={ __( 'Card Appearance', 'axis-folio' ) }>
                     <RangeControl label="Card Border Radius" value={ borderRadius } onChange={ ( val ) => setAttributes( { borderRadius: val } ) } min={ 0 } max={ 50 } />
                     <ToggleControl label="Enable Box Shadow" checked={ hasShadow } onChange={ ( val ) => setAttributes( { hasShadow: val } ) } />
                     <ToggleControl label="Show Tags" checked={ showTags } onChange={ ( val ) => setAttributes( { showTags: val } ) } />
+                    { showTags && (
+                        <>
+                            <ToggleControl label="Show Divider Above Tags" checked={ showTagDivider } onChange={ ( val ) => setAttributes( { showTagDivider: val } ) } />
+                            { showTagDivider && (
+                                <>
+                                    <RangeControl label="Divider Width (%)" value={ dividerWidth } onChange={ ( val ) => setAttributes( { dividerWidth: val } ) } min={ 10 } max={ 100 } />
+                                    <RangeControl label="Divider Height (px)" value={ dividerHeight } onChange={ ( val ) => setAttributes( { dividerHeight: val } ) } min={ 1 } max={ 10 } />
+                                </>
+                            )}
+                        </>
+                    )}
+                </PanelBody>
+
+                <PanelBody title={ __( 'Typography', 'axis-folio' ) } initialOpen={ false }>
+                    <p><strong>{ __( 'Title', 'axis-folio' ) }</strong></p>
+                    <SelectControl label="Font Family" value={ titleFontFamily } options={ fontOptions } onChange={ ( val ) => setAttributes( { titleFontFamily: val } ) } />
+                    <RangeControl label="Font Size" value={ titleFontSize } onChange={ ( val ) => setAttributes( { titleFontSize: val } ) } min={ 10 } max={ 100 } />
+                    <hr />
+                    <p><strong>{ __( 'Description', 'axis-folio' ) }</strong></p>
+                    <SelectControl label="Font Family" value={ descFontFamily } options={ fontOptions } onChange={ ( val ) => setAttributes( { descFontFamily: val } ) } />
+                    <RangeControl label="Font Size" value={ descFontSize } onChange={ ( val ) => setAttributes( { descFontSize: val } ) } min={ 10 } max={ 50 } />
+                    <hr />
+                    <p><strong>{ __( 'Tags', 'axis-folio' ) }</strong></p>
+                    <SelectControl label="Font Family" value={ tagFontFamily } options={ fontOptions } onChange={ ( val ) => setAttributes( { tagFontFamily: val } ) } />
+                    <RangeControl label="Font Size" value={ tagFontSize } onChange={ ( val ) => setAttributes( { tagFontSize: val } ) } min={ 8 } max={ 30 } />
+                </PanelBody>
+
+                <PanelBody title={ __( 'Image Controls', 'axis-folio' ) } initialOpen={ false }>
+                    <ToggleControl label="Enable Image Zoom" checked={ hasZoom } onChange={ ( val ) => setAttributes( { hasZoom: val } ) } />
+                    { hasZoom && (
+                        <RangeControl label="Zoom Scale" value={ zoomScale } onChange={ ( val ) => setAttributes( { zoomScale: val } ) } min={ 1 } max={ 2 } step={ 0.01 } />
+                    )}
                 </PanelBody>
 
                 { enableLoadMore && (
                     <PanelBody title={ __( 'Button Styles', 'axis-folio' ) } initialOpen={ false }>
-                        <RangeControl 
-                            label="Button Border Radius" 
-                            value={ btnBorderRadius } 
-                            onChange={ ( val ) => setAttributes( { btnBorderRadius: val } ) } 
-                            min={ 0 } 
-                            max={ 50 } 
-                        />
+                        <RangeControl label="Button Border Radius" value={ btnBorderRadius } onChange={ ( val ) => setAttributes( { btnBorderRadius: val } ) } min={ 0 } max={ 50 } />
                     </PanelBody>
                 )}
 
@@ -224,6 +219,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         { value: hShadowColor, onChange: ( val ) => setAttributes( { hShadowColor: val } ), label: "Hover Shadow Color" },
                         { value: tagBgColor, onChange: ( val ) => setAttributes( { tagBgColor: val } ), label: "Tag Background" },
                         { value: tagTextColor, onChange: ( val ) => setAttributes( { tagTextColor: val } ), label: "Tag Text Color" },
+                        { value: dividerColor, onChange: ( val ) => setAttributes( { dividerColor: val } ), label: "Divider Color" },
                         { value: btnBgColor, onChange: ( val ) => setAttributes( { btnBgColor: val } ), label: "Button Background" },
                         { value: btnTextColor, onChange: ( val ) => setAttributes( { btnTextColor: val } ), label: "Button Text Color" },
                         { value: btnHovBgColor, onChange: ( val ) => setAttributes( { btnHovBgColor: val } ), label: "Button Hover Background" },
@@ -247,12 +243,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     render={ ( { open } ) => (
                                         <div onClick={ open } style={ editorStyles.imageWrapper }>
                                             { item.url ? (
-                                                <img 
-                                                    src={ item.url } 
-                                                    className="portfolio-edit-image" 
-                                                    style={ editorStyles.image } 
-                                                    alt="" 
-                                                />
+                                                <img src={ item.url } className="portfolio-edit-image" style={ editorStyles.image } alt="" />
                                             ) : (
                                                 <div style={{ padding: '40px', textAlign: 'center' }}><Dashicon icon="format-image" /></div>
                                             ) }
@@ -260,24 +251,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     ) }
                                 />
                             </MediaUploadCheck>
-                            <TextControl 
-                                label={ __( "Title", "axis-folio" ) } 
-                                value={ item.title } 
-                                onChange={ ( val ) => updateItem( index, 'title', val ) } 
-                                style={{ color: titleColor }}
-                            />
-                            <TextareaControl 
-                                label={ __( "Description", "axis-folio" ) } 
-                                value={ item.description } 
-                                onChange={ ( val ) => updateItem( index, 'description', val ) } 
-                                style={{ color: descColor }}
-                            />
-                            <TextControl 
-                                label={ __( "Tags (Comma separated)", "axis-folio" ) } 
-                                value={ item.tags } 
-                                onChange={ ( val ) => updateItem( index, 'tags', val ) } 
-                            />
+                            <TextControl label={ __( "Title", "axis-folio" ) } value={ item.title } onChange={ ( val ) => updateItem( index, 'title', val ) } style={{ color: titleColor, fontFamily: titleFontFamily }} />
+                            <TextareaControl label={ __( "Description", "axis-folio" ) } value={ item.description } onChange={ ( val ) => updateItem( index, 'description', val ) } style={{ color: descColor, fontFamily: descFontFamily }} />
+                            <TextControl label={ __( "Tags (Comma separated)", "axis-folio" ) } value={ item.tags } onChange={ ( val ) => updateItem( index, 'tags', val ) } />
                             
+                            { showTagDivider && <div style={ editorStyles.divider }></div> }
+
                             { showTags && item.tags && (
                                 <div style={{ marginTop: '10px' }}>
                                     { item.tags.split(',').map( ( tag, i ) => (
