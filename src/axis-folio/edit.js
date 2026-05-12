@@ -52,7 +52,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     };
 
     const addNewItem = () => {
-        setAttributes( { items: [ ...items, { title: '', description: '', url: '', tags: '' } ] } );
+        setAttributes( { items: [ ...items, { title: '', description: '', url: '', tags: '', linkUrl: '', openInNewTab: false } ] } );
     };
 
     const fontOptions = [
@@ -124,7 +124,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             background: ${btnHovBgColor} !important;
             color: ${btnHovTextColor} !important;
         }
-        /* Style overrides for Gutenberg inputs to show live font changes */
         #${uniqueId}-editor .portfolio-title-input input {
             color: ${titleColor} !important;
             font-size: ${titleFontSize}px !important;
@@ -277,6 +276,20 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     label={ __( "Description", "axis-folio" ) } 
                                     value={ item.description } 
                                     onChange={ ( val ) => updateItem( index, 'description', val ) } 
+                                />
+                            </div>
+
+                            <div style={{ padding: '10px', background: '#fff', border: '1px solid #eee', borderRadius: '4px', marginBottom: '15px' }}>
+                                <TextControl 
+                                    label={ __( "Link URL", "axis-folio" ) } 
+                                    value={ item.linkUrl } 
+                                    onChange={ ( val ) => updateItem( index, 'linkUrl', val ) } 
+                                    placeholder="https://..."
+                                />
+                                <ToggleControl 
+                                    label={ __( "Open in New Tab", "axis-folio" ) } 
+                                    checked={ item.openInNewTab } 
+                                    onChange={ ( val ) => updateItem( index, 'openInNewTab', val ) } 
                                 />
                             </div>
                             

@@ -108,7 +108,9 @@ function Edit({
         title: '',
         description: '',
         url: '',
-        tags: ''
+        tags: '',
+        linkUrl: '',
+        openInNewTab: false
       }]
     });
   };
@@ -243,7 +245,6 @@ function Edit({
             background: ${btnHovBgColor} !important;
             color: ${btnHovTextColor} !important;
         }
-        /* Style overrides for Gutenberg inputs to show live font changes */
         #${uniqueId}-editor .portfolio-title-input input {
             color: ${titleColor} !important;
             font-size: ${titleFontSize}px !important;
@@ -678,6 +679,24 @@ function Edit({
               value: item.description,
               onChange: val => updateItem(index, 'description', val)
             })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            style: {
+              padding: '10px',
+              background: '#fff',
+              border: '1px solid #eee',
+              borderRadius: '4px',
+              marginBottom: '15px'
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Link URL", "axis-folio"),
+              value: item.linkUrl,
+              onChange: val => updateItem(index, 'linkUrl', val),
+              placeholder: "https://..."
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Open in New Tab", "axis-folio"),
+              checked: item.openInNewTab,
+              onChange: val => updateItem(index, 'openInNewTab', val)
+            })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Tags (Comma separated)", "axis-folio"),
             value: item.tags,

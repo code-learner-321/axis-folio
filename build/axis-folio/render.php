@@ -7,22 +7,18 @@ $items = $attributes['items'] ?? [];
 $unique_id = $attributes['uniqueId'] ?? 'af-' . wp_generate_password( 4, false );
 $show_tags = $attributes['showTags'] ?? true;
 
-// Divider Logic
 $show_divider  = $attributes['showTagDivider'] ?? false;
 $divider_w     = $attributes['dividerWidth'] ?? 100;
 $divider_h     = $attributes['dividerHeight'] ?? 1;
 $divider_color = $attributes['dividerColor'] ?? '#eeeeee';
 
-// Pagination Attributes
 $enable_load_more = $attributes['enableLoadMore'] ?? false;
 $posts_per_page   = $attributes['postsPerPage'] ?? 3;
 $load_more_text   = $attributes['loadMoreText'] ?? 'Load More';
 
-// Style Attributes
 $card_radius      = $attributes['borderRadius'] ?? 8;
 $btn_radius       = $attributes['btnBorderRadius'] ?? 4;
 
-// Dynamic Typography & Colors
 $title_color    = $attributes['titleColor'] ?? '#111';
 $title_size     = $attributes['titleFontSize'] ?? 20;
 $desc_color     = $attributes['descColor'] ?? '#666';
@@ -44,11 +40,18 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id ] );
                 $is_hidden = ($enable_load_more && $index >= $posts_per_page);
                 $item_class = 'portfolio-item' . ($is_hidden ? ' is-hidden' : '');
                 $item_style = ($is_hidden ? 'display: none;' : 'display: block;') . " border-radius: {$card_radius}px;";
+                
+                // URL Handling
+                $link_url = !empty($item['linkUrl']) ? esc_url($item['linkUrl']) : '';
+                $target = (!empty($item['openInNewTab']) && $item['openInNewTab'] === true) ? '_blank' : '_self';
+                $rel = ($target === '_blank') ? 'rel="noopener noreferrer"' : '';
                 ?>
                 <div class="<?php echo esc_attr($item_class); ?>" style="<?php echo esc_attr($item_style); ?>">
                     <?php if ( ! empty( $item['url'] ) ) : ?>
                         <div class="portfolio-image">
+                            <?php if ($link_url) : ?><a href="<?php echo $link_url; ?>" target="<?php echo $target; ?>" <?php echo $rel; ?> style="display:block;"><?php endif; ?>
                             <img src="<?php echo esc_url( $item['url'] ); ?>" alt="<?php echo esc_attr( $item['title'] ?? '' ); ?>" />
+                            <?php if ($link_url) : ?></a><?php endif; ?>
                         </div>
                     <?php endif; ?>
                     
@@ -56,7 +59,11 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id ] );
                         <h3 style="margin: 0 0 8px 0; line-height: 1.2; font-weight: 700; 
                             color: <?php echo esc_attr( $title_color ); ?>; 
                             font-size: <?php echo esc_attr( $title_size ); ?>px;">
-                            <?php echo esc_html( $item['title'] ?? '' ); ?>
+                            <?php if ($link_url) : ?>
+                                <a href="<?php echo $link_url; ?>" target="<?php echo $target; ?>" <?php echo $rel; ?> style="text-decoration: none; color: inherit;">
+                            <?php endif; ?>
+                                <?php echo esc_html( $item['title'] ?? '' ); ?>
+                            <?php if ($link_url) : ?></a><?php endif; ?>
                         </h3>
 
                         <p style="margin: 0 0 15px 0; line-height: 1.6; 
