@@ -124,6 +124,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             background: ${btnHovBgColor} !important;
             color: ${btnHovTextColor} !important;
         }
+        /* Style overrides for Gutenberg inputs to show live font changes */
+        #${uniqueId}-editor .portfolio-title-input input {
+            color: ${titleColor} !important;
+            font-size: ${titleFontSize}px !important;
+            font-family: ${titleFontFamily} !important;
+            font-weight: 700;
+        }
+        #${uniqueId}-editor .portfolio-desc-input textarea {
+            color: ${descColor} !important;
+            font-size: ${descFontSize}px !important;
+            font-family: ${descFontFamily} !important;
+        }
     `;
 
     return (
@@ -233,7 +245,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                     { items.map( ( item, index ) => (
                         <div key={ index } className="portfolio-edit-card" style={ editorStyles.card }>
                             <div style={ editorStyles.header }>
-                                <strong style={{ color: titleColor }}>ITEM { index + 1 }</strong>
+                                <strong style={{ color: '#111', fontSize: '11px', textTransform: 'uppercase' }}>ITEM { index + 1 }</strong>
                                 <Button isDestructive icon="trash" onClick={ () => removeItem( index ) } />
                             </div>
                             <MediaUploadCheck>
@@ -251,8 +263,23 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     ) }
                                 />
                             </MediaUploadCheck>
-                            <TextControl label={ __( "Title", "axis-folio" ) } value={ item.title } onChange={ ( val ) => updateItem( index, 'title', val ) } style={{ color: titleColor, fontFamily: titleFontFamily }} />
-                            <TextareaControl label={ __( "Description", "axis-folio" ) } value={ item.description } onChange={ ( val ) => updateItem( index, 'description', val ) } style={{ color: descColor, fontFamily: descFontFamily }} />
+                            
+                            <div className="portfolio-title-input">
+                                <TextControl 
+                                    label={ __( "Title", "axis-folio" ) } 
+                                    value={ item.title } 
+                                    onChange={ ( val ) => updateItem( index, 'title', val ) } 
+                                />
+                            </div>
+
+                            <div className="portfolio-desc-input">
+                                <TextareaControl 
+                                    label={ __( "Description", "axis-folio" ) } 
+                                    value={ item.description } 
+                                    onChange={ ( val ) => updateItem( index, 'description', val ) } 
+                                />
+                            </div>
+                            
                             <TextControl label={ __( "Tags (Comma separated)", "axis-folio" ) } value={ item.tags } onChange={ ( val ) => updateItem( index, 'tags', val ) } />
                             
                             { showTagDivider && <div style={ editorStyles.divider }></div> }

@@ -243,6 +243,18 @@ function Edit({
             background: ${btnHovBgColor} !important;
             color: ${btnHovTextColor} !important;
         }
+        /* Style overrides for Gutenberg inputs to show live font changes */
+        #${uniqueId}-editor .portfolio-title-input input {
+            color: ${titleColor} !important;
+            font-size: ${titleFontSize}px !important;
+            font-family: ${titleFontFamily} !important;
+            font-weight: 700;
+        }
+        #${uniqueId}-editor .portfolio-desc-input textarea {
+            color: ${descColor} !important;
+            font-size: ${descFontSize}px !important;
+            font-family: ${descFontFamily} !important;
+        }
     `;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
@@ -617,7 +629,9 @@ function Edit({
             style: editorStyles.header,
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("strong", {
               style: {
-                color: titleColor
+                color: '#111',
+                fontSize: '11px',
+                textTransform: 'uppercase'
               },
               children: ["ITEM ", index + 1]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
@@ -650,22 +664,20 @@ function Edit({
                 })
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Title", "axis-folio"),
-            value: item.title,
-            onChange: val => updateItem(index, 'title', val),
-            style: {
-              color: titleColor,
-              fontFamily: titleFontFamily
-            }
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Description", "axis-folio"),
-            value: item.description,
-            onChange: val => updateItem(index, 'description', val),
-            style: {
-              color: descColor,
-              fontFamily: descFontFamily
-            }
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: "portfolio-title-input",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Title", "axis-folio"),
+              value: item.title,
+              onChange: val => updateItem(index, 'title', val)
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: "portfolio-desc-input",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Description", "axis-folio"),
+              value: item.description,
+              onChange: val => updateItem(index, 'description', val)
+            })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Tags (Comma separated)", "axis-folio"),
             value: item.tags,
