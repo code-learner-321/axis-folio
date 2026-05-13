@@ -131,6 +131,9 @@ add_action( 'wp_enqueue_scripts', function() {
     wp_enqueue_script( 'masonry' );
     wp_enqueue_script( 'imagesloaded' );
     wp_enqueue_script( 'axis-folio-js', plugin_dir_url( __FILE__ ) . 'assets/js/my-jquery.js', array('jquery', 'masonry', 'imagesloaded'), '1.0', true );
+
+    wp_enqueue_style( 'axis-folio-widget-style', plugin_dir_url( __FILE__ ) . 'assets/css/axis-folio-widget-style.css' );
+        wp_enqueue_script( 'axis-folio-widget-js', plugin_dir_url( __FILE__ ) . 'assets/js/axis-folio-widget-script.js', array('jquery', 'masonry', 'imagesloaded'), '1.0', true );
 });
 
 function elementor_axis_folio_addon() {
