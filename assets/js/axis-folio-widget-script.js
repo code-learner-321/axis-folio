@@ -34,10 +34,20 @@
         $loadMoreBtn.on('click', function(e) {
             e.preventDefault();
             var $hidden = $scope.find('.axis-ms-item:not(.is-visible)');
+            var $toShow = $hidden.slice(0, limit);
             
-            $hidden.slice(0, limit).addClass('is-visible').hide().fadeIn(400, function() {
-                resizeAll();
-            });
+            // Fix overlapping: Add class first, but keep invisible via CSS 
+            // then calculate layout, then fade in.
+            $toShow.css({
+                'opacity': 0,
+                'display': 'block'
+            }).addClass('is-visible');
+
+            // Recalculate grid positions while items are invisible but in DOM
+            resizeAll();
+
+            // Now animate them in
+            $toShow.animate({ 'opacity': 1 }, 400);
 
             shown += limit;
             if (shown >= $items.length) {
@@ -50,4 +60,4 @@
         elementorFrontend.hooks.addAction('frontend/element_ready/axis-folio-widget.default', AxisFolioHandler);
     });
 
-})(jQuery); 
+})(jQuery);

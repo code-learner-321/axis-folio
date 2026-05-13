@@ -46,7 +46,6 @@ class Axis_Folio_Widget extends Widget_Base
             'default' => ['url' => Utils::get_placeholder_image_src()]
         ]);
 
-        // Added URL Control with New Tab / Same Tab options
         $repeater->add_control('list_url', [
             'label' => \esc_html__('Link', 'axis-folio'),
             'type' => Controls_Manager::URL,
@@ -395,7 +394,6 @@ class Axis_Folio_Widget extends Widget_Base
                     $img_alt = $img_id ? get_post_meta($img_id, '_wp_attachment_image_alt', true) : '';
                     if (empty($img_alt)) $img_alt = $item['list_title'];
 
-                    // URL Logic
                     $link_key = 'link_' . $index;
                     if ( ! empty( $item['list_url']['url'] ) ) {
                         $this->add_link_attributes( $link_key, $item['list_url'] );
