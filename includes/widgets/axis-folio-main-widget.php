@@ -280,7 +280,7 @@ class Axis_Folio_Widget extends Widget_Base
         $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'title_typography', 'selector' => '{{WRAPPER}} .axis-ms-content h3']);
         
         $this->add_control('tag_heading', [
-            'label' => \esc_html__('Tags Styling', 'axis-folio'),
+            'label' => \esc_html__('Tag Styling', 'axis-folio'),
             'type' => Controls_Manager::HEADING,
             'separator' => 'before',
         ]);
@@ -394,10 +394,17 @@ class Axis_Folio_Widget extends Widget_Base
                     $img_alt = $img_id ? get_post_meta($img_id, '_wp_attachment_image_alt', true) : '';
                     if (empty($img_alt)) $img_alt = $item['list_title'];
 
+                    // URL Logic
                     $link_key = 'link_' . $index;
                     if ( ! empty( $item['list_url']['url'] ) ) {
                         $this->add_link_attributes( $link_key, $item['list_url'] );
                     }
+
+                    // Condition: Check if any text content exists
+                    $has_title = ! empty($item['list_title']);
+                    $has_desc  = ! empty($item['list_description']);
+                    $has_tags  = ! empty($item['list_tags']);
+                    $has_any_text = ( $has_title || $has_desc || $has_tags );
                 ?>
                     <div class="axis-ms-item <?php echo esc_attr($visible); ?>">
                         <div class="axis-ms-card">
@@ -415,7 +422,9 @@ class Axis_Folio_Widget extends Widget_Base
                                 </a>
                             <?php endif; ?>
 
+                            <?php if ( $has_any_text ) : ?>
                             <div class="axis-ms-content">
+                                <?php if ( $has_title ) : ?>
                                 <h3>
                                     <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
                                         <a <?php echo $this->get_render_attribute_string( $link_key ); ?> style="color: inherit; text-decoration: none;">
@@ -425,13 +434,17 @@ class Axis_Folio_Widget extends Widget_Base
                                         </a>
                                     <?php endif; ?>
                                 </h3>
+                                <?php endif; ?>
                                 
-                                <p class="axis-ms-description"><?php echo esc_html($item['list_description']); ?></p>
+                                <?php if ( $has_desc ) : ?>
+                                    <p class="axis-ms-description"><?php echo esc_html($item['list_description']); ?></p>
+                                <?php endif; ?>
                                 
-                                <?php if ($settings['show_separator'] === 'yes') : ?>
+                                <?php if ($settings['show_separator'] === 'yes' && ( $has_title || $has_desc ) && $has_tags ) : ?>
                                     <hr class="axis-ms-divider">
                                 <?php endif; ?>
 
+                                <?php if ( $has_tags ) : ?>
                                 <div class="axis-ms-tags-container">
                                     <?php 
                                     $tags = explode(',', $item['list_tags']);
@@ -443,7 +456,9 @@ class Axis_Folio_Widget extends Widget_Base
                                     }
                                     ?>
                                 </div>
+                                <?php endif; ?>
                             </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>

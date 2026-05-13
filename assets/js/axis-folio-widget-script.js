@@ -23,30 +23,23 @@
             });
         };
 
-        // Run on load and images load
         $(window).on('load resize', resizeAll);
         $scope.find('img').on('load', resizeAll);
         
-        // Initial trigger
         setTimeout(resizeAll, 500);
 
-        // Load More Logic
         $loadMoreBtn.on('click', function(e) {
             e.preventDefault();
             var $hidden = $scope.find('.axis-ms-item:not(.is-visible)');
             var $toShow = $hidden.slice(0, limit);
             
-            // Fix overlapping: Add class first, but keep invisible via CSS 
-            // then calculate layout, then fade in.
             $toShow.css({
                 'opacity': 0,
                 'display': 'block'
             }).addClass('is-visible');
 
-            // Recalculate grid positions while items are invisible but in DOM
             resizeAll();
 
-            // Now animate them in
             $toShow.animate({ 'opacity': 1 }, 400);
 
             shown += limit;
