@@ -121,7 +121,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             fontWeight: '600',
             marginTop: '20px',
             transition: 'all 0.3s ease',
-            cursor: 'default'
+            cursor: 'pointer'
         },
         divider: {
             width: `${dividerWidth}%`,

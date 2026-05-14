@@ -41,7 +41,6 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id ] );
                 $target = (!empty($item['openInNewTab']) && $item['openInNewTab'] === true) ? '_blank' : '_self';
                 $rel = ($target === '_blank') ? 'rel="noopener noreferrer"' : '';
 
-                // Check for content
                 $has_title = !empty($item['title']);
                 $has_desc = !empty($item['description']);
                 $has_tags = ($show_tags && !empty($item['tags']));
@@ -71,7 +70,8 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id ] );
                             </p>
                         <?php endif; ?>
 
-                        <?php if ( $show_divider && $has_tags && ($has_title || $has_desc) ) : ?>
+                        <?php // Fixed Divider Logic: Checks if divider enabled and tags exist ?>
+                        <?php if ( $show_divider && $has_tags ) : ?>
                             <div class="tag-divider" style="width: <?php echo esc_attr($divider_w); ?>%; height: <?php echo esc_attr($divider_h); ?>px; background-color: <?php echo esc_attr($divider_color); ?>; margin: 15px 0;"></div>
                         <?php endif; ?>
 
