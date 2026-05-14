@@ -14,7 +14,8 @@ import {
     Dashicon, 
     RangeControl, 
     ToggleControl,
-    SelectControl
+    SelectControl,
+    TabPanel
 } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 
@@ -65,266 +66,192 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     ];
 
     const editorStyles = {
-        container: { padding: '25px', background: '#f0f0f0', border: '1px solid #ddd', borderRadius: '8px', boxSizing: 'border-box' },
-        masonryGrid: { columnCount: columnsDesktop, columnGap: `${gridGap}px`, width: '100%', display: 'block' },
+        container: { padding: '20px', background: '#fff', width: '100%' },
+        masonryGrid: { 
+            display: 'grid', 
+            gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`, 
+            gap: `${gridGap}px`,
+            width: '100%' 
+        },
         card: { 
             background: cardBgColor, 
-            padding: '15px', 
             borderRadius: `${borderRadius}px`,
             boxShadow: hasShadow ? `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` : 'none',
-            border: hasShadow ? 'none' : '1px solid #ccc',
-            transition: 'all 0.3s ease',
-            overflow: 'hidden',
-            position: 'relative',
-            marginBottom: `${gridGap}px`, 
-            breakInside: 'avoid', 
-            display: 'inline-block', 
-            width: '100%',
-            verticalAlign: 'top',
-            boxSizing: 'border-box'
+            border: '1px solid #ddd',
+            overflow: 'hidden'
         },
-        imageWrapper: { width: '100%', overflow: 'hidden', borderRadius: '4px', marginBottom: '15px', backgroundColor: '#e5e5e5', display: 'block', cursor: 'pointer', lineHeight: 0 },
-        image: { width: '100%', height: 'auto !important', display: 'block', transition: 'transform 0.5s ease' },
+        imageWrapper: { width: '100%', backgroundColor: '#eee', minHeight: '150px', cursor: 'pointer' },
+        image: { width: '100%', height: 'auto', display: 'block' },
         tagItem: {
-            padding: '3px 10px',
-            borderRadius: '4px',
-            fontWeight: '600',
-            textTransform: 'uppercase',
+            padding: '2px 8px',
+            borderRadius: '3px',
             backgroundColor: tagBgColor,
             color: tagTextColor,
             fontSize: `${tagFontSize}px`,
             fontFamily: tagFontFamily,
             display: 'inline-block',
-            marginRight: '5px',
-            marginBottom: '5px'
+            marginRight: '5px'
         },
-        divider: {
-            width: `${dividerWidth}%`,
-            height: `${dividerHeight}px`,
-            backgroundColor: dividerColor || '#eee',
-            margin: '10px 0',
-            display: showTagDivider ? 'block' : 'none'
-        },
-        header: { display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' },
-        footer: { textAlign: 'center', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #eee', width: '100%', clear: 'both', display: 'flex', flexDirection: 'column', gap: '15px', alignItems: 'center' },
-        loadMorePreview: { padding: '10px 25px', borderRadius: `${btnBorderRadius}px`, backgroundColor: btnBgColor, color: btnTextColor, fontWeight: '600', fontSize: '14px', display: 'inline-block', cursor: 'pointer', marginTop: '10px', border: 'none', transition: 'all 0.3s ease' }
+        loadMorePreview: {
+            padding: '12px 30px',
+            backgroundColor: btnBgColor,
+            color: btnTextColor,
+            borderRadius: `${btnBorderRadius}px`,
+            border: 'none',
+            display: 'inline-block',
+            fontWeight: '600',
+            marginTop: '20px'
+        }
     };
-
-    const hoverCSS = `
-        #${uniqueId}-editor .portfolio-edit-card:hover {
-            background: ${hCardBgColor || cardBgColor} !important;
-            box-shadow: ${hasShadow ? `${hShadowX}px ${hShadowY}px ${hShadowBlur}px ${hShadowSpread}px ${hShadowColor}` : 'none'} !important;
-        }
-        ${hasZoom ? `
-        #${uniqueId}-editor .portfolio-edit-card:hover .portfolio-edit-image {
-            transform: scale(${zoomScale}) !important;
-        }
-        ` : ''}
-        #${uniqueId}-editor .portfolio-load-more-preview:hover {
-            background: ${btnHovBgColor} !important;
-            color: ${btnHovTextColor} !important;
-        }
-        #${uniqueId}-editor .portfolio-title-input input {
-            color: ${titleColor} !important;
-            font-size: ${titleFontSize}px !important;
-            font-family: ${titleFontFamily} !important;
-            font-weight: 700;
-        }
-        #${uniqueId}-editor .portfolio-desc-input textarea {
-            color: ${descColor} !important;
-            font-size: ${descFontSize}px !important;
-            font-family: ${descFontFamily} !important;
-        }
-    `;
 
     return (
         <div { ...useBlockProps() }>
-            <style>{ hoverCSS }</style>
-            
             <InspectorControls>
-                <PanelBody title={ __( 'Grid Layout', 'axis-folio' ) }>
-                    <RangeControl label="Columns (Desktop)" value={ columnsDesktop } onChange={ ( val ) => setAttributes( { columnsDesktop: val } ) } min={ 1 } max={ 6 } />
-                    <RangeControl label="Columns (Tablet)" value={ columnsTablet } onChange={ ( val ) => setAttributes( { columnsTablet: val } ) } min={ 1 } max={ 4 } />
-                    <RangeControl label="Columns (Mobile)" value={ columnsMobile } onChange={ ( val ) => setAttributes( { columnsMobile: val } ) } min={ 1 } max={ 2 } />
-                    <RangeControl label="Grid Gap" value={ gridGap } onChange={ ( val ) => setAttributes( { gridGap: val } ) } min={ 0 } max={ 50 } />
-                </PanelBody>
-                <PanelBody title={ __( 'Pagination', 'axis-folio' ) }>
-                    <ToggleControl label="Enable Load More" checked={ enableLoadMore } onChange={ ( val ) => setAttributes( { enableLoadMore: val } ) } />
-                    { enableLoadMore && (
-                        <>
-                            <TextControl label="Button Text" value={ loadMoreText } onChange={ ( val ) => setAttributes( { loadMoreText: val } ) } />
-                            <RangeControl label="Items Per Page" value={ postsPerPage } onChange={ ( val ) => setAttributes( { postsPerPage: val } ) } min={ 1 } max={ 20 } />
-                        </>
-                    )}
-                </PanelBody>
-            </InspectorControls>
-
-            <InspectorControls group="styles">
-                <PanelBody title={ __( 'Card Appearance', 'axis-folio' ) }>
-                    <RangeControl label="Card Border Radius" value={ borderRadius } onChange={ ( val ) => setAttributes( { borderRadius: val } ) } min={ 0 } max={ 50 } />
-                    <ToggleControl label="Enable Box Shadow" checked={ hasShadow } onChange={ ( val ) => setAttributes( { hasShadow: val } ) } />
-                    <ToggleControl label="Show Tags" checked={ showTags } onChange={ ( val ) => setAttributes( { showTags: val } ) } />
-                    { showTags && (
-                        <>
-                            <ToggleControl label="Show Divider Above Tags" checked={ showTagDivider } onChange={ ( val ) => setAttributes( { showTagDivider: val } ) } />
-                            { showTagDivider && (
-                                <>
-                                    <RangeControl label="Divider Width (%)" value={ dividerWidth } onChange={ ( val ) => setAttributes( { dividerWidth: val } ) } min={ 10 } max={ 100 } />
-                                    <RangeControl label="Divider Height (px)" value={ dividerHeight } onChange={ ( val ) => setAttributes( { dividerHeight: val } ) } min={ 1 } max={ 10 } />
-                                </>
-                            )}
-                        </>
-                    )}
-                </PanelBody>
-
-                <PanelBody title={ __( 'Typography', 'axis-folio' ) } initialOpen={ false }>
-                    <p><strong>{ __( 'Title', 'axis-folio' ) }</strong></p>
-                    <SelectControl label="Font Family" value={ titleFontFamily } options={ fontOptions } onChange={ ( val ) => setAttributes( { titleFontFamily: val } ) } />
-                    <RangeControl label="Font Size" value={ titleFontSize } onChange={ ( val ) => setAttributes( { titleFontSize: val } ) } min={ 10 } max={ 100 } />
-                    <hr />
-                    <p><strong>{ __( 'Description', 'axis-folio' ) }</strong></p>
-                    <SelectControl label="Font Family" value={ descFontFamily } options={ fontOptions } onChange={ ( val ) => setAttributes( { descFontFamily: val } ) } />
-                    <RangeControl label="Font Size" value={ descFontSize } onChange={ ( val ) => setAttributes( { descFontSize: val } ) } min={ 10 } max={ 50 } />
-                    <hr />
-                    <p><strong>{ __( 'Tags', 'axis-folio' ) }</strong></p>
-                    <SelectControl label="Font Family" value={ tagFontFamily } options={ fontOptions } onChange={ ( val ) => setAttributes( { tagFontFamily: val } ) } />
-                    <RangeControl label="Font Size" value={ tagFontSize } onChange={ ( val ) => setAttributes( { tagFontSize: val } ) } min={ 8 } max={ 30 } />
-                </PanelBody>
-
-                <PanelBody title={ __( 'Image Controls', 'axis-folio' ) } initialOpen={ false }>
-                    <ToggleControl label="Enable Image Zoom" checked={ hasZoom } onChange={ ( val ) => setAttributes( { hasZoom: val } ) } />
-                    { hasZoom && (
-                        <RangeControl label="Zoom Scale" value={ zoomScale } onChange={ ( val ) => setAttributes( { zoomScale: val } ) } min={ 1 } max={ 2 } step={ 0.01 } />
-                    )}
-                </PanelBody>
-
-                { enableLoadMore && (
-                    <PanelBody title={ __( 'Button Styles', 'axis-folio' ) } initialOpen={ false }>
-                        <RangeControl label="Button Border Radius" value={ btnBorderRadius } onChange={ ( val ) => setAttributes( { btnBorderRadius: val } ) } min={ 0 } max={ 50 } />
-                    </PanelBody>
-                )}
-
-                { hasShadow && (
-                    <PanelBody title={ __( 'Shadow Controls', 'axis-folio' ) } initialOpen={ false }>
-                        <p><strong>{ __( 'Standard State', 'axis-folio' ) }</strong></p>
-                        <RangeControl label="Blur" value={ shadowBlur } onChange={ ( val ) => setAttributes( { shadowBlur: val } ) } min={ 0 } max={ 100 } />
-                        <RangeControl label="Spread" value={ shadowSpread } onChange={ ( val ) => setAttributes( { shadowSpread: val } ) } min={ -20 } max={ 50 } />
-                        <RangeControl label="Offset X" value={ shadowX } onChange={ ( val ) => setAttributes( { shadowX: val } ) } min={ -50 } max={ 50 } />
-                        <RangeControl label="Offset Y" value={ shadowY } onChange={ ( val ) => setAttributes( { shadowY: val } ) } min={ -50 } max={ 50 } />
-                        <hr style={{ margin: '20px 0' }} />
-                        <p><strong>{ __( 'Hover State', 'axis-folio' ) }</strong></p>
-                        <RangeControl label="Hover Blur" value={ hShadowBlur } onChange={ ( val ) => setAttributes( { hShadowBlur: val } ) } min={ 0 } max={ 100 } />
-                        <RangeControl label="Hover Spread" value={ hShadowSpread } onChange={ ( val ) => setAttributes( { hShadowSpread: val } ) } min={ -20 } max={ 50 } />
-                        <RangeControl label="Hover Offset X" value={ hShadowX } onChange={ ( val ) => setAttributes( { hShadowX: val } ) } min={ -50 } max={ 50 } />
-                        <RangeControl label="Hover Offset Y" value={ hShadowY } onChange={ ( val ) => setAttributes( { hShadowY: val } ) } min={ -50 } max={ 50 } />
-                    </PanelBody>
-                )}
-
-                <PanelColorSettings
-                    title={ __( 'Color Palette', 'axis-folio' ) }
-                    initialOpen={ false }
-                    colorSettings={ [
-                        { value: cardBgColor, onChange: ( val ) => setAttributes( { cardBgColor: val } ), label: "Card Background" },
-                        { value: hCardBgColor, onChange: ( val ) => setAttributes( { hCardBgColor: val } ), label: "Hover Card Background" },
-                        { value: shadowColor, onChange: ( val ) => setAttributes( { shadowColor: val } ), label: "Shadow Color" },
-                        { value: hShadowColor, onChange: ( val ) => setAttributes( { hShadowColor: val } ), label: "Hover Shadow Color" },
-                        { value: tagBgColor, onChange: ( val ) => setAttributes( { tagBgColor: val } ), label: "Tag Background" },
-                        { value: tagTextColor, onChange: ( val ) => setAttributes( { tagTextColor: val } ), label: "Tag Text Color" },
-                        { value: dividerColor, onChange: ( val ) => setAttributes( { dividerColor: val } ), label: "Divider Color" },
-                        { value: btnBgColor, onChange: ( val ) => setAttributes( { btnBgColor: val } ), label: "Button Background" },
-                        { value: btnTextColor, onChange: ( val ) => setAttributes( { btnTextColor: val } ), label: "Button Text Color" },
-                        { value: btnHovBgColor, onChange: ( val ) => setAttributes( { btnHovBgColor: val } ), label: "Button Hover Background" },
-                        { value: btnHovTextColor, onChange: ( val ) => setAttributes( { btnHovTextColor: val } ), label: "Button Hover Text Color" },
+                <TabPanel
+                    className="axis-folio-tabs"
+                    activeClass="is-active"
+                    tabs={ [
+                        { name: 'settings', title: __( 'Settings', 'axis-folio' ) },
+                        { name: 'styles', title: __( 'Styles', 'axis-folio' ) },
                     ] }
-                />
+                >
+                    { ( tab ) => (
+                        <>
+                            { tab.name === 'settings' && (
+                                <>
+                                    <PanelBody title={ __( 'Grid Layout', 'axis-folio' ) }>
+                                        <RangeControl label={ __( 'Columns (Desktop)', 'axis-folio' ) } value={ columnsDesktop } onChange={ ( v ) => setAttributes( { columnsDesktop: v } ) } min={ 1 } max={ 6 } />
+                                        <RangeControl label={ __( 'Columns (tablet)', 'axis-folio' ) } value={ columnsTablet } onChange={ ( v ) => setAttributes( { columnsTablet: v } ) } min={ 1 } max={ 4 } />
+                                        <RangeControl label={ __( 'Columns (mobile)', 'axis-folio' ) } value={ columnsMobile } onChange={ ( v ) => setAttributes( { columnsMobile: v } ) } min={ 1 } max={ 2 } />
+                                        <RangeControl label={ __( 'Grid Gap', 'axis-folio' ) } value={ gridGap } onChange={ ( v ) => setAttributes( { gridGap: v } ) } min={ 0 } max={ 100 } />
+                                    </PanelBody>
+                                    <PanelBody title={ __( 'Pagination', 'axis-folio' ) }>
+                                        <ToggleControl label={ __( 'Enable Load more', 'axis-folio' ) } checked={ enableLoadMore } onChange={ ( v ) => setAttributes( { enableLoadMore: v } ) } />
+                                        <TextControl label={ __( 'Button Text', 'axis-folio' ) } value={ loadMoreText } onChange={ ( v ) => setAttributes( { loadMoreText: v } ) } />
+                                        <RangeControl label={ __( 'items per page', 'axis-folio' ) } value={ postsPerPage } onChange={ ( v ) => setAttributes( { postsPerPage: v } ) } min={ 1 } max={ 20 } />
+                                    </PanelBody>
+                                </>
+                            ) }
+                            { tab.name === 'styles' && (
+                                <>
+                                    <PanelBody title={ __( 'Card Appearance', 'axis-folio' ) }>
+                                        <RangeControl label={ __( 'Card Border Radius', 'axis-folio' ) } value={ borderRadius } onChange={ ( v ) => setAttributes( { borderRadius: v } ) } min={ 0 } max={ 50 } />
+                                        <ToggleControl label={ __( 'enable box shadow', 'axis-folio' ) } checked={ hasShadow } onChange={ ( v ) => setAttributes( { hasShadow: v } ) } />
+                                        <ToggleControl label={ __( 'show tags', 'axis-folio' ) } checked={ showTags } onChange={ ( v ) => setAttributes( { showTags: v } ) } />
+                                        <ToggleControl label={ __( 'show divider above tags', 'axis-folio' ) } checked={ showTagDivider } onChange={ ( v ) => setAttributes( { showTagDivider: v } ) } />
+                                        <RangeControl label={ __( 'Divider Width (%)', 'axis-folio' ) } value={ dividerWidth } onChange={ ( v ) => setAttributes( { dividerWidth: v } ) } min={ 1 } max={ 100 } />
+                                        <RangeControl label={ __( 'Divider Height (px)', 'axis-folio' ) } value={ dividerHeight } onChange={ ( v ) => setAttributes( { dividerHeight: v } ) } min={ 1 } max={ 10 } />
+                                    </PanelBody>
+
+                                    <PanelBody title={ __( 'Typography', 'axis-folio' ) } initialOpen={ false }>
+                                        <p><strong>{ __( 'Title', 'axis-folio' ) }</strong></p>
+                                        <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ titleFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { titleFontFamily: v } ) } />
+                                        <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ titleFontSize } onChange={ ( v ) => setAttributes( { titleFontSize: v } ) } min={ 10 } max={ 100 } />
+                                        
+                                        <p><strong>{ __( 'description', 'axis-folio' ) }</strong></p>
+                                        <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ descFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { descFontFamily: v } ) } />
+                                        <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ descFontSize } onChange={ ( v ) => setAttributes( { descFontSize: v } ) } min={ 10 } max={ 100 } />
+                                        
+                                        <p><strong>{ __( 'tags', 'axis-folio' ) }</strong></p>
+                                        <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ tagFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { tagFontFamily: v } ) } />
+                                        <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ tagFontSize } onChange={ ( v ) => setAttributes( { tagFontSize: v } ) } min={ 8 } max={ 30 } />
+                                    </PanelBody>
+
+                                    <PanelBody title={ __( 'image controls', 'axis-folio' ) } initialOpen={ false }>
+                                        <ToggleControl label={ __( 'enable image zoom', 'axis-folio' ) } checked={ hasZoom } onChange={ ( v ) => setAttributes( { hasZoom: v } ) } />
+                                        <RangeControl label={ __( 'zoom scale', 'axis-folio' ) } value={ zoomScale } onChange={ ( v ) => setAttributes( { zoomScale: v } ) } min={ 1 } max={ 2 } step={ 0.1 } />
+                                    </PanelBody>
+
+                                    <PanelBody title={ __( 'button styles', 'axis-folio' ) } initialOpen={ false }>
+                                        <RangeControl label={ __( 'Button Border Radius', 'axis-folio' ) } value={ btnBorderRadius } onChange={ ( v ) => setAttributes( { btnBorderRadius: v } ) } min={ 0 } max={ 50 } />
+                                    </PanelBody>
+
+                                    <PanelBody title={ __( 'shadow controls', 'axis-folio' ) } initialOpen={ false }>
+                                        <p><strong>{ __( 'Standard State', 'axis-folio' ) }</strong></p>
+                                        <RangeControl label={ __( 'Blur', 'axis-folio' ) } value={ shadowBlur } onChange={ ( v ) => setAttributes( { shadowBlur: v } ) } min={ 0 } max={ 50 } />
+                                        <RangeControl label={ __( 'Spread', 'axis-folio' ) } value={ shadowSpread } onChange={ ( v ) => setAttributes( { shadowSpread: v } ) } min={ -20 } max={ 50 } />
+                                        <RangeControl label={ __( 'Offset X', 'axis-folio' ) } value={ shadowX } onChange={ ( v ) => setAttributes( { shadowX: v } ) } min={ -50 } max={ 50 } />
+                                        <RangeControl label={ __( 'Offset Y', 'axis-folio' ) } value={ shadowY } onChange={ ( v ) => setAttributes( { shadowY: v } ) } min={ -50 } max={ 50 } />
+                                        
+                                        <p><strong>{ __( 'Hover State', 'axis-folio' ) }</strong></p>
+                                        <RangeControl label={ __( 'Hover Blur', 'axis-folio' ) } value={ hShadowBlur } onChange={ ( v ) => setAttributes( { hShadowBlur: v } ) } min={ 0 } max={ 50 } />
+                                        <RangeControl label={ __( 'Hover Spread', 'axis-folio' ) } value={ hShadowSpread } onChange={ ( v ) => setAttributes( { hShadowSpread: v } ) } min={ -20 } max={ 50 } />
+                                        <RangeControl label={ __( 'Hover Offset X', 'axis-folio' ) } value={ hShadowX } onChange={ ( v ) => setAttributes( { hShadowX: v } ) } min={ -50 } max={ 50 } />
+                                        <RangeControl label={ __( 'Hover Offset Y', 'axis-folio' ) } value={ hShadowY } onChange={ ( v ) => setAttributes( { hShadowY: v } ) } min={ -50 } max={ 50 } />
+                                    </PanelBody>
+
+                                    <PanelColorSettings
+                                        title={ __( 'Color Palette', 'axis-folio' ) }
+                                        initialOpen={ false }
+                                        colorSettings={ [
+                                            { label: __( 'card background', 'axis-folio' ), value: cardBgColor, onChange: ( v ) => setAttributes( { cardBgColor: v } ) },
+                                            { label: __( 'hover card background', 'axis-folio' ), value: hCardBgColor, onChange: ( v ) => setAttributes( { hCardBgColor: v } ) },
+                                            { label: __( 'shadow color', 'axis-folio' ), value: shadowColor, onChange: ( v ) => setAttributes( { shadowColor: v } ) },
+                                            { label: __( 'hover shadow color', 'axis-folio' ), value: hShadowColor, onChange: ( v ) => setAttributes( { hShadowColor: v } ) },
+                                            { label: __( 'tag background', 'axis-folio' ), value: tagBgColor, onChange: ( v ) => setAttributes( { tagBgColor: v } ) },
+                                            { label: __( 'tag text color', 'axis-folio' ), value: tagTextColor, onChange: ( v ) => setAttributes( { tagTextColor: v } ) },
+                                            { label: __( 'divider color', 'axis-folio' ), value: dividerColor, onChange: ( v ) => setAttributes( { dividerColor: v } ) },
+                                            { label: __( 'button background', 'axis-folio' ), value: btnBgColor, onChange: ( v ) => setAttributes( { btnBgColor: v } ) },
+                                            { label: __( 'button text color', 'axis-folio' ), value: btnTextColor, onChange: ( v ) => setAttributes( { btnTextColor: v } ) },
+                                            { label: __( 'button hover background', 'axis-folio' ), value: btnHovBgColor, onChange: ( v ) => setAttributes( { btnHovBgColor: v } ) },
+                                            { label: __( 'button hover text color', 'axis-folio' ), value: btnHovTextColor, onChange: ( v ) => setAttributes( { btnHovTextColor: v } ) },
+                                        ] }
+                                    />
+                                </>
+                            ) }
+                        </>
+                    ) }
+                </TabPanel>
             </InspectorControls>
 
-            <div id={ `${uniqueId}-editor` } className="portfolio-editor-wrapper" style={ editorStyles.container }>
+            <div style={ editorStyles.container }>
                 <div style={ editorStyles.masonryGrid }>
                     { items.map( ( item, index ) => (
-                        <div key={ index } className="portfolio-edit-card" style={ editorStyles.card }>
-                            <div style={ editorStyles.header }>
-                                <strong style={{ color: '#111', fontSize: '11px', textTransform: 'uppercase' }}>ITEM { index + 1 }</strong>
-                                <Button isDestructive icon="trash" onClick={ () => removeItem( index ) } />
+                        <div key={ index } style={ editorStyles.card }>
+                            <div style={ { padding: '10px', background: '#f1f1f1', display: 'flex', justifyContent: 'flex-end' } }>
+                                <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
                             </div>
                             <MediaUploadCheck>
                                 <MediaUpload
                                     onSelect={ ( media ) => updateItem( index, 'url', media.url ) }
                                     allowedTypes={ [ 'image' ] }
                                     render={ ( { open } ) => (
-                                        <div onClick={ open } style={ editorStyles.imageWrapper }>
-                                            { item.url ? (
-                                                <img src={ item.url } className="portfolio-edit-image" style={ editorStyles.image } alt="" />
-                                            ) : (
-                                                <div style={{ padding: '40px', textAlign: 'center' }}><Dashicon icon="format-image" /></div>
-                                            ) }
+                                        <div style={ editorStyles.imageWrapper } onClick={ open }>
+                                            { item.url ? <img src={ item.url } style={ editorStyles.image } /> : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> }
                                         </div>
                                     ) }
                                 />
                             </MediaUploadCheck>
-                            
-                            <div className="portfolio-title-input">
-                                <TextControl 
-                                    label={ __( "Title", "axis-folio" ) } 
-                                    value={ item.title } 
-                                    onChange={ ( val ) => updateItem( index, 'title', val ) } 
-                                />
+                            <div style={ { padding: '15px' } }>
+                                <TextControl placeholder="Title" value={ item.title } onChange={ ( v ) => updateItem( index, 'title', v ) } />
+                                <TextareaControl placeholder="Description" value={ item.description } onChange={ ( v ) => updateItem( index, 'description', v ) } />
+                                <TextControl placeholder="Link URL" value={ item.linkUrl } onChange={ ( v ) => updateItem( index, 'linkUrl', v ) } />
+                                <ToggleControl label="Open in New Tab" checked={ item.openInNewTab } onChange={ ( v ) => updateItem( index, 'openInNewTab', v ) } />
+                                <TextControl placeholder="Tags (comma separated)" value={ item.tags } onChange={ ( v ) => updateItem( index, 'tags', v ) } />
+                                { showTags && item.tags && (
+                                    <div style={ { marginTop: '10px' } }>
+                                        { item.tags.split( ',' ).map( ( t, i ) => (
+                                            <span key={ i } style={ editorStyles.tagItem }>{ t.trim() }</span>
+                                        ) ) }
+                                    </div>
+                                ) }
                             </div>
-
-                            <div className="portfolio-desc-input">
-                                <TextareaControl 
-                                    label={ __( "Description", "axis-folio" ) } 
-                                    value={ item.description } 
-                                    onChange={ ( val ) => updateItem( index, 'description', val ) } 
-                                />
-                            </div>
-
-                            <div style={{ padding: '10px', background: '#fff', border: '1px solid #eee', borderRadius: '4px', marginBottom: '15px' }}>
-                                <TextControl 
-                                    label={ __( "Link URL", "axis-folio" ) } 
-                                    value={ item.linkUrl } 
-                                    onChange={ ( val ) => updateItem( index, 'linkUrl', val ) } 
-                                    placeholder="https://..."
-                                />
-                                <ToggleControl 
-                                    label={ __( "Open in New Tab", "axis-folio" ) } 
-                                    checked={ item.openInNewTab } 
-                                    onChange={ ( val ) => updateItem( index, 'openInNewTab', val ) } 
-                                />
-                            </div>
-                            
-                            <TextControl label={ __( "Tags (Comma separated)", "axis-folio" ) } value={ item.tags } onChange={ ( val ) => updateItem( index, 'tags', val ) } />
-                            
-                            { showTagDivider && <div style={ editorStyles.divider }></div> }
-
-                            { showTags && item.tags && (
-                                <div style={{ marginTop: '10px' }}>
-                                    { item.tags.split(',').map( ( tag, i ) => (
-                                        <span key={ i } style={ editorStyles.tagItem }>
-                                            { tag.trim() }
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
                         </div>
                     ) ) }
                 </div>
                 
-                <div style={ editorStyles.footer }>
-                    <Button isPrimary icon="plus" onClick={ addNewItem }>
+                <div style={ { marginTop: '30px', textAlign: 'center' } }>
+                    <Button variant="primary" onClick={ addNewItem } icon="plus">
                         { __( 'Add New Item', 'axis-folio' ) }
                     </Button>
 
                     { enableLoadMore && (
-                        <div style={{ borderTop: '1px dashed #ccc', width: '100%', marginTop: '10px', paddingTop: '20px' }}>
-                            <p style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase', marginBottom: '5px' }}>
-                                { __( 'Load More Preview', 'axis-folio' ) }
-                            </p>
-                            <div className="portfolio-load-more-preview" style={ editorStyles.loadMorePreview }>
+                        <div style={ { marginTop: '20px', borderTop: '1px dashed #ccc', paddingTop: '20px' } }>
+                            <div style={ editorStyles.loadMorePreview }>
                                 { loadMoreText || __( 'Load More', 'axis-folio' ) }
                             </div>
                         </div>
-                    )}
+                    ) }
                 </div>
             </div>
         </div>

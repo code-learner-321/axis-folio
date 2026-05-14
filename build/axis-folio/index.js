@@ -135,511 +135,435 @@ function Edit({
   }];
   const editorStyles = {
     container: {
-      padding: '25px',
-      background: '#f0f0f0',
-      border: '1px solid #ddd',
-      borderRadius: '8px',
-      boxSizing: 'border-box'
+      padding: '20px',
+      background: '#fff',
+      width: '100%'
     },
     masonryGrid: {
-      columnCount: columnsDesktop,
-      columnGap: `${gridGap}px`,
-      width: '100%',
-      display: 'block'
+      display: 'grid',
+      gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`,
+      gap: `${gridGap}px`,
+      width: '100%'
     },
     card: {
       background: cardBgColor,
-      padding: '15px',
       borderRadius: `${borderRadius}px`,
       boxShadow: hasShadow ? `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` : 'none',
-      border: hasShadow ? 'none' : '1px solid #ccc',
-      transition: 'all 0.3s ease',
-      overflow: 'hidden',
-      position: 'relative',
-      marginBottom: `${gridGap}px`,
-      breakInside: 'avoid',
-      display: 'inline-block',
-      width: '100%',
-      verticalAlign: 'top',
-      boxSizing: 'border-box'
+      border: '1px solid #ddd',
+      overflow: 'hidden'
     },
     imageWrapper: {
       width: '100%',
-      overflow: 'hidden',
-      borderRadius: '4px',
-      marginBottom: '15px',
-      backgroundColor: '#e5e5e5',
-      display: 'block',
-      cursor: 'pointer',
-      lineHeight: 0
+      backgroundColor: '#eee',
+      minHeight: '150px',
+      cursor: 'pointer'
     },
     image: {
       width: '100%',
-      height: 'auto !important',
-      display: 'block',
-      transition: 'transform 0.5s ease'
+      height: 'auto',
+      display: 'block'
     },
     tagItem: {
-      padding: '3px 10px',
-      borderRadius: '4px',
-      fontWeight: '600',
-      textTransform: 'uppercase',
+      padding: '2px 8px',
+      borderRadius: '3px',
       backgroundColor: tagBgColor,
       color: tagTextColor,
       fontSize: `${tagFontSize}px`,
       fontFamily: tagFontFamily,
       display: 'inline-block',
-      marginRight: '5px',
-      marginBottom: '5px'
-    },
-    divider: {
-      width: `${dividerWidth}%`,
-      height: `${dividerHeight}px`,
-      backgroundColor: dividerColor || '#eee',
-      margin: '10px 0',
-      display: showTagDivider ? 'block' : 'none'
-    },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      marginBottom: '10px',
-      alignItems: 'center'
-    },
-    footer: {
-      textAlign: 'center',
-      marginTop: '20px',
-      paddingTop: '20px',
-      borderTop: '1px solid #eee',
-      width: '100%',
-      clear: 'both',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '15px',
-      alignItems: 'center'
+      marginRight: '5px'
     },
     loadMorePreview: {
-      padding: '10px 25px',
-      borderRadius: `${btnBorderRadius}px`,
+      padding: '12px 30px',
       backgroundColor: btnBgColor,
       color: btnTextColor,
-      fontWeight: '600',
-      fontSize: '14px',
-      display: 'inline-block',
-      cursor: 'pointer',
-      marginTop: '10px',
+      borderRadius: `${btnBorderRadius}px`,
       border: 'none',
-      transition: 'all 0.3s ease'
+      display: 'inline-block',
+      fontWeight: '600',
+      marginTop: '20px'
     }
   };
-  const hoverCSS = `
-        #${uniqueId}-editor .portfolio-edit-card:hover {
-            background: ${hCardBgColor || cardBgColor} !important;
-            box-shadow: ${hasShadow ? `${hShadowX}px ${hShadowY}px ${hShadowBlur}px ${hShadowSpread}px ${hShadowColor}` : 'none'} !important;
-        }
-        ${hasZoom ? `
-        #${uniqueId}-editor .portfolio-edit-card:hover .portfolio-edit-image {
-            transform: scale(${zoomScale}) !important;
-        }
-        ` : ''}
-        #${uniqueId}-editor .portfolio-load-more-preview:hover {
-            background: ${btnHovBgColor} !important;
-            color: ${btnHovTextColor} !important;
-        }
-        #${uniqueId}-editor .portfolio-title-input input {
-            color: ${titleColor} !important;
-            font-size: ${titleFontSize}px !important;
-            font-family: ${titleFontFamily} !important;
-            font-weight: 700;
-        }
-        #${uniqueId}-editor .portfolio-desc-input textarea {
-            color: ${descColor} !important;
-            font-size: ${descFontSize}px !important;
-            font-family: ${descFontFamily} !important;
-        }
-    `;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("style", {
-      children: hoverCSS
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Grid Layout', 'axis-folio'),
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Columns (Desktop)",
-          value: columnsDesktop,
-          onChange: val => setAttributes({
-            columnsDesktop: val
-          }),
-          min: 1,
-          max: 6
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Columns (Tablet)",
-          value: columnsTablet,
-          onChange: val => setAttributes({
-            columnsTablet: val
-          }),
-          min: 1,
-          max: 4
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Columns (Mobile)",
-          value: columnsMobile,
-          onChange: val => setAttributes({
-            columnsMobile: val
-          }),
-          min: 1,
-          max: 2
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Grid Gap",
-          value: gridGap,
-          onChange: val => setAttributes({
-            gridGap: val
-          }),
-          min: 0,
-          max: 50
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Pagination', 'axis-folio'),
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-          label: "Enable Load More",
-          checked: enableLoadMore,
-          onChange: val => setAttributes({
-            enableLoadMore: val
-          })
-        }), enableLoadMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-            label: "Button Text",
-            value: loadMoreText,
-            onChange: val => setAttributes({
-              loadMoreText: val
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-            label: "Items Per Page",
-            value: postsPerPage,
-            onChange: val => setAttributes({
-              postsPerPage: val
-            }),
-            min: 1,
-            max: 20
-          })]
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
-      group: "styles",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Card Appearance', 'axis-folio'),
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Card Border Radius",
-          value: borderRadius,
-          onChange: val => setAttributes({
-            borderRadius: val
-          }),
-          min: 0,
-          max: 50
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-          label: "Enable Box Shadow",
-          checked: hasShadow,
-          onChange: val => setAttributes({
-            hasShadow: val
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-          label: "Show Tags",
-          checked: showTags,
-          onChange: val => setAttributes({
-            showTags: val
-          })
-        }), showTags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-            label: "Show Divider Above Tags",
-            checked: showTagDivider,
-            onChange: val => setAttributes({
-              showTagDivider: val
-            })
-          }), showTagDivider && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-              label: "Divider Width (%)",
-              value: dividerWidth,
-              onChange: val => setAttributes({
-                dividerWidth: val
-              }),
-              min: 10,
-              max: 100
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-              label: "Divider Height (px)",
-              value: dividerHeight,
-              onChange: val => setAttributes({
-                dividerHeight: val
-              }),
-              min: 1,
-              max: 10
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TabPanel, {
+        className: "axis-folio-tabs",
+        activeClass: "is-active",
+        tabs: [{
+          name: 'settings',
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Settings', 'axis-folio')
+        }, {
+          name: 'styles',
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Styles', 'axis-folio')
+        }],
+        children: tab => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+          children: [tab.name === 'settings' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Grid Layout', 'axis-folio'),
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Columns (Desktop)', 'axis-folio'),
+                value: columnsDesktop,
+                onChange: v => setAttributes({
+                  columnsDesktop: v
+                }),
+                min: 1,
+                max: 6
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Columns (tablet)', 'axis-folio'),
+                value: columnsTablet,
+                onChange: v => setAttributes({
+                  columnsTablet: v
+                }),
+                min: 1,
+                max: 4
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Columns (mobile)', 'axis-folio'),
+                value: columnsMobile,
+                onChange: v => setAttributes({
+                  columnsMobile: v
+                }),
+                min: 1,
+                max: 2
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Grid Gap', 'axis-folio'),
+                value: gridGap,
+                onChange: v => setAttributes({
+                  gridGap: v
+                }),
+                min: 0,
+                max: 100
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Pagination', 'axis-folio'),
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Enable Load more', 'axis-folio'),
+                checked: enableLoadMore,
+                onChange: v => setAttributes({
+                  enableLoadMore: v
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Button Text', 'axis-folio'),
+                value: loadMoreText,
+                onChange: v => setAttributes({
+                  loadMoreText: v
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('items per page', 'axis-folio'),
+                value: postsPerPage,
+                onChange: v => setAttributes({
+                  postsPerPage: v
+                }),
+                min: 1,
+                max: 20
+              })]
+            })]
+          }), tab.name === 'styles' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Card Appearance', 'axis-folio'),
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Card Border Radius', 'axis-folio'),
+                value: borderRadius,
+                onChange: v => setAttributes({
+                  borderRadius: v
+                }),
+                min: 0,
+                max: 50
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('enable box shadow', 'axis-folio'),
+                checked: hasShadow,
+                onChange: v => setAttributes({
+                  hasShadow: v
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('show tags', 'axis-folio'),
+                checked: showTags,
+                onChange: v => setAttributes({
+                  showTags: v
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('show divider above tags', 'axis-folio'),
+                checked: showTagDivider,
+                onChange: v => setAttributes({
+                  showTagDivider: v
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Divider Width (%)', 'axis-folio'),
+                value: dividerWidth,
+                onChange: v => setAttributes({
+                  dividerWidth: v
+                }),
+                min: 1,
+                max: 100
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Divider Height (px)', 'axis-folio'),
+                value: dividerHeight,
+                onChange: v => setAttributes({
+                  dividerHeight: v
+                }),
+                min: 1,
+                max: 10
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Typography', 'axis-folio'),
+              initialOpen: false,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
+                  children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Title', 'axis-folio')
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('font family', 'axis-folio'),
+                value: titleFontFamily,
+                options: fontOptions,
+                onChange: v => setAttributes({
+                  titleFontFamily: v
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('font size', 'axis-folio'),
+                value: titleFontSize,
+                onChange: v => setAttributes({
+                  titleFontSize: v
+                }),
+                min: 10,
+                max: 100
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
+                  children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('description', 'axis-folio')
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('font family', 'axis-folio'),
+                value: descFontFamily,
+                options: fontOptions,
+                onChange: v => setAttributes({
+                  descFontFamily: v
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('font size', 'axis-folio'),
+                value: descFontSize,
+                onChange: v => setAttributes({
+                  descFontSize: v
+                }),
+                min: 10,
+                max: 100
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
+                  children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('tags', 'axis-folio')
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('font family', 'axis-folio'),
+                value: tagFontFamily,
+                options: fontOptions,
+                onChange: v => setAttributes({
+                  tagFontFamily: v
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('font size', 'axis-folio'),
+                value: tagFontSize,
+                onChange: v => setAttributes({
+                  tagFontSize: v
+                }),
+                min: 8,
+                max: 30
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('image controls', 'axis-folio'),
+              initialOpen: false,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('enable image zoom', 'axis-folio'),
+                checked: hasZoom,
+                onChange: v => setAttributes({
+                  hasZoom: v
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('zoom scale', 'axis-folio'),
+                value: zoomScale,
+                onChange: v => setAttributes({
+                  zoomScale: v
+                }),
+                min: 1,
+                max: 2,
+                step: 0.1
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button styles', 'axis-folio'),
+              initialOpen: false,
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Button Border Radius', 'axis-folio'),
+                value: btnBorderRadius,
+                onChange: v => setAttributes({
+                  btnBorderRadius: v
+                }),
+                min: 0,
+                max: 50
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('shadow controls', 'axis-folio'),
+              initialOpen: false,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
+                  children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Standard State', 'axis-folio')
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Blur', 'axis-folio'),
+                value: shadowBlur,
+                onChange: v => setAttributes({
+                  shadowBlur: v
+                }),
+                min: 0,
+                max: 50
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Spread', 'axis-folio'),
+                value: shadowSpread,
+                onChange: v => setAttributes({
+                  shadowSpread: v
+                }),
+                min: -20,
+                max: 50
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Offset X', 'axis-folio'),
+                value: shadowX,
+                onChange: v => setAttributes({
+                  shadowX: v
+                }),
+                min: -50,
+                max: 50
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Offset Y', 'axis-folio'),
+                value: shadowY,
+                onChange: v => setAttributes({
+                  shadowY: v
+                }),
+                min: -50,
+                max: 50
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
+                  children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover State', 'axis-folio')
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover Blur', 'axis-folio'),
+                value: hShadowBlur,
+                onChange: v => setAttributes({
+                  hShadowBlur: v
+                }),
+                min: 0,
+                max: 50
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover Spread', 'axis-folio'),
+                value: hShadowSpread,
+                onChange: v => setAttributes({
+                  hShadowSpread: v
+                }),
+                min: -20,
+                max: 50
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover Offset X', 'axis-folio'),
+                value: hShadowX,
+                onChange: v => setAttributes({
+                  hShadowX: v
+                }),
+                min: -50,
+                max: 50
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover Offset Y', 'axis-folio'),
+                value: hShadowY,
+                onChange: v => setAttributes({
+                  hShadowY: v
+                }),
+                min: -50,
+                max: 50
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.PanelColorSettings, {
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Color Palette', 'axis-folio'),
+              initialOpen: false,
+              colorSettings: [{
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('card background', 'axis-folio'),
+                value: cardBgColor,
+                onChange: v => setAttributes({
+                  cardBgColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('hover card background', 'axis-folio'),
+                value: hCardBgColor,
+                onChange: v => setAttributes({
+                  hCardBgColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('shadow color', 'axis-folio'),
+                value: shadowColor,
+                onChange: v => setAttributes({
+                  shadowColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('hover shadow color', 'axis-folio'),
+                value: hShadowColor,
+                onChange: v => setAttributes({
+                  hShadowColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('tag background', 'axis-folio'),
+                value: tagBgColor,
+                onChange: v => setAttributes({
+                  tagBgColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('tag text color', 'axis-folio'),
+                value: tagTextColor,
+                onChange: v => setAttributes({
+                  tagTextColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('divider color', 'axis-folio'),
+                value: dividerColor,
+                onChange: v => setAttributes({
+                  dividerColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button background', 'axis-folio'),
+                value: btnBgColor,
+                onChange: v => setAttributes({
+                  btnBgColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button text color', 'axis-folio'),
+                value: btnTextColor,
+                onChange: v => setAttributes({
+                  btnTextColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button hover background', 'axis-folio'),
+                value: btnHovBgColor,
+                onChange: v => setAttributes({
+                  btnHovBgColor: v
+                })
+              }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button hover text color', 'axis-folio'),
+                value: btnHovTextColor,
+                onChange: v => setAttributes({
+                  btnHovTextColor: v
+                })
+              }]
             })]
           })]
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Typography', 'axis-folio'),
-        initialOpen: false,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Title', 'axis-folio')
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-          label: "Font Family",
-          value: titleFontFamily,
-          options: fontOptions,
-          onChange: val => setAttributes({
-            titleFontFamily: val
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Font Size",
-          value: titleFontSize,
-          onChange: val => setAttributes({
-            titleFontSize: val
-          }),
-          min: 10,
-          max: 100
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Description', 'axis-folio')
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-          label: "Font Family",
-          value: descFontFamily,
-          options: fontOptions,
-          onChange: val => setAttributes({
-            descFontFamily: val
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Font Size",
-          value: descFontSize,
-          onChange: val => setAttributes({
-            descFontSize: val
-          }),
-          min: 10,
-          max: 50
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tags', 'axis-folio')
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-          label: "Font Family",
-          value: tagFontFamily,
-          options: fontOptions,
-          onChange: val => setAttributes({
-            tagFontFamily: val
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Font Size",
-          value: tagFontSize,
-          onChange: val => setAttributes({
-            tagFontSize: val
-          }),
-          min: 8,
-          max: 30
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Image Controls', 'axis-folio'),
-        initialOpen: false,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-          label: "Enable Image Zoom",
-          checked: hasZoom,
-          onChange: val => setAttributes({
-            hasZoom: val
-          })
-        }), hasZoom && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Zoom Scale",
-          value: zoomScale,
-          onChange: val => setAttributes({
-            zoomScale: val
-          }),
-          min: 1,
-          max: 2,
-          step: 0.01
-        })]
-      }), enableLoadMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Button Styles', 'axis-folio'),
-        initialOpen: false,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Button Border Radius",
-          value: btnBorderRadius,
-          onChange: val => setAttributes({
-            btnBorderRadius: val
-          }),
-          min: 0,
-          max: 50
         })
-      }), hasShadow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Shadow Controls', 'axis-folio'),
-        initialOpen: false,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Standard State', 'axis-folio')
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Blur",
-          value: shadowBlur,
-          onChange: val => setAttributes({
-            shadowBlur: val
-          }),
-          min: 0,
-          max: 100
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Spread",
-          value: shadowSpread,
-          onChange: val => setAttributes({
-            shadowSpread: val
-          }),
-          min: -20,
-          max: 50
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Offset X",
-          value: shadowX,
-          onChange: val => setAttributes({
-            shadowX: val
-          }),
-          min: -50,
-          max: 50
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Offset Y",
-          value: shadowY,
-          onChange: val => setAttributes({
-            shadowY: val
-          }),
-          min: -50,
-          max: 50
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("hr", {
-          style: {
-            margin: '20px 0'
-          }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Hover State', 'axis-folio')
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Hover Blur",
-          value: hShadowBlur,
-          onChange: val => setAttributes({
-            hShadowBlur: val
-          }),
-          min: 0,
-          max: 100
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Hover Spread",
-          value: hShadowSpread,
-          onChange: val => setAttributes({
-            hShadowSpread: val
-          }),
-          min: -20,
-          max: 50
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Hover Offset X",
-          value: hShadowX,
-          onChange: val => setAttributes({
-            hShadowX: val
-          }),
-          min: -50,
-          max: 50
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: "Hover Offset Y",
-          value: hShadowY,
-          onChange: val => setAttributes({
-            hShadowY: val
-          }),
-          min: -50,
-          max: 50
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.PanelColorSettings, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Color Palette', 'axis-folio'),
-        initialOpen: false,
-        colorSettings: [{
-          value: cardBgColor,
-          onChange: val => setAttributes({
-            cardBgColor: val
-          }),
-          label: "Card Background"
-        }, {
-          value: hCardBgColor,
-          onChange: val => setAttributes({
-            hCardBgColor: val
-          }),
-          label: "Hover Card Background"
-        }, {
-          value: shadowColor,
-          onChange: val => setAttributes({
-            shadowColor: val
-          }),
-          label: "Shadow Color"
-        }, {
-          value: hShadowColor,
-          onChange: val => setAttributes({
-            hShadowColor: val
-          }),
-          label: "Hover Shadow Color"
-        }, {
-          value: tagBgColor,
-          onChange: val => setAttributes({
-            tagBgColor: val
-          }),
-          label: "Tag Background"
-        }, {
-          value: tagTextColor,
-          onChange: val => setAttributes({
-            tagTextColor: val
-          }),
-          label: "Tag Text Color"
-        }, {
-          value: dividerColor,
-          onChange: val => setAttributes({
-            dividerColor: val
-          }),
-          label: "Divider Color"
-        }, {
-          value: btnBgColor,
-          onChange: val => setAttributes({
-            btnBgColor: val
-          }),
-          label: "Button Background"
-        }, {
-          value: btnTextColor,
-          onChange: val => setAttributes({
-            btnTextColor: val
-          }),
-          label: "Button Text Color"
-        }, {
-          value: btnHovBgColor,
-          onChange: val => setAttributes({
-            btnHovBgColor: val
-          }),
-          label: "Button Hover Background"
-        }, {
-          value: btnHovTextColor,
-          onChange: val => setAttributes({
-            btnHovTextColor: val
-          }),
-          label: "Button Hover Text Color"
-        }]
-      })]
+      })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      id: `${uniqueId}-editor`,
-      className: "portfolio-editor-wrapper",
       style: editorStyles.container,
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         style: editorStyles.masonryGrid,
         children: items.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: "portfolio-edit-card",
           style: editorStyles.card,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-            style: editorStyles.header,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("strong", {
-              style: {
-                color: '#111',
-                fontSize: '11px',
-                textTransform: 'uppercase'
-              },
-              children: ["ITEM ", index + 1]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            style: {
+              padding: '10px',
+              background: '#f1f1f1',
+              display: 'flex',
+              justifyContent: 'flex-end'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
               isDestructive: true,
-              icon: "trash",
-              onClick: () => removeItem(index)
-            })]
+              onClick: () => removeItem(index),
+              icon: "trash"
+            })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUploadCheck, {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
               onSelect: media => updateItem(index, 'url', media.url),
@@ -647,13 +571,11 @@ function Edit({
               render: ({
                 open
               }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-                onClick: open,
                 style: editorStyles.imageWrapper,
+                onClick: open,
                 children: item.url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
                   src: item.url,
-                  className: "portfolio-edit-image",
-                  style: editorStyles.image,
-                  alt: ""
+                  style: editorStyles.image
                 }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                   style: {
                     padding: '40px',
@@ -665,81 +587,61 @@ function Edit({
                 })
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "portfolio-title-input",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Title", "axis-folio"),
-              value: item.title,
-              onChange: val => updateItem(index, 'title', val)
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "portfolio-desc-input",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
-              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Description", "axis-folio"),
-              value: item.description,
-              onChange: val => updateItem(index, 'description', val)
-            })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             style: {
-              padding: '10px',
-              background: '#fff',
-              border: '1px solid #eee',
-              borderRadius: '4px',
-              marginBottom: '15px'
+              padding: '15px'
             },
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Link URL", "axis-folio"),
+              placeholder: "Title",
+              value: item.title,
+              onChange: v => updateItem(index, 'title', v)
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
+              placeholder: "Description",
+              value: item.description,
+              onChange: v => updateItem(index, 'description', v)
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+              placeholder: "Link URL",
               value: item.linkUrl,
-              onChange: val => updateItem(index, 'linkUrl', val),
-              placeholder: "https://..."
+              onChange: v => updateItem(index, 'linkUrl', v)
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Open in New Tab", "axis-folio"),
+              label: "Open in New Tab",
               checked: item.openInNewTab,
-              onChange: val => updateItem(index, 'openInNewTab', val)
+              onChange: v => updateItem(index, 'openInNewTab', v)
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+              placeholder: "Tags (comma separated)",
+              value: item.tags,
+              onChange: v => updateItem(index, 'tags', v)
+            }), showTags && item.tags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              style: {
+                marginTop: '10px'
+              },
+              children: item.tags.split(',').map((t, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                style: editorStyles.tagItem,
+                children: t.trim()
+              }, i))
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Tags (Comma separated)", "axis-folio"),
-            value: item.tags,
-            onChange: val => updateItem(index, 'tags', val)
-          }), showTagDivider && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            style: editorStyles.divider
-          }), showTags && item.tags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            style: {
-              marginTop: '10px'
-            },
-            children: item.tags.split(',').map((tag, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-              style: editorStyles.tagItem,
-              children: tag.trim()
-            }, i))
           })]
         }, index))
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        style: editorStyles.footer,
+        style: {
+          marginTop: '30px',
+          textAlign: 'center'
+        },
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
-          isPrimary: true,
-          icon: "plus",
+          variant: "primary",
           onClick: addNewItem,
+          icon: "plus",
           children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add New Item', 'axis-folio')
-        }), enableLoadMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), enableLoadMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           style: {
+            marginTop: '20px',
             borderTop: '1px dashed #ccc',
-            width: '100%',
-            marginTop: '10px',
             paddingTop: '20px'
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-            style: {
-              fontSize: '11px',
-              color: '#888',
-              textTransform: 'uppercase',
-              marginBottom: '5px'
-            },
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Load More Preview', 'axis-folio')
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "portfolio-load-more-preview",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             style: editorStyles.loadMorePreview,
             children: loadMoreText || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Load More', 'axis-folio')
-          })]
+          })
         })]
       })]
     })]
