@@ -79,6 +79,10 @@ function Edit({
     titleFontSize,
     descFontSize
   } = attributes;
+
+  // Local state for editor hover previews
+  const [hoveredIndex, setHoveredIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
+  const [isBtnHovered, setIsBtnHovered] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
     if (!uniqueId) {
       setAttributes({
@@ -133,6 +137,17 @@ function Edit({
     label: 'Verdana',
     value: 'Verdana, sans-serif'
   }];
+  const getCardStyle = index => {
+    const isHovered = hoveredIndex === index;
+    return {
+      background: isHovered ? hCardBgColor : cardBgColor,
+      borderRadius: `${borderRadius}px`,
+      transition: 'all 0.3s ease',
+      boxShadow: hasShadow ? isHovered ? `${hShadowX}px ${hShadowY}px ${hShadowBlur}px ${hShadowSpread}px ${hShadowColor}` : `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` : 'none',
+      border: '1px solid #ddd',
+      overflow: 'hidden'
+    };
+  };
   const editorStyles = {
     container: {
       padding: '20px',
@@ -145,24 +160,20 @@ function Edit({
       gap: `${gridGap}px`,
       width: '100%'
     },
-    card: {
-      background: cardBgColor,
-      borderRadius: `${borderRadius}px`,
-      boxShadow: hasShadow ? `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` : 'none',
-      border: '1px solid #ddd',
-      overflow: 'hidden'
-    },
     imageWrapper: {
       width: '100%',
       backgroundColor: '#eee',
       minHeight: '150px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      overflow: 'hidden'
     },
-    image: {
+    image: index => ({
       width: '100%',
       height: 'auto',
-      display: 'block'
-    },
+      display: 'block',
+      transition: 'transform 0.3s ease',
+      transform: hasZoom && hoveredIndex === index ? `scale(${zoomScale})` : 'scale(1)'
+    }),
     tagItem: {
       padding: '2px 8px',
       borderRadius: '3px',
@@ -175,13 +186,21 @@ function Edit({
     },
     loadMorePreview: {
       padding: '12px 30px',
-      backgroundColor: btnBgColor,
-      color: btnTextColor,
+      backgroundColor: isBtnHovered ? btnHovBgColor : btnBgColor,
+      color: isBtnHovered ? btnHovTextColor : btnTextColor,
       borderRadius: `${btnBorderRadius}px`,
       border: 'none',
       display: 'inline-block',
       fontWeight: '600',
-      marginTop: '20px'
+      marginTop: '20px',
+      transition: 'all 0.3s ease',
+      cursor: 'default'
+    },
+    divider: {
+      width: `${dividerWidth}%`,
+      height: `${dividerHeight}px`,
+      backgroundColor: dividerColor,
+      margin: '15px 0'
     }
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -243,7 +262,7 @@ function Edit({
                   enableLoadMore: v
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Button Text', 'axis-folio'),
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Butten Text', 'axis-folio'),
                 value: loadMoreText,
                 onChange: v => setAttributes({
                   loadMoreText: v
@@ -375,7 +394,7 @@ function Edit({
                   hasZoom: v
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('zoom scale', 'axis-folio'),
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('zoom scall', 'axis-folio'),
                 value: zoomScale,
                 onChange: v => setAttributes({
                   zoomScale: v
@@ -385,7 +404,7 @@ function Edit({
                 step: 0.1
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button styles', 'axis-folio'),
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('butten styles', 'axis-folio'),
               initialOpen: false,
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
                 label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Button Border Radius', 'axis-folio'),
@@ -518,7 +537,7 @@ function Edit({
                   dividerColor: v
                 })
               }, {
-                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button background', 'axis-folio'),
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button backgount', 'axis-folio'),
                 value: btnBgColor,
                 onChange: v => setAttributes({
                   btnBgColor: v
@@ -530,7 +549,7 @@ function Edit({
                   btnTextColor: v
                 })
               }, {
-                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button hover background', 'axis-folio'),
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('button hover backgount', 'axis-folio'),
                 value: btnHovBgColor,
                 onChange: v => setAttributes({
                   btnHovBgColor: v
@@ -551,7 +570,9 @@ function Edit({
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         style: editorStyles.masonryGrid,
         children: items.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          style: editorStyles.card,
+          style: getCardStyle(index),
+          onMouseEnter: () => setHoveredIndex(index),
+          onMouseLeave: () => setHoveredIndex(null),
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             style: {
               padding: '10px',
@@ -575,7 +596,8 @@ function Edit({
                 onClick: open,
                 children: item.url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
                   src: item.url,
-                  style: editorStyles.image
+                  style: editorStyles.image(index),
+                  alt: ""
                 }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                   style: {
                     padding: '40px',
@@ -611,6 +633,8 @@ function Edit({
               placeholder: "Tags (comma separated)",
               value: item.tags,
               onChange: v => updateItem(index, 'tags', v)
+            }), showTagDivider && item.tags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              style: editorStyles.divider
             }), showTags && item.tags && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               style: {
                 marginTop: '10px'
@@ -640,6 +664,8 @@ function Edit({
           },
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             style: editorStyles.loadMorePreview,
+            onMouseEnter: () => setIsBtnHovered(true),
+            onMouseLeave: () => setIsBtnHovered(false),
             children: loadMoreText || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Load More', 'axis-folio')
           })
         })]

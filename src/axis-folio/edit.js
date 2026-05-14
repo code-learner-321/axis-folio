@@ -17,7 +17,7 @@ import {
     SelectControl,
     TabPanel
 } from '@wordpress/components';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
     const { 
@@ -34,6 +34,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         titleFontFamily, descFontFamily, tagFontFamily,
         titleFontSize, descFontSize
     } = attributes;
+
+    // Local state for editor hover previews
+    const [ hoveredIndex, setHoveredIndex ] = useState( null );
+    const [ isBtnHovered, setIsBtnHovered ] = useState( false );
 
     useEffect( () => {
         if ( ! uniqueId ) {
@@ -65,6 +69,22 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         { label: 'Verdana', value: 'Verdana, sans-serif' }
     ];
 
+    const getCardStyle = ( index ) => {
+        const isHovered = hoveredIndex === index;
+        return {
+            background: isHovered ? hCardBgColor : cardBgColor,
+            borderRadius: `${borderRadius}px`,
+            transition: 'all 0.3s ease',
+            boxShadow: hasShadow 
+                ? ( isHovered 
+                    ? `${hShadowX}px ${hShadowY}px ${hShadowBlur}px ${hShadowSpread}px ${hShadowColor}`
+                    : `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` )
+                : 'none',
+            border: '1px solid #ddd',
+            overflow: 'hidden'
+        };
+    };
+
     const editorStyles = {
         container: { padding: '20px', background: '#fff', width: '100%' },
         masonryGrid: { 
@@ -73,15 +93,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             gap: `${gridGap}px`,
             width: '100%' 
         },
-        card: { 
-            background: cardBgColor, 
-            borderRadius: `${borderRadius}px`,
-            boxShadow: hasShadow ? `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` : 'none',
-            border: '1px solid #ddd',
-            overflow: 'hidden'
-        },
-        imageWrapper: { width: '100%', backgroundColor: '#eee', minHeight: '150px', cursor: 'pointer' },
-        image: { width: '100%', height: 'auto', display: 'block' },
+        imageWrapper: { width: '100%', backgroundColor: '#eee', minHeight: '150px', cursor: 'pointer', overflow: 'hidden' },
+        image: ( index ) => ( { 
+            width: '100%', 
+            height: 'auto', 
+            display: 'block',
+            transition: 'transform 0.3s ease',
+            transform: ( hasZoom && hoveredIndex === index ) ? `scale(${zoomScale})` : 'scale(1)'
+        } ),
         tagItem: {
             padding: '2px 8px',
             borderRadius: '3px',
@@ -94,13 +113,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         },
         loadMorePreview: {
             padding: '12px 30px',
-            backgroundColor: btnBgColor,
-            color: btnTextColor,
+            backgroundColor: isBtnHovered ? btnHovBgColor : btnBgColor,
+            color: isBtnHovered ? btnHovTextColor : btnTextColor,
             borderRadius: `${btnBorderRadius}px`,
             border: 'none',
             display: 'inline-block',
             fontWeight: '600',
-            marginTop: '20px'
+            marginTop: '20px',
+            transition: 'all 0.3s ease',
+            cursor: 'default'
+        },
+        divider: {
+            width: `${dividerWidth}%`,
+            height: `${dividerHeight}px`,
+            backgroundColor: dividerColor,
+            margin: '15px 0'
         }
     };
 
@@ -127,7 +154,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     </PanelBody>
                                     <PanelBody title={ __( 'Pagination', 'axis-folio' ) }>
                                         <ToggleControl label={ __( 'Enable Load more', 'axis-folio' ) } checked={ enableLoadMore } onChange={ ( v ) => setAttributes( { enableLoadMore: v } ) } />
-                                        <TextControl label={ __( 'Button Text', 'axis-folio' ) } value={ loadMoreText } onChange={ ( v ) => setAttributes( { loadMoreText: v } ) } />
+                                        <TextControl label={ __( 'Butten Text', 'axis-folio' ) } value={ loadMoreText } onChange={ ( v ) => setAttributes( { loadMoreText: v } ) } />
                                         <RangeControl label={ __( 'items per page', 'axis-folio' ) } value={ postsPerPage } onChange={ ( v ) => setAttributes( { postsPerPage: v } ) } min={ 1 } max={ 20 } />
                                     </PanelBody>
                                 </>
@@ -147,11 +174,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         <p><strong>{ __( 'Title', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ titleFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { titleFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ titleFontSize } onChange={ ( v ) => setAttributes( { titleFontSize: v } ) } min={ 10 } max={ 100 } />
-                                        
                                         <p><strong>{ __( 'description', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ descFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { descFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ descFontSize } onChange={ ( v ) => setAttributes( { descFontSize: v } ) } min={ 10 } max={ 100 } />
-                                        
                                         <p><strong>{ __( 'tags', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ tagFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { tagFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ tagFontSize } onChange={ ( v ) => setAttributes( { tagFontSize: v } ) } min={ 8 } max={ 30 } />
@@ -159,10 +184,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
                                     <PanelBody title={ __( 'image controls', 'axis-folio' ) } initialOpen={ false }>
                                         <ToggleControl label={ __( 'enable image zoom', 'axis-folio' ) } checked={ hasZoom } onChange={ ( v ) => setAttributes( { hasZoom: v } ) } />
-                                        <RangeControl label={ __( 'zoom scale', 'axis-folio' ) } value={ zoomScale } onChange={ ( v ) => setAttributes( { zoomScale: v } ) } min={ 1 } max={ 2 } step={ 0.1 } />
+                                        <RangeControl label={ __( 'zoom scall', 'axis-folio' ) } value={ zoomScale } onChange={ ( v ) => setAttributes( { zoomScale: v } ) } min={ 1 } max={ 2 } step={ 0.1 } />
                                     </PanelBody>
 
-                                    <PanelBody title={ __( 'button styles', 'axis-folio' ) } initialOpen={ false }>
+                                    <PanelBody title={ __( 'butten styles', 'axis-folio' ) } initialOpen={ false }>
                                         <RangeControl label={ __( 'Button Border Radius', 'axis-folio' ) } value={ btnBorderRadius } onChange={ ( v ) => setAttributes( { btnBorderRadius: v } ) } min={ 0 } max={ 50 } />
                                     </PanelBody>
 
@@ -172,7 +197,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         <RangeControl label={ __( 'Spread', 'axis-folio' ) } value={ shadowSpread } onChange={ ( v ) => setAttributes( { shadowSpread: v } ) } min={ -20 } max={ 50 } />
                                         <RangeControl label={ __( 'Offset X', 'axis-folio' ) } value={ shadowX } onChange={ ( v ) => setAttributes( { shadowX: v } ) } min={ -50 } max={ 50 } />
                                         <RangeControl label={ __( 'Offset Y', 'axis-folio' ) } value={ shadowY } onChange={ ( v ) => setAttributes( { shadowY: v } ) } min={ -50 } max={ 50 } />
-                                        
                                         <p><strong>{ __( 'Hover State', 'axis-folio' ) }</strong></p>
                                         <RangeControl label={ __( 'Hover Blur', 'axis-folio' ) } value={ hShadowBlur } onChange={ ( v ) => setAttributes( { hShadowBlur: v } ) } min={ 0 } max={ 50 } />
                                         <RangeControl label={ __( 'Hover Spread', 'axis-folio' ) } value={ hShadowSpread } onChange={ ( v ) => setAttributes( { hShadowSpread: v } ) } min={ -20 } max={ 50 } />
@@ -191,9 +215,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                             { label: __( 'tag background', 'axis-folio' ), value: tagBgColor, onChange: ( v ) => setAttributes( { tagBgColor: v } ) },
                                             { label: __( 'tag text color', 'axis-folio' ), value: tagTextColor, onChange: ( v ) => setAttributes( { tagTextColor: v } ) },
                                             { label: __( 'divider color', 'axis-folio' ), value: dividerColor, onChange: ( v ) => setAttributes( { dividerColor: v } ) },
-                                            { label: __( 'button background', 'axis-folio' ), value: btnBgColor, onChange: ( v ) => setAttributes( { btnBgColor: v } ) },
+                                            { label: __( 'button backgount', 'axis-folio' ), value: btnBgColor, onChange: ( v ) => setAttributes( { btnBgColor: v } ) },
                                             { label: __( 'button text color', 'axis-folio' ), value: btnTextColor, onChange: ( v ) => setAttributes( { btnTextColor: v } ) },
-                                            { label: __( 'button hover background', 'axis-folio' ), value: btnHovBgColor, onChange: ( v ) => setAttributes( { btnHovBgColor: v } ) },
+                                            { label: __( 'button hover backgount', 'axis-folio' ), value: btnHovBgColor, onChange: ( v ) => setAttributes( { btnHovBgColor: v } ) },
                                             { label: __( 'button hover text color', 'axis-folio' ), value: btnHovTextColor, onChange: ( v ) => setAttributes( { btnHovTextColor: v } ) },
                                         ] }
                                     />
@@ -207,7 +231,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             <div style={ editorStyles.container }>
                 <div style={ editorStyles.masonryGrid }>
                     { items.map( ( item, index ) => (
-                        <div key={ index } style={ editorStyles.card }>
+                        <div 
+                            key={ index } 
+                            style={ getCardStyle( index ) }
+                            onMouseEnter={ () => setHoveredIndex( index ) }
+                            onMouseLeave={ () => setHoveredIndex( null ) }
+                        >
                             <div style={ { padding: '10px', background: '#f1f1f1', display: 'flex', justifyContent: 'flex-end' } }>
                                 <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
                             </div>
@@ -217,7 +246,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     allowedTypes={ [ 'image' ] }
                                     render={ ( { open } ) => (
                                         <div style={ editorStyles.imageWrapper } onClick={ open }>
-                                            { item.url ? <img src={ item.url } style={ editorStyles.image } /> : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> }
+                                            { item.url 
+                                                ? <img src={ item.url } style={ editorStyles.image( index ) } alt="" /> 
+                                                : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> 
+                                            }
                                         </div>
                                     ) }
                                 />
@@ -228,6 +260,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                 <TextControl placeholder="Link URL" value={ item.linkUrl } onChange={ ( v ) => updateItem( index, 'linkUrl', v ) } />
                                 <ToggleControl label="Open in New Tab" checked={ item.openInNewTab } onChange={ ( v ) => updateItem( index, 'openInNewTab', v ) } />
                                 <TextControl placeholder="Tags (comma separated)" value={ item.tags } onChange={ ( v ) => updateItem( index, 'tags', v ) } />
+                                
+                                { showTagDivider && item.tags && ( <div style={ editorStyles.divider }></div> ) }
+                                
                                 { showTags && item.tags && (
                                     <div style={ { marginTop: '10px' } }>
                                         { item.tags.split( ',' ).map( ( t, i ) => (
@@ -247,7 +282,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
                     { enableLoadMore && (
                         <div style={ { marginTop: '20px', borderTop: '1px dashed #ccc', paddingTop: '20px' } }>
-                            <div style={ editorStyles.loadMorePreview }>
+                            <div 
+                                style={ editorStyles.loadMorePreview }
+                                onMouseEnter={ () => setIsBtnHovered( true ) }
+                                onMouseLeave={ () => setIsBtnHovered( false ) }
+                            >
                                 { loadMoreText || __( 'Load More', 'axis-folio' ) }
                             </div>
                         </div>
