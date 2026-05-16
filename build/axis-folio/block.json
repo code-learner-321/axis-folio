@@ -82,6 +82,26 @@
       "type": "number",
       "default": 20
     },
+    "titlePadding": {
+      "type": "number",
+      "default": 0
+    },
+    "titlePaddingTop": {
+      "type": "number",
+      "default": 0
+    },
+    "titlePaddingRight": {
+      "type": "number",
+      "default": 0
+    },
+    "titlePaddingBottom": {
+      "type": "number",
+      "default": 0
+    },
+    "titlePaddingLeft": {
+      "type": "number",
+      "default": 0
+    },
     "descColor": {
       "type": "string",
       "default": "#666666"
@@ -90,9 +110,49 @@
       "type": "number",
       "default": 16
     },
+    "descPadding": {
+      "type": "number",
+      "default": 0
+    },
+    "descPaddingTop": {
+      "type": "number",
+      "default": 0
+    },
+    "descPaddingRight": {
+      "type": "number",
+      "default": 0
+    },
+    "descPaddingBottom": {
+      "type": "number",
+      "default": 0
+    },
+    "descPaddingLeft": {
+      "type": "number",
+      "default": 0
+    },
     "tagFontSize": {
       "type": "number",
       "default": 11
+    },
+    "tagPadding": {
+      "type": "number",
+      "default": 0
+    },
+    "tagPaddingTop": {
+      "type": "number",
+      "default": 0
+    },
+    "tagPaddingRight": {
+      "type": "number",
+      "default": 0
+    },
+    "tagPaddingBottom": {
+      "type": "number",
+      "default": 0
+    },
+    "tagPaddingLeft": {
+      "type": "number",
+      "default": 0
     },
     "enableLoadMore": {
       "type": "boolean",
@@ -192,10 +252,7 @@
     }
   },
   "supports": {
-    "align": [
-      "wide",
-      "full"
-    ],
+    "align": true,
     "html": false
   },
   "editorScript": "file:./index.js",

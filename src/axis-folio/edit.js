@@ -4,7 +4,7 @@ import {
     InspectorControls, 
     MediaUpload, 
     MediaUploadCheck, 
-    PanelColorSettings 
+    PanelColorSettings,
 } from '@wordpress/block-editor';
 import { 
     PanelBody, 
@@ -15,13 +15,14 @@ import {
     RangeControl, 
     ToggleControl,
     SelectControl,
-    TabPanel
+    TabPanel,
+    BoxControl,
 } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
     const { 
-        uniqueId, items = [], columnsDesktop, columnsTablet, columnsMobile, gridGap,
+        align, uniqueId, items = [], columnsDesktop, columnsTablet, columnsMobile, gridGap,
         borderRadius, hasShadow, cardBgColor, hCardBgColor,
         titleColor, descColor, tagBgColor, tagTextColor, tagFontSize,
         showTags,
@@ -32,12 +33,27 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         hShadowX, hShadowY, hShadowBlur, hShadowSpread, hShadowColor,
         showTagDivider, dividerWidth, dividerHeight, dividerColor,
         titleFontFamily, descFontFamily, tagFontFamily,
-        titleFontSize, descFontSize
+        titleFontSize, titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft,
+        descFontSize, descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft,
+        tagPadding, tagPaddingTop, tagPaddingRight, tagPaddingBottom, tagPaddingLeft
     } = attributes;
 
-    // Local state for editor hover previews
+    const safeItems = Array.isArray( items ) ? items : [];
+
     const [ hoveredIndex, setHoveredIndex ] = useState( null );
     const [ isBtnHovered, setIsBtnHovered ] = useState( false );
+
+    // This assigns native alignment selectors safely to the topmost div boundary to handle block widths
+    const alignWrapperStyle = align === 'wide'
+        ? { maxWidth: 'var(--wp--style--global--content-size, 1200px)', width: '100%' }
+        : align === 'full'
+            ? { width: '100%' }
+            : undefined;
+
+    const blockProps = useBlockProps({
+        className: align ? `portfolio-editor-wrapper align${ align }` : 'portfolio-editor-wrapper',
+        style: alignWrapperStyle,
+    });
 
     useEffect( () => {
         if ( ! uniqueId ) {
@@ -46,13 +62,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     }, [ uniqueId, clientId, setAttributes ] );
 
     const updateItem = ( index, key, value ) => {
-        const newItems = [ ...items ];
+        const currentItems = Array.isArray( items ) ? items : [];
+        const newItems = [ ...currentItems ];
+        if ( ! newItems[ index ] ) {
+            newItems[ index ] = {};
+        }
         newItems[ index ] = { ...newItems[ index ], [ key ]: value };
         setAttributes( { items: newItems } );
     };
 
     const removeItem = ( index ) => {
-        const newItems = items.filter( ( _, i ) => i !== index );
+        const currentItems = Array.isArray( items ) ? items : [];
+        const newItems = currentItems.filter( ( _, i ) => i !== index );
         setAttributes( { items: newItems } );
     };
 
@@ -69,36 +90,49 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         { label: 'Verdana', value: 'Verdana, sans-serif' }
     ];
 
+    const buildPadding = ( top, right, bottom, left, fallback ) => {
+        const fallbackValue = fallback ?? 0;
+        return `${ top ?? fallbackValue }px ${ right ?? fallbackValue }px ${ bottom ?? fallbackValue }px ${ left ?? fallbackValue }px`;
+    };
+
     const getCardStyle = ( index ) => {
         const isHovered = hoveredIndex === index;
         return {
             background: isHovered ? hCardBgColor : cardBgColor,
             borderRadius: `${borderRadius}px`,
-            transition: 'all 0.3s ease',
+            transition: 'all 0.3s ease-in-out',
             boxShadow: hasShadow 
                 ? ( isHovered 
                     ? `${hShadowX}px ${hShadowY}px ${hShadowBlur}px ${hShadowSpread}px ${hShadowColor}`
                     : `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px ${shadowColor}` )
                 : 'none',
-            border: '1px solid #ddd',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            boxSizing: 'border-box'
         };
     };
 
     const editorStyles = {
-        container: { padding: '20px', background: '#fff', width: '100%' },
-        masonryGrid: { 
+        containerLayout: { 
+            padding: '20px', 
+            boxSizing: 'border-box',
+            width: '100%' 
+        },
+        gridContainer: { 
             display: 'grid', 
             gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`, 
             gap: `${gridGap}px`,
-            width: '100%' 
+            width: '100%',
+            boxSizing: 'border-box'
         },
-        imageWrapper: { width: '100%', backgroundColor: '#eee', minHeight: '150px', cursor: 'pointer', overflow: 'hidden' },
+        imageWrapper: { width: '100%', backgroundColor: '#eee', minHeight: '150px', cursor: 'pointer', overflow: 'hidden', position: 'relative' },
         image: ( index ) => ( { 
             width: '100%', 
             height: 'auto', 
             display: 'block',
-            transition: 'transform 0.3s ease',
+            transition: 'transform 0.3s ease-in-out',
             transform: ( hasZoom && hoveredIndex === index ) ? `scale(${zoomScale})` : 'scale(1)'
         } ),
         tagItem: {
@@ -109,7 +143,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             fontSize: `${tagFontSize}px`,
             fontFamily: tagFontFamily,
             display: 'inline-block',
-            marginRight: '5px'
+            marginRight: '5px',
+            marginBottom: '5px'
+        },
+        sectionDivider: {
+            borderTop: '1px solid #e6e6e6',
+            margin: '20px 0',
+            width: '100%'
         },
         loadMorePreview: {
             padding: '12px 30px',
@@ -120,7 +160,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             display: 'inline-block',
             fontWeight: '600',
             marginTop: '20px',
-            transition: 'all 0.3s ease',
+            transition: 'all 0.3s ease-in-out',
             cursor: 'pointer'
         },
         divider: {
@@ -132,7 +172,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     };
 
     return (
-        <div { ...useBlockProps() }>
+        <div { ...blockProps }>
             <InspectorControls>
                 <TabPanel
                     className="axis-folio-tabs"
@@ -161,7 +201,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                             ) }
                             { tab.name === 'styles' && (
                                 <>
-                                    <PanelBody title={ __( 'Card Appearance', 'axis-folio' ) }>
+                                    <PanelBody title={ __( 'card appearence', 'axis-folio' ) }>
                                         <RangeControl label={ __( 'Card Border Radius', 'axis-folio' ) } value={ borderRadius } onChange={ ( v ) => setAttributes( { borderRadius: v } ) } min={ 0 } max={ 50 } />
                                         <ToggleControl label={ __( 'enable box shadow', 'axis-folio' ) } checked={ hasShadow } onChange={ ( v ) => setAttributes( { hasShadow: v } ) } />
                                         <ToggleControl label={ __( 'show tags', 'axis-folio' ) } checked={ showTags } onChange={ ( v ) => setAttributes( { showTags: v } ) } />
@@ -170,16 +210,67 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         <RangeControl label={ __( 'Divider Height (px)', 'axis-folio' ) } value={ dividerHeight } onChange={ ( v ) => setAttributes( { dividerHeight: v } ) } min={ 1 } max={ 10 } />
                                     </PanelBody>
 
-                                    <PanelBody title={ __( 'Typography', 'axis-folio' ) } initialOpen={ false }>
+                                    <PanelBody title={ __( 'typography', 'axis-folio' ) } initialOpen={ false }>
                                         <p><strong>{ __( 'Title', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ titleFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { titleFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ titleFontSize } onChange={ ( v ) => setAttributes( { titleFontSize: v } ) } min={ 10 } max={ 100 } />
+                                        <BoxControl
+                                            label={ __( 'Padding', 'axis-folio' ) }
+                                            values={ {
+                                                top: titlePaddingTop ? `${ titlePaddingTop }px` : '0px',
+                                                right: titlePaddingRight ? `${ titlePaddingRight }px` : '0px',
+                                                bottom: titlePaddingBottom ? `${ titlePaddingBottom }px` : '0px',
+                                                left: titlePaddingLeft ? `${ titlePaddingLeft }px` : '0px',
+                                            } }
+                                            onChange={ ( values ) => setAttributes( {
+                                                titlePaddingTop: parseInt( values.top, 10 ) || 0,
+                                                titlePaddingRight: parseInt( values.right, 10 ) || 0,
+                                                titlePaddingBottom: parseInt( values.bottom, 10 ) || 0,
+                                                titlePaddingLeft: parseInt( values.left, 10 ) || 0,
+                                            } ) }
+                                            units={ [ 'px' ] }
+                                            inputProps={ { min: 0, max: 80 } }
+                                        />
                                         <p><strong>{ __( 'description', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ descFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { descFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ descFontSize } onChange={ ( v ) => setAttributes( { descFontSize: v } ) } min={ 10 } max={ 100 } />
+                                        <BoxControl
+                                            label={ __( 'Padding', 'axis-folio' ) }
+                                            values={ {
+                                                top: descPaddingTop ? `${ descPaddingTop }px` : '0px',
+                                                right: descPaddingRight ? `${ descPaddingRight }px` : '0px',
+                                                bottom: descPaddingBottom ? `${ descPaddingBottom }px` : '0px',
+                                                left: descPaddingLeft ? `${ descPaddingLeft }px` : '0px',
+                                            } }
+                                            onChange={ ( values ) => setAttributes( {
+                                                descPaddingTop: parseInt( values.top, 10 ) || 0,
+                                                descPaddingRight: parseInt( values.right, 10 ) || 0,
+                                                descPaddingBottom: parseInt( values.bottom, 10 ) || 0,
+                                                descPaddingLeft: parseInt( values.left, 10 ) || 0,
+                                            } ) }
+                                            units={ [ 'px' ] }
+                                            inputProps={ { min: 0, max: 80 } }
+                                        />
                                         <p><strong>{ __( 'tags', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ tagFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { tagFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ tagFontSize } onChange={ ( v ) => setAttributes( { tagFontSize: v } ) } min={ 8 } max={ 30 } />
+                                        <BoxControl
+                                            label={ __( 'Padding', 'axis-folio' ) }
+                                            values={ {
+                                                top: tagPaddingTop ? `${ tagPaddingTop }px` : '0px',
+                                                right: tagPaddingRight ? `${ tagPaddingRight }px` : '0px',
+                                                bottom: tagPaddingBottom ? `${ tagPaddingBottom }px` : '0px',
+                                                left: tagPaddingLeft ? `${ tagPaddingLeft }px` : '0px',
+                                            } }
+                                            onChange={ ( values ) => setAttributes( {
+                                                tagPaddingTop: parseInt( values.top, 10 ) || 0,
+                                                tagPaddingRight: parseInt( values.right, 10 ) || 0,
+                                                tagPaddingBottom: parseInt( values.bottom, 10 ) || 0,
+                                                tagPaddingLeft: parseInt( values.left, 10 ) || 0,
+                                            } ) }
+                                            units={ [ 'px' ] }
+                                            inputProps={ { min: 0, max: 80 } }
+                                        />
                                     </PanelBody>
 
                                     <PanelBody title={ __( 'image controls', 'axis-folio' ) } initialOpen={ false }>
@@ -228,60 +319,90 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 </TabPanel>
             </InspectorControls>
 
-            <div style={ editorStyles.container }>
-                <div style={ editorStyles.masonryGrid }>
-                    { items.map( ( item, index ) => (
-                        <div 
-                            key={ index } 
-                            style={ getCardStyle( index ) }
-                            onMouseEnter={ () => setHoveredIndex( index ) }
-                            onMouseLeave={ () => setHoveredIndex( null ) }
-                        >
-                            <div style={ { padding: '10px', background: '#f1f1f1', display: 'flex', justifyContent: 'flex-end' } }>
-                                <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
-                            </div>
-                            <MediaUploadCheck>
-                                <MediaUpload
-                                    onSelect={ ( media ) => updateItem( index, 'url', media.url ) }
-                                    allowedTypes={ [ 'image' ] }
-                                    render={ ( { open } ) => (
-                                        <div style={ editorStyles.imageWrapper } onClick={ open }>
-                                            { item.url 
-                                                ? <img src={ item.url } style={ editorStyles.image( index ) } alt="" /> 
-                                                : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> 
-                                            }
+            <div style={ editorStyles.containerLayout }>
+                <div style={ editorStyles.gridContainer }>
+                    { safeItems.map( ( item, index ) => {
+                        const itemTags = String( item.tags ?? '' );
+                        const tagsArray = itemTags.split( ',' ).map( ( t ) => t.trim() ).filter( Boolean );
+                        return (
+                            <div 
+                                key={ index } 
+                                className="item-card-wrapper"
+                                style={ getCardStyle( index ) }
+                                onMouseEnter={ () => setHoveredIndex( index ) }
+                                onMouseLeave={ () => setHoveredIndex( null ) }
+                            >
+                                <div style={ { padding: '10px', background: '#f1f1f1', display: 'flex', justifyContent: 'flex-end', zIndex: 10 } }>
+                                    <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
+                                </div>
+                                <MediaUploadCheck>
+                                    <MediaUpload
+                                        onSelect={ ( media ) => updateItem( index, 'url', media.url ) }
+                                        allowedTypes={ [ 'image' ] }
+                                        render={ ( { open } ) => (
+                                            <>
+                                                <div style={ editorStyles.imageWrapper } onClick={ open }>
+                                                    { item.url 
+                                                        ? <img src={ item.url } style={ editorStyles.image( index ) } alt="" /> 
+                                                        : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> 
+                                                    }
+                                                </div>
+                                                <div style={ { marginTop: '12px', textAlign: 'center' } }>
+                                                    <Button variant="secondary" onClick={ open }>
+                                                        { item.url ? __( 'Change Image', 'axis-folio' ) : __( 'Upload Image', 'axis-folio' ) }
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        ) }
+                                    />
+                                </MediaUploadCheck>
+                                <div style={ { padding: '15px', flexGrow: 1, display: 'flex', flexDirection: 'column' } }>
+                                    <div style={ { marginBottom: '20px' } }>
+                                        <div style={ { fontFamily: titleFontFamily, fontSize: `${ titleFontSize }px`, fontWeight: '700', color: titleColor, marginBottom: '8px', padding: buildPadding( titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft, 0 ) } }>
+                                            { item.title || __( 'Title', 'axis-folio' ) }
                                         </div>
-                                    ) }
-                                />
-                            </MediaUploadCheck>
-                            <div style={ { padding: '15px' } }>
-                                <TextControl placeholder="Title" value={ item.title } onChange={ ( v ) => updateItem( index, 'title', v ) } />
-                                <TextareaControl placeholder="Description" value={ item.description } onChange={ ( v ) => updateItem( index, 'description', v ) } />
-                                <TextControl placeholder="Link URL" value={ item.linkUrl } onChange={ ( v ) => updateItem( index, 'linkUrl', v ) } />
-                                <ToggleControl label="Open in New Tab" checked={ item.openInNewTab } onChange={ ( v ) => updateItem( index, 'openInNewTab', v ) } />
-                                <TextControl placeholder="Tags (comma separated)" value={ item.tags } onChange={ ( v ) => updateItem( index, 'tags', v ) } />
-                                
-                                { showTagDivider && item.tags && ( <div style={ editorStyles.divider }></div> ) }
-                                
-                                { showTags && item.tags && (
-                                    <div style={ { marginTop: '10px' } }>
-                                        { item.tags.split( ',' ).map( ( t, i ) => (
-                                            <span key={ i } style={ editorStyles.tagItem }>{ t.trim() }</span>
-                                        ) ) }
+                                        <div style={ { fontFamily: descFontFamily, fontSize: `${ descFontSize }px`, color: descColor, marginBottom: '12px', padding: buildPadding( descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft, 0 ) } }>
+                                            { item.description || __( 'Description', 'axis-folio' ) }
+                                        </div>
+                                        { showTagDivider && tagsArray.length > 0 && (
+                                            <div style={ editorStyles.divider }></div>
+                                        ) }
+                                        { showTags && tagsArray.length > 0 && (
+                                            <div style={ { display: 'flex', flexWrap: 'wrap', gap: '6px', padding: buildPadding( tagPaddingTop, tagPaddingRight, tagPaddingBottom, tagPaddingLeft, 0 ) } }>
+                                                { tagsArray.map( ( t, i ) => (
+                                                    <span key={ i } style={ editorStyles.tagItem }>{ t }</span>
+                                                ) ) }
+                                            </div>
+                                        ) }
                                     </div>
-                                ) }
+                                    <div style={ { display: 'grid', gap: '16px' } }>
+                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                            <TextControl placeholder="Title" value={ item.title } onChange={ ( v ) => updateItem( index, 'title', v ) } />
+                                        </div>
+                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                            <TextareaControl placeholder="Description" value={ item.description } onChange={ ( v ) => updateItem( index, 'description', v ) } />
+                                        </div>
+                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                            <TextControl label="Link URL" placeholder="https://..." value={ item.linkUrl } onChange={ ( v ) => updateItem( index, 'linkUrl', v ) } />
+                                            <ToggleControl label="Open in New Tab" checked={ item.openInNewTab } onChange={ ( v ) => updateItem( index, 'openInNewTab', v ) } />
+                                            <TextControl label="Tags (Comma Separated)" placeholder="Design, Web, App" value={ itemTags } onChange={ ( v ) => updateItem( index, 'tags', v ) } />
+                                        </div>
+                                    </div>
+
+                                    
+                                </div>
                             </div>
-                        </div>
-                    ) ) }
+                        );
+                    } ) }
                 </div>
                 
-                <div style={ { marginTop: '30px', textAlign: 'center' } }>
+                <div style={ { marginTop: '40px', textAlign: 'center', width: '100%' } }>
                     <Button variant="primary" onClick={ addNewItem } icon="plus">
-                        { __( 'Add New Item', 'axis-folio' ) }
+                        { __( 'Add Portfolio Item', 'axis-folio' ) }
                     </Button>
 
                     { enableLoadMore && (
-                        <div style={ { marginTop: '20px', borderTop: '1px dashed #ccc', paddingTop: '20px' } }>
+                        <div style={ { marginTop: '20px', borderTop: '1px dashed #ccc', paddingTop: '20px', width: '100%' } }>
                             <div 
                                 style={ editorStyles.loadMorePreview }
                                 onMouseEnter={ () => setIsBtnHovered( true ) }

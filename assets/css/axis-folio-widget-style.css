@@ -1,13 +1,16 @@
 /* Layout & Masonry */
 .axis-masonry-container {
     display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
     grid-auto-rows: 1px;
     width: 100%;
+    gap: 20px;
     align-items: start;
 }
 
 .axis-ms-item { 
-    display: none; 
+    display: none;
+    width: 100%; 
 }
 
 .axis-ms-item.is-visible { 

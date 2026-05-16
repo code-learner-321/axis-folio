@@ -1,25 +1,92 @@
 .wp-block-create-block-axis-folio {
     box-sizing: border-box;
-    display: block !important; // Force block layout
-    width: 100%;
-    
+
+    &.alignleft {
+        float: left;
+        margin: 0 1.5em 1.5em 0;
+    }
+
+    &.aligncenter {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    &.alignright {
+        float: right;
+        margin: 0 0 1.5em 1.5em;
+    }
+
+    &.alignwide {
+        max-width: var(--wp--style--global--content-size, 1200px) !important;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    &.alignfull {
+        max-width: none !important;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+.portfolio-editor-wrapper.alignleft {
+    display: block !important;
+    float: left !important;
+    margin: 0 1.5em 1.5em 0 !important;
+    max-width: none !important;
+    width: auto !important;
+}
+.portfolio-editor-wrapper.aligncenter {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: none !important;
+    width: auto !important;
+}
+.portfolio-editor-wrapper.alignright {
+    display: block !important;
+    float: right !important;
+    margin: 0 0 1.5em 1.5em !important;
+    max-width: none !important;
+    width: auto !important;
+}
+.portfolio-editor-wrapper.alignwide {
+    max-width: var(--wp--style--global--content-size, 1200px) !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+.portfolio-editor-wrapper.alignfull {
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.wp-block-create-block-axis-folio {
+    box-sizing: border-box;
     .portfolio-grid {
-        display: block !important;
-        column-fill: auto; // Better than 'balance' for masonry
+        display: grid;
+        width: 100%;
+        gap: 25px;
+        grid-template-columns: repeat( auto-fit, minmax(260px, 1fr) );
     }
 
     .portfolio-item {
-        display: inline-block !important; // Essential for column-count masonry
-        width: 100% !important;
-        margin: 0 0 25px 0 !important;
+        display: block;
+        width: 100%;
+        margin: 0;
         break-inside: avoid;
         -webkit-column-break-inside: avoid;
-        transform: translateZ(0); // Fixes some rendering glitches in Chrome
-
-        img {
-            width: 100% !important;
-            height: auto !important;
-            display: block !important;
-        }
+        transform: translateZ(0);
+    }
+    
+    .portfolio-item-card {
+        overflow: hidden;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
     }
 }

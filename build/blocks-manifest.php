@@ -87,6 +87,26 @@ return array(
 				'type' => 'number',
 				'default' => 20
 			),
+			'titlePadding' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'titlePaddingTop' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'titlePaddingRight' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'titlePaddingBottom' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'titlePaddingLeft' => array(
+				'type' => 'number',
+				'default' => 0
+			),
 			'descColor' => array(
 				'type' => 'string',
 				'default' => '#666666'
@@ -95,9 +115,49 @@ return array(
 				'type' => 'number',
 				'default' => 16
 			),
+			'descPadding' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'descPaddingTop' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'descPaddingRight' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'descPaddingBottom' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'descPaddingLeft' => array(
+				'type' => 'number',
+				'default' => 0
+			),
 			'tagFontSize' => array(
 				'type' => 'number',
 				'default' => 11
+			),
+			'tagPadding' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'tagPaddingTop' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'tagPaddingRight' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'tagPaddingBottom' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'tagPaddingLeft' => array(
+				'type' => 'number',
+				'default' => 0
 			),
 			'enableLoadMore' => array(
 				'type' => 'boolean',
@@ -197,10 +257,7 @@ return array(
 			)
 		),
 		'supports' => array(
-			'align' => array(
-				'wide',
-				'full'
-			),
+			'align' => true,
 			'html' => false
 		),
 		'editorScript' => 'file:./index.js',
