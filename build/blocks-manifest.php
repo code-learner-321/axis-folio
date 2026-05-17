@@ -159,6 +159,10 @@ return array(
 				'type' => 'number',
 				'default' => 0
 			),
+			'tagBorderRadius' => array(
+				'type' => 'number',
+				'default' => 999
+			),
 			'enableLoadMore' => array(
 				'type' => 'boolean',
 				'default' => false

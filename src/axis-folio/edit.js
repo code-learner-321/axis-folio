@@ -24,7 +24,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     const { 
         align, uniqueId, items = [], columnsDesktop, columnsTablet, columnsMobile, gridGap,
         borderRadius, hasShadow, cardBgColor, hCardBgColor,
-        titleColor, descColor, tagBgColor, tagTextColor, tagFontSize,
+        titleColor, descColor, tagBgColor, tagTextColor, tagFontSize, tagBorderRadius,
         showTags,
         enableLoadMore, postsPerPage, loadMoreText, btnBgColor, btnTextColor,
         btnHovBgColor, btnHovTextColor, btnBorderRadius,
@@ -98,7 +98,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     const getCardStyle = ( index ) => {
         const isHovered = hoveredIndex === index;
         return {
-            background: isHovered ? hCardBgColor : cardBgColor,
             borderRadius: `${borderRadius}px`,
             transition: 'all 0.3s ease-in-out',
             boxShadow: hasShadow 
@@ -127,24 +126,26 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             width: '100%',
             boxSizing: 'border-box'
         },
-        imageWrapper: { width: '100%', backgroundColor: '#eee', minHeight: '150px', cursor: 'pointer', overflow: 'hidden', position: 'relative' },
+        imageWrapper: { width: '100%', backgroundColor: 'transparent', minHeight: '220px', cursor: 'pointer', overflow: 'hidden', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' },
         image: ( index ) => ( { 
             width: '100%', 
-            height: 'auto', 
+            height: '100%', 
+            objectFit: 'cover',
             display: 'block',
-            transition: 'transform 0.3s ease-in-out',
+            transition: 'transform 0.35s ease-in-out',
             transform: ( hasZoom && hoveredIndex === index ) ? `scale(${zoomScale})` : 'scale(1)'
         } ),
         tagItem: {
-            padding: '2px 8px',
-            borderRadius: '3px',
-            backgroundColor: tagBgColor,
-            color: tagTextColor,
+            padding: '6px 10px',
+            borderRadius: typeof tagBorderRadius === 'number' ? `${tagBorderRadius}px` : '999px',
+            backgroundColor: tagBgColor || '#f1f1f1',
+            color: tagTextColor || '#6b6b6b',
             fontSize: `${tagFontSize}px`,
             fontFamily: tagFontFamily,
             display: 'inline-block',
-            marginRight: '5px',
-            marginBottom: '5px'
+            marginRight: '8px',
+            marginBottom: '8px',
+            boxShadow: 'none'
         },
         sectionDivider: {
             borderTop: '1px solid #e6e6e6',
@@ -153,10 +154,27 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         },
         previewSection: {
             backgroundColor: '#f9fbfd',
-            padding: '16px',
+            padding: '18px 0 12px',
             borderRadius: '12px',
             border: '1px solid #dde7ef',
-            marginBottom: '14px'
+            marginBottom: '18px',
+            boxShadow: '0 6px 20px rgba(30,40,50,0.06)'
+        },
+        previewHeading: {
+            fontSize: '14px',
+            fontWeight: '700',
+            margin: '0 0 16px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: '#39444d',
+            padding: '0 18px'
+        },
+        cardContent: {
+            backgroundColor: 'transparent',
+            padding: '18px',
+            borderBottomLeftRadius: '12px',
+            borderBottomRightRadius: '12px',
+            boxSizing: 'border-box'
         },
         editSection: {
             backgroundColor: '#ffffff',
@@ -275,6 +293,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         <p><strong>{ __( 'tags', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ tagFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { tagFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ tagFontSize } onChange={ ( v ) => setAttributes( { tagFontSize: v } ) } min={ 8 } max={ 30 } />
+                                        <RangeControl label={ __( 'border radius', 'axis-folio' ) } value={ tagBorderRadius } onChange={ ( v ) => setAttributes( { tagBorderRadius: v } ) } min={ 0 } max={ 50 } />
                                         <BoxControl
                                             label={ __( 'Padding', 'axis-folio' ) }
                                             values={ {
@@ -345,6 +364,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                     { safeItems.map( ( item, index ) => {
                         const itemTags = String( item.tags ?? '' );
                         const tagsArray = itemTags.split( ',' ).map( ( t ) => t.trim() ).filter( Boolean );
+                        const previewBgColor = hoveredIndex === index
+                            ? ( hCardBgColor || cardBgColor || editorStyles.previewSection.backgroundColor )
+                            : ( cardBgColor || editorStyles.previewSection.backgroundColor );
                         return (
                             <div 
                                 key={ index } 
@@ -353,9 +375,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                 onMouseEnter={ () => setHoveredIndex( index ) }
                                 onMouseLeave={ () => setHoveredIndex( null ) }
                             >
-                                <div style={ editorStyles.previewSection }>
-                                <div style={ editorStyles.sectionHeading }>{ __( 'Preview', 'axis-folio' ) }</div>
-                                <div style={ { padding: '10px', background: '#f1f1f1', display: 'flex', justifyContent: 'flex-end', zIndex: 10 } }>
+                                <div style={ { ...editorStyles.previewSection, backgroundColor: previewBgColor } }>
+                                <div style={ editorStyles.previewHeading }>{ __( 'PREVIEW', 'axis-folio' ) }</div>
+                                <div style={ { padding: '0 18px 10px', background: 'transparent', display: 'flex', justifyContent: 'flex-end', zIndex: 10 } }>
                                     <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
                                 </div>
                                 <MediaUploadCheck>
@@ -364,13 +386,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         allowedTypes={ [ 'image' ] }
                                         render={ ( { open } ) => (
                                             <>
-                                                <div style={ editorStyles.imageWrapper } onClick={ open }>
+                                                <div style={ { ...editorStyles.imageWrapper, backgroundColor: previewBgColor } } onClick={ open }>
                                                     { item.url 
                                                         ? <img src={ item.url } style={ editorStyles.image( index ) } alt="" /> 
                                                         : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> 
                                                     }
                                                 </div>
-                                                <div style={ { marginTop: '12px', textAlign: 'center' } }>
+                                                <div style={ { marginTop: '12px', textAlign: 'center', background: 'transparent', padding: '0 18px' } }>
                                                     <Button variant="secondary" onClick={ open }>
                                                         { item.url ? __( 'Change Image', 'axis-folio' ) : __( 'Upload Image', 'axis-folio' ) }
                                                     </Button>
@@ -379,9 +401,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         ) }
                                     />
                                 </MediaUploadCheck>
-                                <div style={ { padding: '15px', flexGrow: 1, display: 'flex', flexDirection: 'column' } }>
-                                    <div style={ { marginBottom: '20px' } }>
-                                        <div style={ { fontFamily: titleFontFamily, fontSize: `${ titleFontSize }px`, fontWeight: '700', color: titleColor, marginBottom: '8px', padding: buildPadding( titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft, 0 ) } }>
+                                <div style={ editorStyles.cardContent }>
+                                    <div style={ { marginBottom: '8px' } }>
+                                        <div style={ { fontFamily: titleFontFamily, fontSize: `${ titleFontSize }px`, fontWeight: '700', color: titleColor, marginBottom: '6px', padding: buildPadding( titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft, 0 ) } }>
                                             { item.title || __( 'Title', 'axis-folio' ) }
                                         </div>
                                         <div style={ { fontFamily: descFontFamily, fontSize: `${ descFontSize }px`, color: descColor, marginBottom: '12px', padding: buildPadding( descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft, 0 ) } }>

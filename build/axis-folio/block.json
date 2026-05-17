@@ -154,6 +154,10 @@
       "type": "number",
       "default": 0
     },
+    "tagBorderRadius": {
+      "type": "number",
+      "default": 999
+    },
     "enableLoadMore": {
       "type": "boolean",
       "default": false
