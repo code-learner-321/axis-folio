@@ -42,6 +42,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
     const [ hoveredIndex, setHoveredIndex ] = useState( null );
     const [ isBtnHovered, setIsBtnHovered ] = useState( false );
+    const [ draggedIndex, setDraggedIndex ] = useState( null );
+    const [ draggingOverIndex, setDraggingOverIndex ] = useState( null );
 
     // This assigns native alignment selectors safely to the topmost div boundary to handle block widths
     const alignWrapperStyle = align === 'wide'
@@ -61,6 +63,20 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         }
     }, [ uniqueId, clientId, setAttributes ] );
 
+    useEffect( () => {
+        const handleMouseUp = () => {
+            if ( draggedIndex !== null ) {
+                setDraggedIndex( null );
+                setDraggingOverIndex( null );
+            }
+        };
+
+        if ( draggedIndex !== null ) {
+            document.addEventListener( 'mouseup', handleMouseUp );
+            return () => document.removeEventListener( 'mouseup', handleMouseUp );
+        }
+    }, [ draggedIndex ] );
+
     const updateItem = ( index, key, value ) => {
         const currentItems = Array.isArray( items ) ? items : [];
         const newItems = [ ...currentItems ];
@@ -79,6 +95,25 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
     const addNewItem = () => {
         setAttributes( { items: [ ...items, { title: '', description: '', url: '', tags: '', linkUrl: '', openInNewTab: false } ] } );
+    };
+
+    const handleDragHandleMouseDown = ( e, index ) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDraggedIndex( index );
+    };
+
+    const handleMouseEnterCard = ( index ) => {
+        setDraggingOverIndex( index );
+        
+        if ( draggedIndex !== null && draggedIndex !== index ) {
+            const newItems = [ ...safeItems ];
+            const draggedItem = newItems[ draggedIndex ];
+            newItems.splice( draggedIndex, 1 );
+            newItems.splice( index, 0, draggedItem );
+            setAttributes( { items: newItems } );
+            setDraggedIndex( index );
+        }
     };
 
     const fontOptions = [
@@ -371,13 +406,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                             <div 
                                 key={ index } 
                                 className="item-card-wrapper"
-                                style={ getCardStyle( index ) }
+                                style={ { ...getCardStyle( index ), opacity: draggedIndex === index ? 0.5 : 1 } }
                                 onMouseEnter={ () => setHoveredIndex( index ) }
                                 onMouseLeave={ () => setHoveredIndex( null ) }
                             >
                                 <div style={ { ...editorStyles.previewSection, backgroundColor: previewBgColor } }>
                                 <div style={ editorStyles.previewHeading }>{ __( 'PREVIEW', 'axis-folio' ) }</div>
-                                <div style={ { padding: '0 18px 10px', background: 'transparent', display: 'flex', justifyContent: 'flex-end', zIndex: 10 } }>
+                                <div style={ { padding: '0 18px 10px', background: 'transparent', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 } }>
+                                    <div
+                                        onMouseDown={ (e) => handleDragHandleMouseDown( e, index ) }
+                                        onMouseEnter={ () => handleMouseEnterCard( index ) }
+                                        style={ { cursor: draggedIndex === null ? 'grab' : draggedIndex === index ? 'grabbing' : 'grab', padding: '4px 8px', display: 'flex', alignItems: 'center' } }
+                                        title="Drag to reorder"
+                                    >
+                                        <Dashicon icon="menu" size={ 20 } style={ { color: '#666' } } />
+                                    </div>
                                     <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
                                 </div>
                                 <MediaUploadCheck>
