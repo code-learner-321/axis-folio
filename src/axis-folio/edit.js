@@ -151,6 +151,27 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             margin: '20px 0',
             width: '100%'
         },
+        previewSection: {
+            backgroundColor: '#f9fbfd',
+            padding: '16px',
+            borderRadius: '12px',
+            border: '1px solid #dde7ef',
+            marginBottom: '14px'
+        },
+        editSection: {
+            backgroundColor: '#ffffff',
+            padding: '16px',
+            borderRadius: '12px',
+            border: '1px solid #e6e6e6'
+        },
+        sectionHeading: {
+            fontSize: '13px',
+            fontWeight: '700',
+            marginBottom: '12px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em',
+            color: '#39444d'
+        },
         loadMorePreview: {
             padding: '12px 30px',
             backgroundColor: isBtnHovered ? btnHovBgColor : btnBgColor,
@@ -169,7 +190,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             backgroundColor: dividerColor,
             margin: '15px 0'
         }
-    };
+    }; 
 
     return (
         <div { ...blockProps }>
@@ -332,6 +353,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                 onMouseEnter={ () => setHoveredIndex( index ) }
                                 onMouseLeave={ () => setHoveredIndex( null ) }
                             >
+                                <div style={ editorStyles.previewSection }>
+                                <div style={ editorStyles.sectionHeading }>{ __( 'Preview', 'axis-folio' ) }</div>
                                 <div style={ { padding: '10px', background: '#f1f1f1', display: 'flex', justifyContent: 'flex-end', zIndex: 10 } }>
                                     <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
                                 </div>
@@ -375,22 +398,24 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                             </div>
                                         ) }
                                     </div>
-                                    <div style={ { display: 'grid', gap: '16px' } }>
-                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
-                                            <TextControl placeholder="Title" value={ item.title } onChange={ ( v ) => updateItem( index, 'title', v ) } />
-                                        </div>
-                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
-                                            <TextareaControl placeholder="Description" value={ item.description } onChange={ ( v ) => updateItem( index, 'description', v ) } />
-                                        </div>
-                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
-                                            <TextControl label="Link URL" placeholder="https://..." value={ item.linkUrl } onChange={ ( v ) => updateItem( index, 'linkUrl', v ) } />
-                                            <ToggleControl label="Open in New Tab" checked={ item.openInNewTab } onChange={ ( v ) => updateItem( index, 'openInNewTab', v ) } />
-                                            <TextControl label="Tags (Comma Separated)" placeholder="Design, Web, App" value={ itemTags } onChange={ ( v ) => updateItem( index, 'tags', v ) } />
-                                        </div>
-                                    </div>
-
-                                    
                                 </div>
+                            </div>
+                            <div style={ editorStyles.editSection }>
+                                <div style={ editorStyles.sectionHeading }>{ __( 'Edit', 'axis-folio' ) }</div>
+                                <div style={ { display: 'grid', gap: '16px' } }>
+                                    <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                        <TextControl placeholder="Title" value={ item.title } onChange={ ( v ) => updateItem( index, 'title', v ) } />
+                                    </div>
+                                    <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                        <TextareaControl placeholder="Description" value={ item.description } onChange={ ( v ) => updateItem( index, 'description', v ) } />
+                                    </div>
+                                    <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                        <TextControl label="Link URL" placeholder="https://..." value={ item.linkUrl } onChange={ ( v ) => updateItem( index, 'linkUrl', v ) } />
+                                        <ToggleControl label="Open in New Tab" checked={ item.openInNewTab } onChange={ ( v ) => updateItem( index, 'openInNewTab', v ) } />
+                                        <TextControl label="Tags (Comma Separated)" placeholder="Design, Web, App" value={ itemTags } onChange={ ( v ) => updateItem( index, 'tags', v ) } />
+                                    </div>
+                                </div>
+                            </div>
                             </div>
                         );
                     } ) }
