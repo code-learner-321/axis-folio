@@ -118,6 +118,16 @@ class Axis_Folio_Widget extends Widget_Base
             'type' => Controls_Manager::TEXTAREA
         ]);
 
+        // Show/Hide Switcher Control for Horizontal Line inside Repeater (Placed below description and above tags)
+        $repeater->add_control('show_item_separator', [
+            'label' => \esc_html__('Show Separator Line', 'axis-folio'),
+            'type' => Controls_Manager::SWITCHER,
+            'label_on' => \esc_html__('Show', 'axis-folio'),
+            'label_off' => \esc_html__('Hide', 'axis-folio'),
+            'return_value' => 'yes',
+            'default' => 'yes',
+        ]);
+
         $repeater->add_control('list_tags', [
             'label' => \esc_html__('Tags (Comma Separated)', 'axis-folio'), 
             'type' => Controls_Manager::TEXT
@@ -332,19 +342,12 @@ class Axis_Folio_Widget extends Widget_Base
             ],
             'selectors' => ['{{WRAPPER}} .axis-ms-description' => 'display: {{VALUE}};'],
         ]);
-
         $this->end_controls_section();
 
-        // --- STYLE: SEPARATOR LINE ---
-        $this->start_controls_section('style_separator', [
-            'label' => \esc_html__('Separator Line', 'axis-folio'),
+        // --- STYLE: SEPARATOR LINE STYLE OPTIONS (DEDICATED SECTION) ---
+        $this->start_controls_section('style_separator_options_section', [
+            'label' => \esc_html__('Separator Line Style Options', 'axis-folio'),
             'tab' => Controls_Manager::TAB_STYLE,
-        ]);
-
-        $this->add_control('show_separator', [
-            'label' => \esc_html__('Show Line', 'axis-folio'),
-            'type' => Controls_Manager::SWITCHER,
-            'default' => 'yes',
         ]);
 
         $this->add_control('sep_color', [
@@ -352,7 +355,6 @@ class Axis_Folio_Widget extends Widget_Base
             'type' => Controls_Manager::COLOR,
             'default' => '#eeeeee',
             'selectors' => ['{{WRAPPER}} .axis-ms-divider' => 'border-top-color: {{VALUE}};'],
-            'condition' => ['show_separator' => 'yes'],
         ]);
 
         $this->add_control('sep_weight', [
@@ -360,7 +362,6 @@ class Axis_Folio_Widget extends Widget_Base
             'type' => Controls_Manager::SLIDER,
             'default' => ['size' => 1],
             'selectors' => ['{{WRAPPER}} .axis-ms-divider' => 'border-top-width: {{SIZE}}{{UNIT}};'],
-            'condition' => ['show_separator' => 'yes'],
         ]);
 
         $this->add_responsive_control('sep_spacing', [
@@ -368,7 +369,6 @@ class Axis_Folio_Widget extends Widget_Base
             'type' => Controls_Manager::SLIDER,
             'default' => ['size' => 15],
             'selectors' => ['{{WRAPPER}} .axis-ms-divider' => 'margin-top: {{SIZE}}{{UNIT}}; margin-bottom: {{SIZE}}{{UNIT}};'],
-            'condition' => ['show_separator' => 'yes'],
         ]);
         $this->end_controls_section();
 
@@ -518,7 +518,7 @@ class Axis_Folio_Widget extends Widget_Base
                     $has_tags  = ! empty($item['list_tags']);
                     $has_type  = ! empty($item['list_type_text']);
                     
-                    // Evaluate switcher state inside the specific item data to determine ONLY the icon's visibility
+                    // Evaluate middle icon switcher state inside specific item loop data
                     $show_icon_element = ( !isset($item['show_title_icon']) || $item['show_title_icon'] === 'yes' );
                     
                     $icon_value = '';
@@ -534,6 +534,9 @@ class Axis_Folio_Widget extends Widget_Base
                     $line_size = isset($item['title_line_width']['size']) ? $item['title_line_width']['size'] : 40;
                     $line_unit = isset($item['title_line_width']['unit']) ? $item['title_line_width']['unit'] : 'px';
                     $accent_color = !empty($item['title_accent_color']) ? $item['title_accent_color'] : '#333333';
+                    
+                    // Evaluate structural item separator switcher toggle state directly from the repeater loop field
+                    $show_item_line = ( !isset($item['show_item_separator']) || $item['show_item_separator'] === 'yes' );
                     
                     $has_any_text = ( $has_title || $has_desc || $has_tags || $has_type || $has_icon || $line_size > 0 );
                 ?>
@@ -596,7 +599,7 @@ class Axis_Folio_Widget extends Widget_Base
                                     <p class="axis-ms-description"><?php echo esc_html($item['list_description']); ?></p>
                                 <?php endif; ?>
                                 
-                                <?php if ($settings['show_separator'] === 'yes' && ( $has_title || $has_desc || $has_type ) && $has_tags ) : ?>
+                                <?php if ( $show_item_line ) : ?>
                                     <hr class="axis-ms-divider">
                                 <?php endif; ?>
 
