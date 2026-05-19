@@ -53,6 +53,16 @@ class Axis_Folio_Widget extends Widget_Base
             'default' => ['url' => Utils::get_placeholder_image_src()]
         ]);
 
+        // Show/Hide Visibility Control solely for the Middle Icon
+        $repeater->add_control('show_title_icon', [
+            'label' => \esc_html__('Show Icon', 'axis-folio'),
+            'type' => Controls_Manager::SWITCHER,
+            'label_on' => \esc_html__('Show', 'axis-folio'),
+            'label_off' => \esc_html__('Hide', 'axis-folio'),
+            'return_value' => 'yes',
+            'default' => 'yes',
+        ]);
+
         // Type Text control inside repeater
         $repeater->add_control('list_type_text', [
             'label' => \esc_html__('Type Text', 'axis-folio'),
@@ -71,13 +81,16 @@ class Axis_Folio_Widget extends Widget_Base
             'default' => ['size' => 40, 'unit' => 'px'],
         ]);
 
-        // Icon control inside repeater
+        // Icon picker control inside repeater (conditional on switcher)
         $repeater->add_control('title_icon', [
             'label' => \esc_html__('Icon', 'axis-folio'),
             'type' => Controls_Manager::ICONS,
             'default' => [
                 'value' => 'fas fa-arrow-right',
                 'library' => 'fa-solid',
+            ],
+            'condition' => [
+                'show_title_icon' => 'yes',
             ],
         ]);
 
@@ -505,8 +518,11 @@ class Axis_Folio_Widget extends Widget_Base
                     $has_tags  = ! empty($item['list_tags']);
                     $has_type  = ! empty($item['list_type_text']);
                     
+                    // Evaluate switcher state inside the specific item data to determine ONLY the icon's visibility
+                    $show_icon_element = ( !isset($item['show_title_icon']) || $item['show_title_icon'] === 'yes' );
+                    
                     $icon_value = '';
-                    if ( ! empty( $item['title_icon']['value'] ) ) {
+                    if ( $show_icon_element && ! empty( $item['title_icon']['value'] ) ) {
                         if ( is_array( $item['title_icon']['value'] ) && isset( $item['title_icon']['value']['id'] ) ) {
                             $icon_value = $item['title_icon']['value']['id'];
                         } elseif ( is_string( $item['title_icon']['value'] ) ) {
@@ -515,11 +531,11 @@ class Axis_Folio_Widget extends Widget_Base
                     }
 
                     $has_icon  = ! empty( $icon_value );
-                    $has_any_text = ( $has_title || $has_desc || $has_tags || $has_type || $has_icon );
-
                     $line_size = isset($item['title_line_width']['size']) ? $item['title_line_width']['size'] : 40;
                     $line_unit = isset($item['title_line_width']['unit']) ? $item['title_line_width']['unit'] : 'px';
                     $accent_color = !empty($item['title_accent_color']) ? $item['title_accent_color'] : '#333333';
+                    
+                    $has_any_text = ( $has_title || $has_desc || $has_tags || $has_type || $has_icon || $line_size > 0 );
                 ?>
                     <div class="axis-ms-item <?php echo esc_attr($visible); ?>">
                         <div class="axis-ms-card">
