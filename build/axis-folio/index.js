@@ -104,7 +104,8 @@ function Edit({
     iconListSubtitleGap,
     iconCardEndGap,
     iconLineGap,
-    iconTextGap
+    iconTextGap,
+    iconListTextColor // Added type text color control attribute
   } = attributes;
   const safeItems = Array.isArray(items) ? items : [];
   const [hoveredIndex, setHoveredIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
@@ -193,6 +194,8 @@ function Edit({
       setDraggedIndex(index);
     }
   };
+
+  // Expanded Font List to include standard open/popular web fonts
   const fontOptions = [{
     label: 'Default',
     value: 'inherit'
@@ -200,14 +203,47 @@ function Edit({
     label: 'Arial',
     value: 'Arial, sans-serif'
   }, {
+    label: 'Courier New',
+    value: '"Courier New", Courier, monospace'
+  }, {
     label: 'Georgia',
     value: 'Georgia, serif'
   }, {
     label: 'Helvetica',
-    value: 'Helvetica, sans-serif'
+    value: 'Helvetica, Arial, sans-serif'
+  }, {
+    label: 'Impact',
+    value: 'Impact, Charcoal, sans-serif'
+  }, {
+    label: 'Inter',
+    value: '"Inter", sans-serif'
+  }, {
+    label: 'Lucida Sans Unicode',
+    value: '"Lucida Sans Unicode", "Lucida Grande", sans-serif'
+  }, {
+    label: 'Montserrat',
+    value: '"Montserrat", sans-serif'
+  }, {
+    label: 'Open Sans',
+    value: '"Open Sans", sans-serif'
+  }, {
+    label: 'Poppins',
+    value: '"Poppins", sans-serif'
+  }, {
+    label: 'Roboto',
+    value: '"Roboto", sans-serif'
+  }, {
+    label: 'Segoe UI',
+    value: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+  }, {
+    label: 'Tahoma',
+    value: 'Tahoma, Geneva, sans-serif'
   }, {
     label: 'Times New Roman',
     value: 'Times New Roman, serif'
+  }, {
+    label: 'Trebuchet MS',
+    value: '"Trebuchet MS", Helvetica, sans-serif'
   }, {
     label: 'Verdana',
     value: 'Verdana, sans-serif'
@@ -869,6 +905,12 @@ function Edit({
                   hShadowColor: v
                 })
               }, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('type text color', 'axis-folio'),
+                value: iconListTextColor,
+                onChange: v => setAttributes({
+                  iconListTextColor: v
+                })
+              }, {
                 label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('tag background', 'axis-folio'),
                 value: tagBgColor,
                 onChange: v => setAttributes({
@@ -1030,14 +1072,14 @@ function Edit({
                         alignItems: 'center',
                         paddingLeft: `${iconCardEndGap}px`,
                         gap: `${iconLineGap}px`,
-                        color: titleColor,
+                        color: iconListTextColor || titleColor,
                         opacity: item.iconList || item.iconType ? 1 : 0.5
                       },
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
                         style: {
                           width: '56px',
                           height: '2px',
-                          backgroundColor: '#6b7280',
+                          backgroundColor: dividerColor || '#6b7280',
                           display: 'inline-block',
                           borderRadius: '999px',
                           flexShrink: 0

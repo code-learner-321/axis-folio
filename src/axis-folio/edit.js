@@ -36,7 +36,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         titleFontSize, titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft,
         descFontSize, descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft,
         tagPaddingTop, tagPaddingRight, tagPaddingBottom, tagPaddingLeft,
-        iconListPaddingTop, iconListPaddingRight, iconListPaddingBottom, iconListPaddingLeft, iconListSubtitleGap, iconCardEndGap, iconLineGap, iconTextGap
+        iconListPaddingTop, iconListPaddingRight, iconListPaddingBottom, iconListPaddingLeft, iconListSubtitleGap, iconCardEndGap, iconLineGap, iconTextGap,
+        iconListTextColor // Added type text color control attribute
     } = attributes;
 
     const safeItems = Array.isArray( items ) ? items : [];
@@ -116,12 +117,24 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         }
     };
 
+    // Expanded Font List to include standard open/popular web fonts
     const fontOptions = [
         { label: 'Default', value: 'inherit' },
         { label: 'Arial', value: 'Arial, sans-serif' },
+        { label: 'Courier New', value: '"Courier New", Courier, monospace' },
         { label: 'Georgia', value: 'Georgia, serif' },
-        { label: 'Helvetica', value: 'Helvetica, sans-serif' },
+        { label: 'Helvetica', value: 'Helvetica, Arial, sans-serif' },
+        { label: 'Impact', value: 'Impact, Charcoal, sans-serif' },
+        { label: 'Inter', value: '"Inter", sans-serif' },
+        { label: 'Lucida Sans Unicode', value: '"Lucida Sans Unicode", "Lucida Grande", sans-serif' },
+        { label: 'Montserrat', value: '"Montserrat", sans-serif' },
+        { label: 'Open Sans', value: '"Open Sans", sans-serif' },
+        { label: 'Poppins', value: '"Poppins", sans-serif' },
+        { label: 'Roboto', value: '"Roboto", sans-serif' },
+        { label: 'Segoe UI', value: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif' },
+        { label: 'Tahoma', value: 'Tahoma, Geneva, sans-serif' },
         { label: 'Times New Roman', value: 'Times New Roman, serif' },
+        { label: 'Trebuchet MS', value: '"Trebuchet MS", Helvetica, sans-serif' },
         { label: 'Verdana', value: 'Verdana, sans-serif' }
     ];
 
@@ -486,6 +499,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                             { label: __( 'hover card background', 'axis-folio' ), value: hCardBgColor, onChange: ( v ) => setAttributes( { hCardBgColor: v } ) },
                                             { label: __( 'shadow color', 'axis-folio' ), value: shadowColor, onChange: ( v ) => setAttributes( { shadowColor: v } ) },
                                             { label: __( 'hover shadow color', 'axis-folio' ), value: hShadowColor, onChange: ( v ) => setAttributes( { hShadowColor: v } ) },
+                                            { label: __( 'type text color', 'axis-folio' ), value: iconListTextColor, onChange: ( v ) => setAttributes( { iconListTextColor: v } ) },
                                             { label: __( 'tag background', 'axis-folio' ), value: tagBgColor, onChange: ( v ) => setAttributes( { tagBgColor: v } ) },
                                             { label: __( 'tag text color', 'axis-folio' ), value: tagTextColor, onChange: ( v ) => setAttributes( { tagTextColor: v } ) },
                                             { label: __( 'divider color', 'axis-folio' ), value: dividerColor, onChange: ( v ) => setAttributes( { dividerColor: v } ) },
@@ -555,8 +569,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     <div style={ editorStyles.cardContent }>
                                         <div style={ { marginBottom: '8px' } }>
                                             <div style={ { display: 'flex', flexDirection: 'column', padding: buildPadding( iconListPaddingTop, iconListPaddingRight, iconListPaddingBottom, iconListPaddingLeft, 0 ), marginBottom: '12px' } }>
-                                                <div style={ { display: 'flex', alignItems: 'center', paddingLeft: `${ iconCardEndGap }px`, gap: `${ iconLineGap }px`, color: titleColor, opacity: item.iconList || item.iconType ? 1 : 0.5 } }>
-                                                    <span style={ { width: '56px', height: '2px', backgroundColor: '#6b7280', display: 'inline-block', borderRadius: '999px', flexShrink: 0 } }></span>
+                                                <div style={ { display: 'flex', alignItems: 'center', paddingLeft: `${ iconCardEndGap }px`, gap: `${ iconLineGap }px`, color: iconListTextColor || titleColor, opacity: item.iconList || item.iconType ? 1 : 0.5 } }>
+                                                    <span style={ { width: '56px', height: '2px', backgroundColor: dividerColor || '#6b7280', display: 'inline-block', borderRadius: '999px', flexShrink: 0 } }></span>
                                                     <div style={ { display: 'inline-flex', alignItems: 'center', gap: showIconListIcon ? `${ iconTextGap }px` : 0 } }>
                                                         { showIconListIcon && (
                                                             <Dashicon icon={ item.iconType || 'arrow-right-alt2' } size={ 16 } />
