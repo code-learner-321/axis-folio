@@ -20,7 +20,12 @@ class Axis_Folio_Widget extends Widget_Base
     public function get_categories() { return ['general']; }
 
     public function get_style_depends() {
-        return ['axis-folio-style'];
+        return [
+            'axis-folio-style',
+            'elementor-icons-fa-solid',
+            'elementor-icons-fa-regular',
+            'elementor-icons-fa-brands'
+        ];
     }
 
     public function get_script_depends() {
@@ -35,15 +40,52 @@ class Axis_Folio_Widget extends Widget_Base
         ]);
 
         $repeater = new Repeater();
+        
         $repeater->add_control('list_title', [
             'label' => \esc_html__('Title', 'axis-folio'), 
             'type' => Controls_Manager::TEXT, 
             'default' => \esc_html__('Project Title', 'axis-folio')
         ]);
+
         $repeater->add_control('list_image', [
             'label' => \esc_html__('Image', 'axis-folio'), 
             'type' => Controls_Manager::MEDIA, 
             'default' => ['url' => Utils::get_placeholder_image_src()]
+        ]);
+
+        // Type Text control inside repeater
+        $repeater->add_control('list_type_text', [
+            'label' => \esc_html__('Type Text', 'axis-folio'),
+            'type' => Controls_Manager::TEXT,
+            'default' => \esc_html__('Development', 'axis-folio'),
+        ]);
+
+        // Prefix Line Width control inside repeater
+        $repeater->add_control('title_line_width', [
+            'label' => \esc_html__('Prefix Line Width', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
+            'size_units' => ['px'],
+            'range' => [
+                'px' => ['min' => 0, 'max' => 150, 'step' => 1],
+            ],
+            'default' => ['size' => 40, 'unit' => 'px'],
+        ]);
+
+        // Icon control inside repeater
+        $repeater->add_control('title_icon', [
+            'label' => \esc_html__('Icon', 'axis-folio'),
+            'type' => Controls_Manager::ICONS,
+            'default' => [
+                'value' => 'fas fa-arrow-right',
+                'library' => 'fa-solid',
+            ],
+        ]);
+
+        // Accent Color control (Line/Icon) inside repeater
+        $repeater->add_control('title_accent_color', [
+            'label' => \esc_html__('Accent Color (Line/Icon)', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#333333',
         ]);
 
         $repeater->add_control('list_url', [
@@ -62,6 +104,7 @@ class Axis_Folio_Widget extends Widget_Base
             'label' => \esc_html__('Description', 'axis-folio'), 
             'type' => Controls_Manager::TEXTAREA
         ]);
+
         $repeater->add_control('list_tags', [
             'label' => \esc_html__('Tags (Comma Separated)', 'axis-folio'), 
             'type' => Controls_Manager::TEXT
@@ -175,6 +218,57 @@ class Axis_Folio_Widget extends Widget_Base
         ]);
         $this->end_controls_section();
 
+        // --- STYLE: TYPE TEXT ---
+        $this->start_controls_section('style_type_text_section', [
+            'label' => \esc_html__('Type Text', 'axis-folio'),
+            'tab' => Controls_Manager::TAB_STYLE,
+        ]);
+
+        $this->add_control('type_text_color', [
+            'label' => \esc_html__('Text Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#333333',
+            'selectors' => ['{{WRAPPER}} .axis-title-type-text' => 'color: {{VALUE}};'],
+        ]);
+
+        $this->add_group_control(Group_Control_Typography::get_type(), [
+            'name' => 'type_text_typography',
+            'selector' => '{{WRAPPER}} .axis-title-type-text',
+        ]);
+
+        $this->add_responsive_control('icon_text_gap', [
+            'label' => \esc_html__('Gap Between Icon and Text', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
+            'size_units' => ['px'],
+            'range' => [
+                'px' => ['min' => 0, 'max' => 50, 'step' => 1],
+            ],
+            'default' => ['size' => 8, 'unit' => 'px'],
+            'selectors' => [
+                '{{WRAPPER}} .axis-meta-row' => 'gap: {{SIZE}}{{UNIT}};',
+            ],
+        ]);
+
+        $this->add_responsive_control('meta_row_padding', [
+            'label' => \esc_html__('Padding Control', 'axis-folio'),
+            'type' => Controls_Manager::DIMENSIONS,
+            'size_units' => ['px', 'em', '%'],
+            'selectors' => [
+                '{{WRAPPER}} .axis-meta-row' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+            ],
+        ]);
+
+        $this->add_responsive_control('meta_row_margin', [
+            'label' => \esc_html__('Bottom Margin Spacing', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
+            'size_units' => ['px', 'em'],
+            'default' => ['size' => 8, 'unit' => 'px'],
+            'selectors' => [
+                '{{WRAPPER}} .axis-meta-row' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+            ],
+        ]);
+        $this->end_controls_section();
+
         // --- STYLE: DESCRIPTION ---
         $this->start_controls_section('style_description', [
             'label' => \esc_html__('Description Text', 'axis-folio'),
@@ -275,9 +369,13 @@ class Axis_Folio_Widget extends Widget_Base
             'label' => \esc_html__('Title Color', 'axis-folio'),
             'type' => Controls_Manager::COLOR,
             'default' => '#333',
-            'selectors' => ['{{WRAPPER}} .axis-ms-content h3' => 'color: {{VALUE}};'],
+            'selectors' => ['{{WRAPPER}} .axis-ms-content h3' => 'color: {{VALUE}};', '{{WRAPPER}} .axis-ms-content h3 a' => 'color: {{VALUE}};'],
         ]);
-        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'title_typography', 'selector' => '{{WRAPPER}} .axis-ms-content h3']);
+
+        $this->add_group_control(Group_Control_Typography::get_type(), [
+            'name' => 'title_typography', 
+            'selector' => '{{WRAPPER}} .axis-ms-content h3'
+        ]);
         
         $this->add_control('tag_heading', [
             'label' => \esc_html__('Tag Styling', 'axis-folio'),
@@ -307,7 +405,10 @@ class Axis_Folio_Widget extends Widget_Base
             'selectors' => ['{{WRAPPER}} .axis-ms-tag' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'],
         ]);
 
-        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'tag_typography', 'selector' => '{{WRAPPER}} .axis-ms-tag']);
+        $this->add_group_control(Group_Control_Typography::get_type(), [
+            'name' => 'tag_typography', 
+            'selector' => '{{WRAPPER}} .axis-ms-tag'
+        ]);
         $this->end_controls_section();
 
         // --- STYLE: LOAD MORE BUTTON ---
@@ -394,17 +495,31 @@ class Axis_Folio_Widget extends Widget_Base
                     $img_alt = $img_id ? get_post_meta($img_id, '_wp_attachment_image_alt', true) : '';
                     if (empty($img_alt)) $img_alt = $item['list_title'];
 
-                    // URL Logic
                     $link_key = 'link_' . $index;
                     if ( ! empty( $item['list_url']['url'] ) ) {
                         $this->add_link_attributes( $link_key, $item['list_url'] );
                     }
 
-                    // Condition: Check if any text content exists
                     $has_title = ! empty($item['list_title']);
                     $has_desc  = ! empty($item['list_description']);
                     $has_tags  = ! empty($item['list_tags']);
-                    $has_any_text = ( $has_title || $has_desc || $has_tags );
+                    $has_type  = ! empty($item['list_type_text']);
+                    
+                    $icon_value = '';
+                    if ( ! empty( $item['title_icon']['value'] ) ) {
+                        if ( is_array( $item['title_icon']['value'] ) && isset( $item['title_icon']['value']['id'] ) ) {
+                            $icon_value = $item['title_icon']['value']['id'];
+                        } elseif ( is_string( $item['title_icon']['value'] ) ) {
+                            $icon_value = $item['title_icon']['value'];
+                        }
+                    }
+
+                    $has_icon  = ! empty( $icon_value );
+                    $has_any_text = ( $has_title || $has_desc || $has_tags || $has_type || $has_icon );
+
+                    $line_size = isset($item['title_line_width']['size']) ? $item['title_line_width']['size'] : 40;
+                    $line_unit = isset($item['title_line_width']['unit']) ? $item['title_line_width']['unit'] : 'px';
+                    $accent_color = !empty($item['title_accent_color']) ? $item['title_accent_color'] : '#333333';
                 ?>
                     <div class="axis-ms-item <?php echo esc_attr($visible); ?>">
                         <div class="axis-ms-card">
@@ -424,6 +539,31 @@ class Axis_Folio_Widget extends Widget_Base
 
                             <?php if ( $has_any_text ) : ?>
                             <div class="axis-ms-content">
+                                
+                                <?php if ( $has_type || $has_icon || $line_size > 0 ) : ?>
+                                <div class="axis-meta-row" style="display: flex; align-items: center; flex-wrap: wrap;">
+                                    <?php if ( $line_size > 0 ) : ?>
+                                        <span class="axis-title-prefix-line" style="display: inline-block; width: <?php echo esc_attr($line_size . $line_unit); ?>; height: 2px; background-color: <?php echo esc_attr($accent_color); ?>; flex-shrink: 0;"></span>
+                                    <?php endif; ?>
+
+                                    <?php if ( $has_icon ) : ?>
+                                        <span class="axis-title-icon" style="color: <?php echo esc_attr($accent_color); ?>; display: inline-flex; align-items: center;">
+                                            <?php 
+                                            \Elementor\Icons_Manager::render_icon( $item['title_icon'], [ 'aria-hidden' => 'true' ] ); 
+                                            
+                                            if ( is_string( $icon_value ) && ! empty( $icon_value ) ) {
+                                                echo '<i class="' . esc_attr( $icon_value ) . '" aria-hidden="true" style="font-style: normal; font-variant: normal; text-rendering: auto; -webkit-font-smoothing: antialiased;"></i>';
+                                            }
+                                            ?>
+                                        </span>
+                                    <?php endif; ?>
+
+                                    <?php if ( $has_type ) : ?>
+                                        <span class="axis-title-type-text" style="font-weight: 500; text-transform: uppercase;"><?php echo esc_html($item['list_type_text']); ?></span>
+                                    <?php endif; ?>
+                                </div>
+                                <?php endif; ?>
+
                                 <?php if ( $has_title ) : ?>
                                 <h3>
                                     <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
@@ -440,7 +580,7 @@ class Axis_Folio_Widget extends Widget_Base
                                     <p class="axis-ms-description"><?php echo esc_html($item['list_description']); ?></p>
                                 <?php endif; ?>
                                 
-                                <?php if ($settings['show_separator'] === 'yes' && ( $has_title || $has_desc ) && $has_tags ) : ?>
+                                <?php if ($settings['show_separator'] === 'yes' && ( $has_title || $has_desc || $has_type ) && $has_tags ) : ?>
                                     <hr class="axis-ms-divider">
                                 <?php endif; ?>
 

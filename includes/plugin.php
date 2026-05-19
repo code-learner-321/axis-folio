@@ -16,26 +16,20 @@ final class Plugin {
 
 	private static $_instance = null;
 
-
 	public static function instance() {
-
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
 		return self::$_instance;
-
 	}
 
 	public function __construct() {
-
 		if ( $this->is_compatible() ) {
 			add_action( 'elementor/init', [ $this, 'init' ] );
 		}
-
 	}
 
 	public function is_compatible(){
-
 		// Check if Elementor installed and activated
 		if ( ! did_action( 'elementor/loaded' ) ) {
 			add_action( 'admin_notices', [ $this, 'admin_notice_missing_main_plugin' ] );
@@ -55,11 +49,9 @@ final class Plugin {
 		}
 
 		return true;
-
 	}
 
 	public function admin_notice_missing_main_plugin(): void {
-
 		if ( isset( $_GET['activate'] ) ) unset( $_GET['activate'] );
 
 		$message = sprintf(
@@ -70,12 +62,9 @@ final class Plugin {
 		);
 
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', $message );
-
 	}
 
-
 	public function admin_notice_minimum_elementor_version(): void {
-
 		if ( isset( $_GET['activate'] ) ) unset( $_GET['activate'] );
 
 		$message = sprintf(
@@ -87,11 +76,9 @@ final class Plugin {
 		);
 
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', $message );
-
 	}
 
 	public function admin_notice_minimum_php_version(): void {
-
 		if ( isset( $_GET['activate'] ) ) unset( $_GET['activate'] );
 
 		$message = sprintf(
@@ -103,21 +90,14 @@ final class Plugin {
 		);
 
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', $message );
-
 	}
 
 	public function init(): void {
-
 		add_action( 'elementor/widgets/register', [ $this, 'register_widgets' ] );
-
 	}
 
 	public function register_widgets( $widgets_manager ): void {
-
-	 require_once( __DIR__ . '/widgets/axis-folio-main-widget.php' );
-
+		require_once( __DIR__ . '/widgets/axis-folio-main-widget.php' );
 		$widgets_manager->register( new Axis_Folio_Widget() );
-
 	}
-	
-}    
+}
