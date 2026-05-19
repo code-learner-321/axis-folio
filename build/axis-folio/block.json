@@ -253,6 +253,58 @@
     "tagFontFamily": {
       "type": "string",
       "default": "inherit"
+    },
+    "iconListFontFamily": {
+      "type": "string",
+      "default": "inherit"
+    },
+    "iconListFontWeight": {
+      "type": "string",
+      "default": "400"
+    },
+    "iconListFontSize": {
+      "type": "number",
+      "default": 12
+    },
+    "iconListTextTransform": {
+      "type": "string",
+      "default": "uppercase"
+    },
+    "showIconListIcon": {
+      "type": "boolean",
+      "default": true
+    },
+    "iconListPaddingTop": {
+      "type": "number",
+      "default": 0
+    },
+    "iconListPaddingRight": {
+      "type": "number",
+      "default": 0
+    },
+    "iconListPaddingBottom": {
+      "type": "number",
+      "default": 0
+    },
+    "iconListPaddingLeft": {
+      "type": "number",
+      "default": 0
+    },
+    "iconListSubtitleGap": {
+      "type": "number",
+      "default": 10
+    },
+    "iconCardEndGap": {
+      "type": "number",
+      "default": 8
+    },
+    "iconLineGap": {
+      "type": "number",
+      "default": 10
+    },
+    "iconTextGap": {
+      "type": "number",
+      "default": 8
     }
   },
   "supports": {

@@ -56,41 +56,10 @@ function axis_folio_render_handler( $attributes, $content ) {
     $tg_ff = $attributes['tagFontFamily'] ?? 'inherit';
 
     $css = "
-        #{$id} .portfolio-item {
-            margin-bottom: {$gap}px !important;
-            background: {$bg_col} !important;
-            border-radius: {$radius}px !important;
-            box-shadow: {$base_shadow} !important;
-            transition: all 0.3s ease !important;
-            overflow: hidden !important;
-            display: block;
-        }
-        #{$id} .portfolio-item:hover {
-            background: {$h_bg_col} !important;
-            box-shadow: {$hover_shadow} !important;
-        }
         #{$id} .portfolio-content h3 { font-family: {$t_ff} !important; }
         #{$id} .portfolio-content p { font-family: {$d_ff} !important; }
         #{$id} .portfolio-tags .tag { font-family: {$tg_ff} !important; }
 
-        #{$id} .portfolio-grid { position: relative; width: 100% !important; }
-        #{$id} .portfolio-item, #{$id} .grid-sizer {
-            width: calc( (100% / {$cols_d}) - ({$gap}px * ({$cols_d} - 1) / {$cols_d}) ) !important;
-        }
-        #{$id} .gutter-sizer { width: {$gap}px !important; }
-        #{$id} .portfolio-item.is-hidden { display: none !important; }
-        
-        #{$id} .portfolio-image { 
-            overflow: hidden !important; 
-            width: 100%;
-            line-height: 0;
-        }
-        #{$id} .portfolio-image img { 
-            width: 100% !important;
-            height: auto !important;
-            transition: transform 0.5s ease !important; 
-            display: block;
-        }
         #{$id} .portfolio-load-more-btn { 
             background: {$btn_bg} !important; 
             color: {$btn_color} !important; 
@@ -100,20 +69,7 @@ function axis_folio_render_handler( $attributes, $content ) {
             background: {$btn_h_bg} !important; 
             color: {$btn_h_color} !important; 
         }
-
-        @media (max-width: 1024px) {
-            #{$id} .portfolio-item, #{$id} .grid-sizer { 
-                width: calc( (100% / {$cols_t}) - ({$gap}px * ({$cols_t} - 1) / {$cols_t}) ) !important; 
-            }
-        }
-        @media (max-width: 600px) {
-            #{$id} .portfolio-item, #{$id} .grid-sizer { width: 100% !important; }
-        }
     ";
-
-    if ( $has_zoom ) {
-        $css .= "#{$id} .portfolio-item:hover .portfolio-image img { transform: scale({$zoom_scale}) !important; }";
-    }
 
     wp_register_style( 'axis-folio-runtime', false );
     wp_enqueue_style( 'axis-folio-runtime' );

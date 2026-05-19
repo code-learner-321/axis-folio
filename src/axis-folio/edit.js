@@ -32,10 +32,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         shadowX, shadowY, shadowBlur, shadowSpread, shadowColor,
         hShadowX, hShadowY, hShadowBlur, hShadowSpread, hShadowColor,
         showTagDivider, dividerWidth, dividerHeight, dividerColor,
-        titleFontFamily, descFontFamily, tagFontFamily,
+        titleFontFamily, descFontFamily, tagFontFamily, iconListFontFamily, iconListFontWeight, iconListFontSize, iconListTextTransform, showIconListIcon,
         titleFontSize, titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft,
         descFontSize, descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft,
-        tagPadding, tagPaddingTop, tagPaddingRight, tagPaddingBottom, tagPaddingLeft
+        tagPaddingTop, tagPaddingRight, tagPaddingBottom, tagPaddingLeft,
+        iconListPaddingTop, iconListPaddingRight, iconListPaddingBottom, iconListPaddingLeft, iconListSubtitleGap, iconCardEndGap, iconLineGap, iconTextGap
     } = attributes;
 
     const safeItems = Array.isArray( items ) ? items : [];
@@ -45,7 +46,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     const [ draggedIndex, setDraggedIndex ] = useState( null );
     const [ draggingOverIndex, setDraggingOverIndex ] = useState( null );
 
-    // This assigns native alignment selectors safely to the topmost div boundary to handle block widths
     const alignWrapperStyle = align === 'wide'
         ? { maxWidth: 'var(--wp--style--global--content-size, 1200px)', width: '100%' }
         : align === 'full'
@@ -94,7 +94,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     };
 
     const addNewItem = () => {
-        setAttributes( { items: [ ...items, { title: '', description: '', url: '', tags: '', linkUrl: '', openInNewTab: false } ] } );
+        setAttributes( { items: [ ...items, { iconType: 'arrow-right-alt2', iconList: '', title: '', description: '', url: '', tags: '', linkUrl: '', openInNewTab: false } ] } );
     };
 
     const handleDragHandleMouseDown = ( e, index ) => {
@@ -123,6 +123,19 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         { label: 'Helvetica', value: 'Helvetica, sans-serif' },
         { label: 'Times New Roman', value: 'Times New Roman, serif' },
         { label: 'Verdana', value: 'Verdana, sans-serif' }
+    ];
+
+    const iconOptions = [
+        { label: __( 'Arrow Right', 'axis-folio' ), value: 'arrow-right-alt2' },
+        { label: __( 'Arrow Left', 'axis-folio' ), value: 'arrow-left-alt2' },
+        { label: __( 'Arrow Up', 'axis-folio' ), value: 'arrow-up-alt2' },
+        { label: __( 'Arrow Down', 'axis-folio' ), value: 'arrow-down-alt2' },
+        { label: __( 'Star', 'axis-folio' ), value: 'star-filled' },
+        { label: __( 'Plus', 'axis-folio' ), value: 'plus' },
+        { label: __( 'Check', 'axis-folio' ), value: 'yes' },
+        { label: __( 'Dash', 'axis-folio' ), value: 'minus' },
+        { label: __( 'Code', 'axis-folio' ), value: 'editor-code' },
+        { label: __( 'Generic', 'axis-folio' ), value: 'admin-generic' }
     ];
 
     const buildPadding = ( top, right, bottom, left, fallback ) => {
@@ -268,7 +281,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     </PanelBody>
                                     <PanelBody title={ __( 'Pagination', 'axis-folio' ) }>
                                         <ToggleControl label={ __( 'Enable Load more', 'axis-folio' ) } checked={ enableLoadMore } onChange={ ( v ) => setAttributes( { enableLoadMore: v } ) } />
-                                        <TextControl label={ __( 'Butten Text', 'axis-folio' ) } value={ loadMoreText } onChange={ ( v ) => setAttributes( { loadMoreText: v } ) } />
+                                        <TextControl label={ __( 'Button Text', 'axis-folio' ) } value={ loadMoreText } onChange={ ( v ) => setAttributes( { loadMoreText: v } ) } />
                                         <RangeControl label={ __( 'items per page', 'axis-folio' ) } value={ postsPerPage } onChange={ ( v ) => setAttributes( { postsPerPage: v } ) } min={ 1 } max={ 20 } />
                                     </PanelBody>
                                 </>
@@ -348,12 +361,107 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         />
                                     </PanelBody>
 
-                                    <PanelBody title={ __( 'image controls', 'axis-folio' ) } initialOpen={ false }>
-                                        <ToggleControl label={ __( 'enable image zoom', 'axis-folio' ) } checked={ hasZoom } onChange={ ( v ) => setAttributes( { hasZoom: v } ) } />
-                                        <RangeControl label={ __( 'zoom scall', 'axis-folio' ) } value={ zoomScale } onChange={ ( v ) => setAttributes( { zoomScale: v } ) } min={ 1 } max={ 2 } step={ 0.1 } />
+                                    <PanelBody title={ __( 'Type styles', 'axis-folio' ) } initialOpen={ false }>
+                                        <ToggleControl
+                                            label={ __( 'Show icon', 'axis-folio' ) }
+                                            help={ __( 'Display the icon between the line and type text.', 'axis-folio' ) }
+                                            checked={ showIconListIcon }
+                                            onChange={ ( v ) => setAttributes( { showIconListIcon: v } ) }
+                                        />
+                                        <RangeControl
+                                            label={ __( 'Card end to line gap', 'axis-folio' ) }
+                                            value={ iconCardEndGap }
+                                            onChange={ ( v ) => setAttributes( { iconCardEndGap: v } ) }
+                                            min={ 0 }
+                                            max={ 80 }
+                                        />
+                                        <SelectControl
+                                            label={ __( 'font family', 'axis-folio' ) }
+                                            value={ iconListFontFamily }
+                                            options={ fontOptions }
+                                            onChange={ ( v ) => setAttributes( { iconListFontFamily: v } ) }
+                                        />
+                                        <SelectControl
+                                            label={ __( 'font weight', 'axis-folio' ) }
+                                            value={ iconListFontWeight }
+                                            options={ [
+                                                { label: __( 'Light', 'axis-folio' ), value: '300' },
+                                                { label: __( 'Normal', 'axis-folio' ), value: '400' },
+                                                { label: __( 'Medium', 'axis-folio' ), value: '500' },
+                                                { label: __( 'Semi Bold', 'axis-folio' ), value: '600' },
+                                                { label: __( 'Bold', 'axis-folio' ), value: '700' },
+                                            ] }
+                                            onChange={ ( v ) => setAttributes( { iconListFontWeight: v } ) }
+                                        />
+                                        <RangeControl
+                                            label={ __( 'font size', 'axis-folio' ) }
+                                            value={ iconListFontSize }
+                                            onChange={ ( v ) => setAttributes( { iconListFontSize: v } ) }
+                                            min={ 8 }
+                                            max={ 48 }
+                                        />
+                                        <SelectControl
+                                            label={ __( 'text transform', 'axis-folio' ) }
+                                            value={ iconListTextTransform }
+                                            options={ [
+                                                { label: __( 'None', 'axis-folio' ), value: 'none' },
+                                                { label: __( 'Uppercase', 'axis-folio' ), value: 'uppercase' },
+                                                { label: __( 'Capitalize', 'axis-folio' ), value: 'capitalize' },
+                                                { label: __( 'Lowercase', 'axis-folio' ), value: 'lowercase' },
+                                            ] }
+                                            onChange={ ( v ) => setAttributes( { iconListTextTransform: v } ) }
+                                        />
+                                        <BoxControl
+                                            label={ __( 'Padding', 'axis-folio' ) }
+                                            values={ {
+                                                top: iconListPaddingTop ? `${ iconListPaddingTop }px` : '0px',
+                                                right: iconListPaddingRight ? `${ iconListPaddingRight }px` : '0px',
+                                                bottom: iconListPaddingBottom ? `${ iconListPaddingBottom }px` : '0px',
+                                                left: iconListPaddingLeft ? `${ iconListPaddingLeft }px` : '0px',
+                                            } }
+                                            onChange={ ( values ) => setAttributes( {
+                                                iconListPaddingTop: parseInt( values.top, 10 ) || 0,
+                                                iconListPaddingRight: parseInt( values.right, 10 ) || 0,
+                                                iconListPaddingBottom: parseInt( values.bottom, 10 ) || 0,
+                                                iconListPaddingLeft: parseInt( values.left, 10 ) || 0,
+                                            } ) }
+                                            units={ [ 'px' ] }
+                                            inputProps={ { min: 0, max: 80 } }
+                                        />
+                                        { showIconListIcon ? (
+                                            <>
+                                                <RangeControl
+                                                    label={ __( 'Icon to text gap', 'axis-folio' ) }
+                                                    value={ iconTextGap }
+                                                    onChange={ ( v ) => setAttributes( { iconTextGap: v } ) }
+                                                    min={ 0 }
+                                                    max={ 80 }
+                                                />
+                                                <RangeControl
+                                                    label={ __( 'Line to icon gap', 'axis-folio' ) }
+                                                    value={ iconLineGap }
+                                                    onChange={ ( v ) => setAttributes( { iconLineGap: v } ) }
+                                                    min={ 0 }
+                                                    max={ 80 }
+                                                />
+                                            </>
+                                        ) : (
+                                            <RangeControl
+                                                label={ __( 'Line to text gap', 'axis-folio' ) }
+                                                value={ iconLineGap }
+                                                onChange={ ( v ) => setAttributes( { iconLineGap: v } ) }
+                                                min={ 0 }
+                                                max={ 80 }
+                                            />
+                                        ) }
                                     </PanelBody>
 
-                                    <PanelBody title={ __( 'butten styles', 'axis-folio' ) } initialOpen={ false }>
+                                    <PanelBody title={ __( 'image controls', 'axis-folio' ) } initialOpen={ false }>
+                                        <ToggleControl label={ __( 'enable image zoom', 'axis-folio' ) } checked={ hasZoom } onChange={ ( v ) => setAttributes( { hasZoom: v } ) } />
+                                        <RangeControl label={ __( 'zoom scale', 'axis-folio' ) } value={ zoomScale } onChange={ ( v ) => setAttributes( { zoomScale: v } ) } min={ 1 } max={ 2 } step={ 0.1 } />
+                                    </PanelBody>
+
+                                    <PanelBody title={ __( 'button styles', 'axis-folio' ) } initialOpen={ false }>
                                         <RangeControl label={ __( 'Button Border Radius', 'axis-folio' ) } value={ btnBorderRadius } onChange={ ( v ) => setAttributes( { btnBorderRadius: v } ) } min={ 0 } max={ 50 } />
                                     </PanelBody>
 
@@ -381,9 +489,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                             { label: __( 'tag background', 'axis-folio' ), value: tagBgColor, onChange: ( v ) => setAttributes( { tagBgColor: v } ) },
                                             { label: __( 'tag text color', 'axis-folio' ), value: tagTextColor, onChange: ( v ) => setAttributes( { tagTextColor: v } ) },
                                             { label: __( 'divider color', 'axis-folio' ), value: dividerColor, onChange: ( v ) => setAttributes( { dividerColor: v } ) },
-                                            { label: __( 'button backgount', 'axis-folio' ), value: btnBgColor, onChange: ( v ) => setAttributes( { btnBgColor: v } ) },
+                                            { label: __( 'button background', 'axis-folio' ), value: btnBgColor, onChange: ( v ) => setAttributes( { btnBgColor: v } ) },
                                             { label: __( 'button text color', 'axis-folio' ), value: btnTextColor, onChange: ( v ) => setAttributes( { btnTextColor: v } ) },
-                                            { label: __( 'button hover backgount', 'axis-folio' ), value: btnHovBgColor, onChange: ( v ) => setAttributes( { btnHovBgColor: v } ) },
+                                            { label: __( 'button hover background', 'axis-folio' ), value: btnHovBgColor, onChange: ( v ) => setAttributes( { btnHovBgColor: v } ) },
                                             { label: __( 'button hover text color', 'axis-folio' ), value: btnHovTextColor, onChange: ( v ) => setAttributes( { btnHovTextColor: v } ) },
                                         ] }
                                     />
@@ -411,76 +519,100 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                 onMouseLeave={ () => setHoveredIndex( null ) }
                             >
                                 <div style={ { ...editorStyles.previewSection, backgroundColor: previewBgColor } }>
-                                <div style={ editorStyles.previewHeading }>{ __( 'PREVIEW', 'axis-folio' ) }</div>
-                                <div style={ { padding: '0 18px 10px', background: 'transparent', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 } }>
-                                    <div
-                                        onMouseDown={ (e) => handleDragHandleMouseDown( e, index ) }
-                                        onMouseEnter={ () => handleMouseEnterCard( index ) }
-                                        style={ { cursor: draggedIndex === null ? 'grab' : draggedIndex === index ? 'grabbing' : 'grab', padding: '4px 8px', display: 'flex', alignItems: 'center' } }
-                                        title="Drag to reorder"
-                                    >
-                                        <Dashicon icon="menu" size={ 20 } style={ { color: '#666' } } />
+                                    <div style={ editorStyles.previewHeading }>{ __( 'PREVIEW', 'axis-folio' ) }</div>
+                                    <div style={ { padding: '0 18px 10px', background: 'transparent', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 } }>
+                                        <div
+                                            onMouseDown={ (e) => handleDragHandleMouseDown( e, index ) }
+                                            onMouseEnter={ () => handleMouseEnterCard( index ) }
+                                            style={ { cursor: draggedIndex === null ? 'grab' : draggedIndex === index ? 'grabbing' : 'grab', padding: '4px 8px', display: 'flex', alignItems: 'center' } }
+                                            title="Drag to reorder"
+                                        >
+                                            <Dashicon icon="menu" size={ 20 } style={ { color: '#666' } } />
+                                        </div>
+                                        <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
                                     </div>
-                                    <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
+                                    <MediaUploadCheck>
+                                        <MediaUpload
+                                            onSelect={ ( media ) => updateItem( index, 'url', media.url ) }
+                                            allowedTypes={ [ 'image' ] }
+                                            render={ ( { open } ) => (
+                                                <>
+                                                    <div style={ { ...editorStyles.imageWrapper, backgroundColor: previewBgColor } } onClick={ open }>
+                                                        { item.url 
+                                                            ? <img src={ item.url } style={ editorStyles.image( index ) } alt="" /> 
+                                                            : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> 
+                                                        }
+                                                    </div>
+                                                    <div style={ { marginTop: '12px', textAlign: 'center', background: 'transparent', padding: '0 18px' } }>
+                                                        <Button variant="secondary" onClick={ open }>
+                                                            { item.url ? __( 'Change Image', 'axis-folio' ) : __( 'Upload Image', 'axis-folio' ) }
+                                                        </Button>
+                                                    </div>
+                                                </>
+                                            ) }
+                                        />
+                                    </MediaUploadCheck>
+                                    <div style={ editorStyles.cardContent }>
+                                        <div style={ { marginBottom: '8px' } }>
+                                            <div style={ { display: 'flex', flexDirection: 'column', padding: buildPadding( iconListPaddingTop, iconListPaddingRight, iconListPaddingBottom, iconListPaddingLeft, 0 ), marginBottom: '12px' } }>
+                                                <div style={ { display: 'flex', alignItems: 'center', paddingLeft: `${ iconCardEndGap }px`, gap: `${ iconLineGap }px`, color: titleColor, opacity: item.iconList || item.iconType ? 1 : 0.5 } }>
+                                                    <span style={ { width: '56px', height: '2px', backgroundColor: '#6b7280', display: 'inline-block', borderRadius: '999px', flexShrink: 0 } }></span>
+                                                    <div style={ { display: 'inline-flex', alignItems: 'center', gap: showIconListIcon ? `${ iconTextGap }px` : 0 } }>
+                                                        { showIconListIcon && (
+                                                            <Dashicon icon={ item.iconType || 'arrow-right-alt2' } size={ 16 } />
+                                                        ) }
+                                                        <span style={ { fontFamily: iconListFontFamily, fontWeight: iconListFontWeight, fontSize: `${ iconListFontSize }px`, textTransform: iconListTextTransform, letterSpacing: '0.1em' } }>{ item.iconList || __( 'Type', 'axis-folio' ) }</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style={ { fontFamily: titleFontFamily, fontSize: `${ titleFontSize }px`, fontWeight: '700', color: titleColor, marginBottom: '6px', padding: buildPadding( titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft, 0 ) } }>
+                                                { item.title || __( 'Title', 'axis-folio' ) }
+                                            </div>
+                                            <div style={ { fontFamily: descFontFamily, fontSize: `${ descFontSize }px`, color: descColor, marginBottom: '12px', padding: buildPadding( descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft, 0 ) } }>
+                                                { item.description || __( 'Description', 'axis-folio' ) }
+                                            </div>
+                                            { showTagDivider && tagsArray.length > 0 && (
+                                                <div style={ editorStyles.divider }></div>
+                                            ) }
+                                            { showTags && tagsArray.length > 0 && (
+                                                <div style={ { display: 'flex', flexWrap: 'wrap', gap: '6px', padding: buildPadding( tagPaddingTop, tagPaddingRight, tagPaddingBottom, tagPaddingLeft, 0 ) } }>
+                                                    { tagsArray.map( ( t, i ) => (
+                                                        <span key={ i } style={ editorStyles.tagItem }>{ t }</span>
+                                                    ) ) }
+                                                </div>
+                                            ) }
+                                        </div>
+                                    </div>
                                 </div>
-                                <MediaUploadCheck>
-                                    <MediaUpload
-                                        onSelect={ ( media ) => updateItem( index, 'url', media.url ) }
-                                        allowedTypes={ [ 'image' ] }
-                                        render={ ( { open } ) => (
-                                            <>
-                                                <div style={ { ...editorStyles.imageWrapper, backgroundColor: previewBgColor } } onClick={ open }>
-                                                    { item.url 
-                                                        ? <img src={ item.url } style={ editorStyles.image( index ) } alt="" /> 
-                                                        : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> 
-                                                    }
-                                                </div>
-                                                <div style={ { marginTop: '12px', textAlign: 'center', background: 'transparent', padding: '0 18px' } }>
-                                                    <Button variant="secondary" onClick={ open }>
-                                                        { item.url ? __( 'Change Image', 'axis-folio' ) : __( 'Upload Image', 'axis-folio' ) }
-                                                    </Button>
-                                                </div>
-                                            </>
-                                        ) }
-                                    />
-                                </MediaUploadCheck>
-                                <div style={ editorStyles.cardContent }>
-                                    <div style={ { marginBottom: '8px' } }>
-                                        <div style={ { fontFamily: titleFontFamily, fontSize: `${ titleFontSize }px`, fontWeight: '700', color: titleColor, marginBottom: '6px', padding: buildPadding( titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft, 0 ) } }>
-                                            { item.title || __( 'Title', 'axis-folio' ) }
-                                        </div>
-                                        <div style={ { fontFamily: descFontFamily, fontSize: `${ descFontSize }px`, color: descColor, marginBottom: '12px', padding: buildPadding( descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft, 0 ) } }>
-                                            { item.description || __( 'Description', 'axis-folio' ) }
-                                        </div>
-                                        { showTagDivider && tagsArray.length > 0 && (
-                                            <div style={ editorStyles.divider }></div>
-                                        ) }
-                                        { showTags && tagsArray.length > 0 && (
-                                            <div style={ { display: 'flex', flexWrap: 'wrap', gap: '6px', padding: buildPadding( tagPaddingTop, tagPaddingRight, tagPaddingBottom, tagPaddingLeft, 0 ) } }>
-                                                { tagsArray.map( ( t, i ) => (
-                                                    <span key={ i } style={ editorStyles.tagItem }>{ t }</span>
-                                                ) ) }
+                                <div style={ editorStyles.editSection }>
+                                    <div style={ editorStyles.sectionHeading }>{ __( 'Edit', 'axis-folio' ) }</div>
+                                    <div style={ { display: 'grid', gap: '16px' } }>
+                                        { showIconListIcon && (
+                                            <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                                <SelectControl
+                                                    label={ __( 'Icon', 'axis-folio' ) }
+                                                    value={ item.iconType }
+                                                    options={ iconOptions }
+                                                    onChange={ ( v ) => updateItem( index, 'iconType', v ) }
+                                                />
                                             </div>
                                         ) }
+                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                            <TextControl label={ __( 'Type', 'axis-folio' ) } placeholder={ __( 'Type', 'axis-folio' ) } value={ item.iconList || '' } onChange={ ( v ) => updateItem( index, 'iconList', v ) } />
+                                        </div>
+                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                            <TextControl placeholder="Title" value={ item.title || '' } onChange={ ( v ) => updateItem( index, 'title', v ) } />
+                                        </div>
+                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                            <TextareaControl placeholder="Description" value={ item.description || '' } onChange={ ( v ) => updateItem( index, 'description', v ) } />
+                                        </div>
+                                        <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
+                                            <TextControl label="Link URL" placeholder="https://..." value={ item.linkUrl || '' } onChange={ ( v ) => updateItem( index, 'linkUrl', v ) } />
+                                            <ToggleControl label="Open in New Tab" checked={ !!item.openInNewTab } onChange={ ( v ) => updateItem( index, 'openInNewTab', v ) } />
+                                            <TextControl label="Tags (Comma Separated)" placeholder="Design, Web, App" value={ itemTags } onChange={ ( v ) => updateItem( index, 'tags', v ) } />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div style={ editorStyles.editSection }>
-                                <div style={ editorStyles.sectionHeading }>{ __( 'Edit', 'axis-folio' ) }</div>
-                                <div style={ { display: 'grid', gap: '16px' } }>
-                                    <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
-                                        <TextControl placeholder="Title" value={ item.title } onChange={ ( v ) => updateItem( index, 'title', v ) } />
-                                    </div>
-                                    <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
-                                        <TextareaControl placeholder="Description" value={ item.description } onChange={ ( v ) => updateItem( index, 'description', v ) } />
-                                    </div>
-                                    <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
-                                        <TextControl label="Link URL" placeholder="https://..." value={ item.linkUrl } onChange={ ( v ) => updateItem( index, 'linkUrl', v ) } />
-                                        <ToggleControl label="Open in New Tab" checked={ item.openInNewTab } onChange={ ( v ) => updateItem( index, 'openInNewTab', v ) } />
-                                        <TextControl label="Tags (Comma Separated)" placeholder="Design, Web, App" value={ itemTags } onChange={ ( v ) => updateItem( index, 'tags', v ) } />
-                                    </div>
-                                </div>
-                            </div>
                             </div>
                         );
                     } ) }
@@ -493,13 +625,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
                     { enableLoadMore && (
                         <div style={ { marginTop: '20px', borderTop: '1px dashed #ccc', paddingTop: '20px', width: '100%' } }>
-                            <div 
+                            <button 
                                 style={ editorStyles.loadMorePreview }
                                 onMouseEnter={ () => setIsBtnHovered( true ) }
                                 onMouseLeave={ () => setIsBtnHovered( false ) }
                             >
                                 { loadMoreText || __( 'Load More', 'axis-folio' ) }
-                            </div>
+                            </button>
                         </div>
                     ) }
                 </div>

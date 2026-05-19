@@ -258,6 +258,58 @@ return array(
 			'tagFontFamily' => array(
 				'type' => 'string',
 				'default' => 'inherit'
+			),
+			'iconListFontFamily' => array(
+				'type' => 'string',
+				'default' => 'inherit'
+			),
+			'iconListFontWeight' => array(
+				'type' => 'string',
+				'default' => '400'
+			),
+			'iconListFontSize' => array(
+				'type' => 'number',
+				'default' => 12
+			),
+			'iconListTextTransform' => array(
+				'type' => 'string',
+				'default' => 'uppercase'
+			),
+			'showIconListIcon' => array(
+				'type' => 'boolean',
+				'default' => true
+			),
+			'iconListPaddingTop' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'iconListPaddingRight' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'iconListPaddingBottom' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'iconListPaddingLeft' => array(
+				'type' => 'number',
+				'default' => 0
+			),
+			'iconListSubtitleGap' => array(
+				'type' => 'number',
+				'default' => 10
+			),
+			'iconCardEndGap' => array(
+				'type' => 'number',
+				'default' => 8
+			),
+			'iconLineGap' => array(
+				'type' => 'number',
+				'default' => 10
+			),
+			'iconTextGap' => array(
+				'type' => 'number',
+				'default' => 8
 			)
 		),
 		'supports' => array(

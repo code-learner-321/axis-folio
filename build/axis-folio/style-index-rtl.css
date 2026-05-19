@@ -65,14 +65,11 @@
   box-sizing: border-box;
 }
 .wp-block-create-block-axis-folio .portfolio-grid {
-  display: grid;
+  position: relative;
   width: 100%;
-  gap: 25px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 .wp-block-create-block-axis-folio .portfolio-item {
   display: block;
-  width: 100%;
   margin: 0;
   -moz-column-break-inside: avoid;
        break-inside: avoid;

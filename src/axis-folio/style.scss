@@ -68,15 +68,12 @@
 .wp-block-create-block-axis-folio {
     box-sizing: border-box;
     .portfolio-grid {
-        display: grid;
+        position: relative;
         width: 100%;
-        gap: 25px;
-        grid-template-columns: repeat( auto-fit, minmax(260px, 1fr) );
     }
 
     .portfolio-item {
         display: block;
-        width: 100%;
         margin: 0;
         break-inside: avoid;
         -webkit-column-break-inside: avoid;
