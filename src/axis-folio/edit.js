@@ -37,7 +37,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         descFontSize, descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft,
         tagPaddingTop, tagPaddingRight, tagPaddingBottom, tagPaddingLeft,
         iconListPaddingTop, iconListPaddingRight, iconListPaddingBottom, iconListPaddingLeft, iconListSubtitleGap, iconCardEndGap, iconLineGap, iconTextGap,
-        iconListTextColor // Added type text color control attribute
+        iconListTextColor
     } = attributes;
 
     const safeItems = Array.isArray( items ) ? items : [];
@@ -117,7 +117,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         }
     };
 
-    // Expanded Font List to include standard open/popular web fonts
+    // Updated Font List - Added Manrope along with standard popular open web fonts
     const fontOptions = [
         { label: 'Default', value: 'inherit' },
         { label: 'Arial', value: 'Arial, sans-serif' },
@@ -127,6 +127,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         { label: 'Impact', value: 'Impact, Charcoal, sans-serif' },
         { label: 'Inter', value: '"Inter", sans-serif' },
         { label: 'Lucida Sans Unicode', value: '"Lucida Sans Unicode", "Lucida Grande", sans-serif' },
+        { label: 'Manrope', value: '"Manrope", sans-serif' },
         { label: 'Montserrat', value: '"Montserrat", sans-serif' },
         { label: 'Open Sans', value: '"Open Sans", sans-serif' },
         { label: 'Poppins', value: '"Poppins", sans-serif' },

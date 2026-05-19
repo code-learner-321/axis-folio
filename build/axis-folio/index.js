@@ -105,7 +105,7 @@ function Edit({
     iconCardEndGap,
     iconLineGap,
     iconTextGap,
-    iconListTextColor // Added type text color control attribute
+    iconListTextColor
   } = attributes;
   const safeItems = Array.isArray(items) ? items : [];
   const [hoveredIndex, setHoveredIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
@@ -195,7 +195,7 @@ function Edit({
     }
   };
 
-  // Expanded Font List to include standard open/popular web fonts
+  // Updated Font List - Added Manrope along with standard popular open web fonts
   const fontOptions = [{
     label: 'Default',
     value: 'inherit'
@@ -220,6 +220,9 @@ function Edit({
   }, {
     label: 'Lucida Sans Unicode',
     value: '"Lucida Sans Unicode", "Lucida Grande", sans-serif'
+  }, {
+    label: 'Manrope',
+    value: '"Manrope", sans-serif'
   }, {
     label: 'Montserrat',
     value: '"Montserrat", sans-serif'
