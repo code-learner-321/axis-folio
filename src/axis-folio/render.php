@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Render template for Axis Folio
  */
 
 $items = $attributes['items'] ?? [];
-$unique_id = $attributes['uniqueId'] ?? 'af-' . wp_generate_password( 4, false );
+$unique_id = $attributes['uniqueId'] ?? 'af-' . wp_generate_password(4, false);
 $show_tags = $attributes['showTags'] ?? true;
 $show_divider  = $attributes['showTagDivider'] ?? false;
 $divider_w     = $attributes['dividerWidth'] ?? 100;
@@ -95,161 +96,111 @@ $cols_m = $attributes['columnsMobile'] ?? 1;
 $grid_gap = $attributes['gridGap'] ?? 20;
 $align = $attributes['align'] ?? '';
 $wrapper_class = 'wp-block-create-block-axis-folio';
-if ( $align ) {
-    $wrapper_class .= ' align' . sanitize_html_class( $align );
+if ($align) {
+    $wrapper_class .= ' align' . sanitize_html_class($align);
 }
 
 echo "<style>
-    #{$unique_id} .portfolio-grid {
-        position: relative !important;
-        width: 100% !important;
-    }
-    #{$unique_id} .grid-sizer,
-    #{$unique_id} .gutter-sizer {
-        visibility: hidden !important;
-        height: 0 !important;
-        overflow: hidden !important;
-    }
-    #{$unique_id} .portfolio-item,
-    #{$unique_id} .grid-sizer {
-        width: calc( (100% / {$cols_d}) - ({$grid_gap}px * ({$cols_d} - 1) / {$cols_d}) ) !important;
-    }
-    #{$unique_id} .gutter-sizer {
-        width: {$grid_gap}px !important;
-    }
-    #{$unique_id} .portfolio-item {
-        display: block !important;
-        margin-bottom: {$grid_gap}px !important;
-    }
-    @media (max-width: 991px) {
-        #{$unique_id} .portfolio-item,
-        #{$unique_id} .grid-sizer {
-            width: calc( (100% / {$cols_t}) - ({$grid_gap}px * ({$cols_t} - 1) / {$cols_t}) ) !important;
-        }
-    }
-    @media (max-width: 767px) {
-        #{$unique_id} .portfolio-item,
-        #{$unique_id} .grid-sizer {
-            width: calc( (100% / {$cols_m}) - ({$grid_gap}px * ({$cols_m} - 1) / {$cols_m}) ) !important;
-        }
-    }
-    #{$unique_id} .portfolio-item-card {
-        background: {$card_bg_color} !important;
-        border-radius: {$card_radius}px !important;
-        {$shadow_css}
-        transition: all 0.3s ease-in-out !important;
-        overflow: hidden !important;
-        display: flex !important;
-        flex-direction: column !important;
-        height: 100% !important;
-    }
-    #{$unique_id} .portfolio-item-card:hover {
-        background: {$h_card_bg_color} !important;
-        {$h_shadow_css}
-    }
-    #{$unique_id} .portfolio-image {
-        overflow: hidden !important;
-        position: relative !important;
-        width: 100% !important;
-    }
-    #{$unique_id} .portfolio-image img {
-        transition: transform 0.3s ease-in-out !important;
-        width: 100% !important;
-        display: block !important;
-        height: auto !important;
-    }
-    #{$unique_id} .portfolio-item-card:hover .portfolio-image img {
-        {$zoom_css}
-    }
-    #{$unique_id} .portfolio-item.is-hidden {
-        display: none !important;
-    }
+    #{$unique_id} .portfolio-grid { position: relative !important; width: 100% !important; }
+    #{$unique_id} .grid-sizer, #{$unique_id} .gutter-sizer { visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+    #{$unique_id} .portfolio-item, #{$unique_id} .grid-sizer { width: calc( (100% / {$cols_d}) - ({$grid_gap}px * ({$cols_d} - 1) / {$cols_d}) ) !important; }
+    #{$unique_id} .gutter-sizer { width: {$grid_gap}px !important; }
+    #{$unique_id} .portfolio-item { display: block !important; margin-bottom: {$grid_gap}px !important; }
+    @media (max-width: 991px) { #{$unique_id} .portfolio-item, #{$unique_id} .grid-sizer { width: calc( (100% / {$cols_t}) - ({$grid_gap}px * ({$cols_t} - 1) / {$cols_t}) ) !important; } }
+    @media (max-width: 767px) { #{$unique_id} .portfolio-item, #{$unique_id} .grid-sizer { width: calc( (100% / {$cols_m}) - ({$grid_gap}px * ({$cols_m} - 1) / {$cols_m}) ) !important; } }
+    #{$unique_id} .portfolio-item-card { background: {$card_bg_color} !important; border-radius: {$card_radius}px !important; {$shadow_css} transition: all 0.3s ease-in-out !important; overflow: hidden !important; display: flex !important; flex-direction: column !important; height: 100% !important; }
+    #{$unique_id} .portfolio-item-card:hover { background: {$h_card_bg_color} !important; {$h_shadow_css} }
+    #{$unique_id} .portfolio-image { overflow: hidden !important; position: relative !important; width: 100% !important; }
+    #{$unique_id} .portfolio-image img { transition: transform 0.3s ease-in-out !important; width: 100% !important; display: block !important; height: auto !important; }
+    #{$unique_id} .portfolio-item-card:hover .portfolio-image img { {$zoom_css} }
+    #{$unique_id} .portfolio-item.is-hidden { display: none !important; }
 </style>";
 
-$wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id, 'className' => $wrapper_class ] );
+$wrapper_attributes = get_block_wrapper_attributes(['id' => $unique_id, 'className' => $wrapper_class]);
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
     <div class="portfolio-grid" style="visibility: hidden; opacity: 0; transition: opacity 0.24s ease;">
         <div class="grid-sizer"></div>
         <div class="gutter-sizer"></div>
-        <?php if ( ! empty( $items ) ) : ?>
-            <?php foreach ( $items as $index => $item ) :
-                $is_hidden = ( $enable_load_more && $index >= $posts_per_page );
-                $item_class = 'portfolio-item' . ( $is_hidden ? ' is-hidden' : '' );
+        <?php if (! empty($items)) : ?>
+            <?php foreach ($items as $index => $item) :
+                $is_hidden = ($enable_load_more && $index >= $posts_per_page);
+                $item_class = 'portfolio-item' . ($is_hidden ? ' is-hidden' : '');
                 $item_style = $is_hidden ? 'display: none;' : 'display: block;';
 
-                $link_url = ! empty( $item['linkUrl'] ) ? esc_url( $item['linkUrl'] ) : '';
-                $target = ( ! empty( $item['openInNewTab'] ) && $item['openInNewTab'] === true ) ? '_blank' : '_self';
-                $rel = ( $target === '_blank' ) ? 'rel="noopener noreferrer"' : '';
+                $link_url = ! empty($item['linkUrl']) ? esc_url($item['linkUrl']) : '';
+                $target = (! empty($item['openInNewTab']) && $item['openInNewTab'] === true) ? '_blank' : '_self';
+                $rel = ($target === '_blank') ? 'rel="noopener noreferrer"' : '';
 
-                $icon_type = ! empty( $item['iconType'] ) ? $item['iconType'] : 'arrow-right-alt2';
-                $icon_label = ! empty( $item['iconList'] ) ? $item['iconList'] : '';
-                $icon_char = isset( $icon_map[ $icon_type ] ) ? $icon_map[ $icon_type ] : '→';
-                $show_icon_list = $icon_label !== '' || ! empty( $item['iconType'] );
-                $has_title = ! empty( $item['title'] );
-                $has_desc = ! empty( $item['description'] );
+                $icon_label = ! empty($item['iconList']) ? $item['iconList'] : '';
+                $icon_type = ! empty($item['iconType']) ? $item['iconType'] : 'arrow-right-alt2';
+                $icon_char = isset($icon_map[$icon_type]) ? $icon_map[$icon_type] : '→';
+                
+                $has_title = ! empty($item['title']);
+                $has_desc = ! empty($item['description']);
                 $tags_value = '';
-                if ( isset( $item['tags'] ) ) {
-                    $tags_value = is_string( $item['tags'] ) ? $item['tags'] : ( is_scalar( $item['tags'] ) ? strval( $item['tags'] ) : '' );
+                if (isset($item['tags'])) {
+                    $tags_value = is_string($item['tags']) ? $item['tags'] : (is_scalar($item['tags']) ? strval($item['tags']) : '');
                 }
-                $has_tags = ( $show_tags && $tags_value !== '' );
-                ?>
-                <div class="<?php echo esc_attr( $item_class ); ?>" style="<?php echo esc_attr( $item_style ); ?>">
+                $has_tags = ($show_tags && $tags_value !== '');
+                $has_icon = ! empty($icon_label);
+            ?>
+                <div class="<?php echo esc_attr($item_class); ?>" style="<?php echo esc_attr($item_style); ?>">
                     <div class="portfolio-item-card">
-                        <?php if ( ! empty( $item['url'] ) ) : ?>
+                        <?php if (! empty($item['url'])) : ?>
                             <div class="portfolio-image">
-                                <?php if ( $link_url ) : ?><a href="<?php echo $link_url; ?>" target="<?php echo $target; ?>" <?php echo $rel; ?> style="display:block;"><?php endif; ?>
-                                <img src="<?php echo esc_url( $item['url'] ); ?>" alt="<?php echo esc_attr( $item['title'] ?? '' ); ?>" />
-                                <?php if ( $link_url ) : ?></a><?php endif; ?>
+                                <?php if ($link_url) : ?><a href="<?php echo $link_url; ?>" target="<?php echo $target; ?>" <?php echo $rel; ?> style="display:block;"><?php endif; ?>
+                                    <img src="<?php echo esc_url($item['url']); ?>" alt="<?php echo esc_attr($item['title'] ?? ''); ?>" />
+                                <?php if ($link_url) : ?></a><?php endif; ?>
                             </div>
                         <?php endif; ?>
 
-                        <?php if ( $show_icon_list || $has_title || $has_desc || $has_tags ) : ?>
-                        <div class="portfolio-content" style="padding: 20px; flex-grow: 1; display: flex; flex-direction: column;">
-                            <?php if ( $show_icon_list ) : ?>
-                                <div class="portfolio-icon-meta" style="display: flex; flex-direction: column; gap: <?php echo esc_attr( $icon_list_subtitle_gap ); ?>px; padding: <?php echo esc_attr( $icon_list_padding_top ); ?>px <?php echo esc_attr( $icon_list_padding_right ); ?>px <?php echo esc_attr( $icon_list_padding_bottom ); ?>px <?php echo esc_attr( $icon_list_padding_left ); ?>px; margin: 0 0 10px 0;">
-                                    <div class="portfolio-icon-list" style="display: flex; align-items: center; padding-left: <?php echo esc_attr( $icon_card_end_gap ); ?>px; gap: <?php echo esc_attr( $icon_line_gap ); ?>px; color: <?php echo esc_attr( $title_color ); ?>;">
-                                        <span style="width: 56px; height: 2px; background-color: #6b7280; display: inline-block; border-radius: 999px; flex-shrink: 0;"></span>
-                                        <span style="display: inline-flex; align-items: center; gap: <?php echo esc_attr( $show_icon_list_icon ? $icon_text_gap : 0 ); ?>px; font-family: <?php echo esc_attr( $icon_list_font ); ?>; font-weight: <?php echo esc_attr( $icon_list_weight ); ?>; font-size: <?php echo esc_attr( $icon_list_size ); ?>px; text-transform: <?php echo esc_attr( $icon_list_transform ); ?>; letter-spacing: 0.1em; color: <?php echo esc_attr( $title_color ); ?>;">
-                                            <?php if ( $show_icon_list_icon ) : ?>
-                                                <span style="font-size: 14px; line-height: 1; display: inline-block;"><?php echo esc_html( $icon_char ); ?></span>
-                                            <?php endif; ?>
-                                            <?php echo esc_html( $icon_label ?: __( 'Type', 'axis-folio' ) ); ?>
-                                        </span>
+                        <?php if ($has_icon || $has_title || $has_desc || $has_tags) : ?>
+                            <div style="padding: 20px; flex-grow: 1; display: flex; flex-direction: column;">
+                                <?php if ($has_icon) : ?>
+                                    <div class="portfolio-icon-meta" style="display: flex; flex-direction: column; gap: <?php echo esc_attr($icon_list_subtitle_gap); ?>px; padding: <?php echo esc_attr($icon_list_padding_top); ?>px <?php echo esc_attr($icon_list_padding_right); ?>px <?php echo esc_attr($icon_list_padding_bottom); ?>px <?php echo esc_attr($icon_list_padding_left); ?>px; margin: 0 0 10px 0;">
+                                        <div class="portfolio-icon-list" style="display: flex; align-items: center; padding-left: <?php echo esc_attr($icon_card_end_gap); ?>px; gap: <?php echo esc_attr($icon_line_gap); ?>px; color: <?php echo esc_attr($title_color); ?>;">
+                                            <span style="width: 56px; height: 2px; background-color: #6b7280; display: inline-block; border-radius: 999px; flex-shrink: 0;"></span>
+                                            <span style="display: inline-flex; align-items: center; gap: <?php echo esc_attr($show_icon_list_icon ? $icon_text_gap : 0); ?>px; font-family: <?php echo esc_attr($icon_list_font); ?>; font-weight: <?php echo esc_attr($icon_list_weight); ?>; font-size: <?php echo esc_attr($icon_list_size); ?>px; text-transform: <?php echo esc_attr($icon_list_transform); ?>; letter-spacing: 0.1em; color: <?php echo esc_attr($title_color); ?>;">
+                                                <?php if ($show_icon_list_icon) : ?>
+                                                    <span style="font-size: 14px; line-height: 1; display: inline-block;"><?php echo esc_html($icon_char); ?></span>
+                                                <?php endif; ?>
+                                                <?php echo esc_html($icon_label); ?>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            <?php endif; ?>
+                                <?php endif; ?>
 
-                            <?php if ( $has_title ) : ?>
-                                <h3 style="margin: 0 0 8px 0; line-height: 1.2; font-weight: 700; color: <?php echo esc_attr( $title_color ); ?>; font-size: <?php echo esc_attr( $title_size ); ?>px; font-family: <?php echo esc_attr( $title_font ); ?>; padding: <?php echo esc_attr( $title_padding_top ?? $title_padding ); ?>px <?php echo esc_attr( $title_padding_right ?? $title_padding ); ?>px <?php echo esc_attr( $title_padding_bottom ?? $title_padding ); ?>px <?php echo esc_attr( $title_padding_left ?? $title_padding ); ?>px;">
-                                    <?php if ( $link_url ) : ?><a href="<?php echo $link_url; ?>" target="<?php echo $target; ?>" <?php echo $rel; ?> style="text-decoration: none; color: inherit;"><?php endif; ?>
-                                    <?php echo esc_html( $item['title'] ); ?>
-                                    <?php if ( $link_url ) : ?></a><?php endif; ?>
-                                </h3>
-                            <?php endif; ?>
+                                <?php if ($has_title) : ?>
+                                    <h3 style="margin: 0 0 8px 0; line-height: 1.2; font-weight: 700; color: <?php echo esc_attr($title_color); ?>; font-size: <?php echo esc_attr($title_size); ?>px; font-family: <?php echo esc_attr($title_font); ?>; padding: <?php echo esc_attr($title_padding_top ?? $title_padding); ?>px <?php echo esc_attr($title_padding_right ?? $title_padding); ?>px <?php echo esc_attr($title_padding_bottom ?? $title_padding); ?>px <?php echo esc_attr($title_padding_left ?? $title_padding); ?>px;">
+                                        <?php if ($link_url) : ?><a href="<?php echo $link_url; ?>" target="<?php echo $target; ?>" <?php echo $rel; ?> style="text-decoration: none; color: inherit;"><?php endif; ?>
+                                            <?php echo esc_html($item['title']); ?>
+                                        <?php if ($link_url) : ?></a><?php endif; ?>
+                                    </h3>
+                                <?php endif; ?>
 
-                            <?php if ( $has_desc ) : ?>
-                                <p style="margin: 0 0 15px 0; line-height: 1.6; color: <?php echo esc_attr( $desc_color ); ?>; font-size: <?php echo esc_attr( $desc_size ); ?>px; font-family: <?php echo esc_attr( $desc_font ); ?>; padding: <?php echo esc_attr( $desc_padding_top ?? $desc_padding ); ?>px <?php echo esc_attr( $desc_padding_right ?? $desc_padding ); ?>px <?php echo esc_attr( $desc_padding_bottom ?? $desc_padding ); ?>px <?php echo esc_attr( $desc_padding_left ?? $desc_padding ); ?>px;">
-                                    <?php echo esc_html( $item['description'] ); ?>
-                                </p>
-                            <?php endif; ?>
+                                <?php if ($has_desc) : ?>
+                                    <p style="margin: 0 0 15px 0; line-height: 1.6; color: <?php echo esc_attr($desc_color); ?>; font-size: <?php echo esc_attr($desc_size); ?>px; font-family: <?php echo esc_attr($desc_font); ?>; padding: <?php echo esc_attr($desc_padding_top ?? $desc_padding); ?>px <?php echo esc_attr($desc_padding_right ?? $desc_padding); ?>px <?php echo esc_attr($desc_padding_bottom ?? $desc_padding); ?>px <?php echo esc_attr($desc_padding_left ?? $desc_padding); ?>px;">
+                                        <?php echo esc_html($item['description']); ?>
+                                    </p>
+                                <?php endif; ?>
 
-                            <?php if ( $show_divider && $has_tags ) : ?>
-                                <div class="tag-divider" style="width: <?php echo esc_attr( $divider_w ); ?>%; height: <?php echo esc_attr( $divider_h ); ?>px; background-color: <?php echo esc_attr( $divider_color ); ?>; margin: auto 0 15px 0;"></div>
-                            <?php endif; ?>
+                                <?php if ($show_divider && $has_tags) : ?>
+                                    <div class="tag-divider" style="width: <?php echo esc_attr($divider_w); ?>%; height: <?php echo esc_attr($divider_h); ?>px; background-color: <?php echo esc_attr($divider_color); ?>; margin: auto 0 15px 0;"></div>
+                                <?php endif; ?>
 
-                            <?php if ( $has_tags ) :
-                                $tags = $tags_value !== '' ? explode( ',', $tags_value ) : []; ?>
-                                <div class="portfolio-tags" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding: <?php echo esc_attr( $tag_padding_top ?? $tag_padding ); ?>px <?php echo esc_attr( $tag_padding_right ?? $tag_padding ); ?>px <?php echo esc_attr( $tag_padding_bottom ?? $tag_padding ); ?>px <?php echo esc_attr( $tag_padding_left ?? $tag_padding ); ?>px;">
-                                    <?php foreach ( $tags as $tag ) : ?>
-                                        <span class="tag" style="padding: 3px 10px; border-radius: 4px; font-weight: 600; text-transform: uppercase; background-color: <?php echo esc_attr( $tag_bg_color ); ?>; color: <?php echo esc_attr( $tag_text_color ); ?>; font-size: <?php echo esc_attr( $tag_size ); ?>px; font-family: <?php echo esc_attr( $tag_font ); ?>;">
-                                            <?php echo esc_html( trim( $tag ) ); ?>
-                                        </span>
-                                    <?php endforeach; ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
+                                <?php if ($has_tags) :
+                                    $tags = $tags_value !== '' ? explode(',', $tags_value) : []; ?>
+                                    <div class="portfolio-tags" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding: <?php echo esc_attr($tag_padding_top ?? $tag_padding); ?>px <?php echo esc_attr($tag_padding_right ?? $tag_padding); ?>px <?php echo esc_attr($tag_padding_bottom ?? $tag_padding); ?>px <?php echo esc_attr($tag_padding_left ?? $tag_padding); ?>px;">
+                                        <?php foreach ($tags as $tag) : ?>
+                                            <span class="tag" style="padding: 3px 10px; border-radius: 4px; font-weight: 600; text-transform: uppercase; background-color: <?php echo esc_attr($tag_bg_color); ?>; color: <?php echo esc_attr($tag_text_color); ?>; font-size: <?php echo esc_attr($tag_size); ?>px; font-family: <?php echo esc_attr($tag_font); ?>;">
+                                                <?php echo esc_html(trim($tag)); ?>
+                                            </span>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -257,10 +208,10 @@ $wrapper_attributes = get_block_wrapper_attributes( [ 'id' => $unique_id, 'class
         <?php endif; ?>
     </div>
 
-    <?php if ( $enable_load_more && count( $items ) > $posts_per_page ) : ?>
+    <?php if ($enable_load_more && count($items) > $posts_per_page) : ?>
         <div class="portfolio-load-more-wrapper" style="text-align: center; margin-top: 40px; clear: both; width: 100%;">
-            <button class="portfolio-load-more-btn" data-perpage="<?php echo esc_attr( $posts_per_page ); ?>" style="padding: 12px 30px; border: none; cursor: pointer; font-weight: 600; border-radius: <?php echo esc_attr( $btn_radius ); ?>px; background-color: <?php echo esc_attr( $attributes['btnBgColor'] ?? '#111111' ); ?>; color: <?php echo esc_attr( $attributes['btnTextColor'] ?? '#ffffff' ); ?>;">
-                <?php echo esc_html( $load_more_text ); ?>
+            <button class="portfolio-load-more-btn" data-perpage="<?php echo esc_attr($posts_per_page); ?>" style="padding: 12px 30px; border: none; cursor: pointer; font-weight: 600; border-radius: <?php echo esc_attr($btn_radius); ?>px; background-color: <?php echo esc_attr($attributes['btnBgColor'] ?? '#111111'); ?>; color: <?php echo esc_attr($attributes['btnTextColor'] ?? '#ffffff'); ?>;">
+                <?php echo esc_html($load_more_text); ?>
             </button>
         </div>
     <?php endif; ?>
