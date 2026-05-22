@@ -16,6 +16,7 @@ $posts_per_page   = $attributes['postsPerPage'] ?? 3;
 $load_more_text   = $attributes['loadMoreText'] ?? 'Load More';
 $card_radius      = $attributes['borderRadius'] ?? 8;
 $btn_radius       = $attributes['btnBorderRadius'] ?? 4;
+$tag_border_radius = $attributes['tagBorderRadius'] ?? 0;
 $title_color    = $attributes['titleColor'] ?? '#111111';
 $title_size     = $attributes['titleFontSize'] ?? 20;
 $title_padding  = $attributes['titlePadding'] ?? 0;
@@ -194,7 +195,7 @@ $wrapper_attributes = get_block_wrapper_attributes(['id' => $unique_id, 'classNa
                                     $tags = $tags_value !== '' ? explode(',', $tags_value) : []; ?>
                                     <div class="portfolio-tags" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding: <?php echo esc_attr($tag_padding_top ?? $tag_padding); ?>px <?php echo esc_attr($tag_padding_right ?? $tag_padding); ?>px <?php echo esc_attr($tag_padding_bottom ?? $tag_padding); ?>px <?php echo esc_attr($tag_padding_left ?? $tag_padding); ?>px;">
                                         <?php foreach ($tags as $tag) : ?>
-                                            <span class="tag" style="padding: 3px 10px; border-radius: 4px; font-weight: 600; text-transform: uppercase; background-color: <?php echo esc_attr($tag_bg_color); ?>; color: <?php echo esc_attr($tag_text_color); ?>; font-size: <?php echo esc_attr($tag_size); ?>px; font-family: <?php echo esc_attr($tag_font); ?>;">
+                                            <span class="tag" style="padding: 3px 10px; border-radius: <?php echo esc_attr($tag_border_radius); ?>px; font-weight: 600; text-transform: uppercase; background-color: <?php echo esc_attr($tag_bg_color); ?>; color: <?php echo esc_attr($tag_text_color); ?>; font-size: <?php echo esc_attr($tag_size); ?>px; font-family: <?php echo esc_attr($tag_font); ?>;">
                                                 <?php echo esc_html(trim($tag)); ?>
                                             </span>
                                         <?php endforeach; ?>

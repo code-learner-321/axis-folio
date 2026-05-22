@@ -194,8 +194,6 @@ function Edit({
       setDraggedIndex(index);
     }
   };
-
-  // Updated Font List - Added Manrope along with standard popular open web fonts
   const fontOptions = [{
     label: 'Default',
     value: 'inherit'
@@ -528,7 +526,7 @@ function Edit({
                 max: 10
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('typography', 'axis-folio'),
+              title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Edit Controls Styles', 'axis-folio'),
               initialOpen: false,
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
@@ -1062,7 +1060,7 @@ function Edit({
                   style: {
                     marginBottom: '8px'
                   },
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  children: [item.iconList && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                     style: {
                       display: 'flex',
                       flexDirection: 'column',
@@ -1108,7 +1106,7 @@ function Edit({
                         })]
                       })]
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  }), item.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                     style: {
                       fontFamily: titleFontFamily,
                       fontSize: `${titleFontSize}px`,
@@ -1117,8 +1115,8 @@ function Edit({
                       marginBottom: '6px',
                       padding: buildPadding(titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft, 0)
                     },
-                    children: item.title || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Title', 'axis-folio')
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                    children: item.title
+                  }), item.description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                     style: {
                       fontFamily: descFontFamily,
                       fontSize: `${descFontSize}px`,
@@ -1126,7 +1124,7 @@ function Edit({
                       marginBottom: '12px',
                       padding: buildPadding(descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft, 0)
                     },
-                    children: item.description || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Description', 'axis-folio')
+                    children: item.description
                   }), showTagDivider && tagsArray.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                     style: editorStyles.divider
                   }), showTags && tagsArray.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
@@ -1378,7 +1376,7 @@ module.exports = window["wp"]["i18n"];
   \***********************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/axis-folio","version":"0.1.0","title":"Axis Folio","category":"widgets","icon":"layout","attributes":{"btnBorderRadius":{"type":"number","default":4},"uniqueId":{"type":"string"},"items":{"type":"array","default":[]},"columnsDesktop":{"type":"number","default":3},"columnsTablet":{"type":"number","default":2},"columnsMobile":{"type":"number","default":1},"borderRadius":{"type":"number","default":8},"hasShadow":{"type":"boolean","default":true},"showTags":{"type":"boolean","default":true},"cardBgColor":{"type":"string","default":"#ffffff"},"hCardBgColor":{"type":"string","default":"#ffffff"},"tagBgColor":{"type":"string","default":"#f0f0f0"},"tagTextColor":{"type":"string","default":"#555555"},"hasZoom":{"type":"boolean","default":true},"zoomScale":{"type":"number","default":1.05},"showTagLine":{"type":"boolean","default":true},"gridGap":{"type":"number","default":20},"titleColor":{"type":"string","default":"#111111"},"titleFontSize":{"type":"number","default":20},"titlePadding":{"type":"number","default":0},"titlePaddingTop":{"type":"number","default":0},"titlePaddingRight":{"type":"number","default":0},"titlePaddingBottom":{"type":"number","default":0},"titlePaddingLeft":{"type":"number","default":0},"descColor":{"type":"string","default":"#666666"},"descFontSize":{"type":"number","default":16},"descPadding":{"type":"number","default":0},"descPaddingTop":{"type":"number","default":0},"descPaddingRight":{"type":"number","default":0},"descPaddingBottom":{"type":"number","default":0},"descPaddingLeft":{"type":"number","default":0},"tagFontSize":{"type":"number","default":11},"tagPadding":{"type":"number","default":0},"tagPaddingTop":{"type":"number","default":0},"tagPaddingRight":{"type":"number","default":0},"tagPaddingBottom":{"type":"number","default":0},"tagPaddingLeft":{"type":"number","default":0},"tagBorderRadius":{"type":"number","default":999},"enableLoadMore":{"type":"boolean","default":false},"postsPerPage":{"type":"number","default":6},"loadMoreText":{"type":"string","default":"Load More"},"btnBgColor":{"type":"string","default":"#111111"},"btnTextColor":{"type":"string","default":"#ffffff"},"btnHovBgColor":{"type":"string","default":"#333333"},"btnHovTextColor":{"type":"string","default":"#ffffff"},"shadowX":{"type":"number","default":0},"shadowY":{"type":"number","default":4},"shadowBlur":{"type":"number","default":12},"shadowSpread":{"type":"number","default":0},"shadowColor":{"type":"string","default":"rgba(0,0,0,0.1)"},"hShadowX":{"type":"number","default":0},"hShadowY":{"type":"number","default":8},"hShadowBlur":{"type":"number","default":20},"hShadowSpread":{"type":"number","default":0},"hShadowColor":{"type":"string","default":"rgba(0,0,0,0.2)"},"showTagDivider":{"type":"boolean","default":false},"dividerWidth":{"type":"number","default":100},"dividerHeight":{"type":"number","default":1},"dividerColor":{"type":"string","default":"#eeeeee"},"titleFontFamily":{"type":"string","default":"inherit"},"descFontFamily":{"type":"string","default":"inherit"},"tagFontFamily":{"type":"string","default":"inherit"},"iconListFontFamily":{"type":"string","default":"inherit"},"iconListFontWeight":{"type":"string","default":"400"},"iconListFontSize":{"type":"number","default":12},"iconListTextTransform":{"type":"string","default":"uppercase"},"showIconListIcon":{"type":"boolean","default":true},"iconListPaddingTop":{"type":"number","default":0},"iconListPaddingRight":{"type":"number","default":0},"iconListPaddingBottom":{"type":"number","default":0},"iconListPaddingLeft":{"type":"number","default":0},"iconListSubtitleGap":{"type":"number","default":10},"iconCardEndGap":{"type":"number","default":8},"iconLineGap":{"type":"number","default":10},"iconTextGap":{"type":"number","default":8}},"supports":{"align":true,"html":false},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/axis-folio","version":"0.1.0","title":"Axis Folio","category":"widgets","icon":"layout","attributes":{"btnBorderRadius":{"type":"number","default":4},"uniqueId":{"type":"string"},"items":{"type":"array","default":[]},"columnsDesktop":{"type":"number","default":3},"columnsTablet":{"type":"number","default":2},"columnsMobile":{"type":"number","default":1},"borderRadius":{"type":"number","default":8},"hasShadow":{"type":"boolean","default":true},"showTags":{"type":"boolean","default":true},"cardBgColor":{"type":"string","default":"#ffffff"},"hCardBgColor":{"type":"string","default":"#ffffff"},"tagBgColor":{"type":"string","default":"#f0f0f0"},"tagTextColor":{"type":"string","default":"#555555"},"hasZoom":{"type":"boolean","default":true},"zoomScale":{"type":"number","default":1.05},"showTagLine":{"type":"boolean","default":true},"gridGap":{"type":"number","default":20},"titleColor":{"type":"string","default":"#111111"},"titleFontSize":{"type":"number","default":20},"titlePadding":{"type":"number","default":0},"titlePaddingTop":{"type":"number","default":0},"titlePaddingRight":{"type":"number","default":0},"titlePaddingBottom":{"type":"number","default":0},"titlePaddingLeft":{"type":"number","default":0},"descColor":{"type":"string","default":"#666666"},"descFontSize":{"type":"number","default":16},"descPadding":{"type":"number","default":0},"descPaddingTop":{"type":"number","default":0},"descPaddingRight":{"type":"number","default":0},"descPaddingBottom":{"type":"number","default":0},"descPaddingLeft":{"type":"number","default":0},"tagFontSize":{"type":"number","default":11},"tagPadding":{"type":"number","default":0},"tagPaddingTop":{"type":"number","default":0},"tagPaddingRight":{"type":"number","default":0},"tagPaddingBottom":{"type":"number","default":0},"tagPaddingLeft":{"type":"number","default":0},"tagBorderRadius":{"type":"number","default":0},"enableLoadMore":{"type":"boolean","default":false},"postsPerPage":{"type":"number","default":6},"loadMoreText":{"type":"string","default":"Load More"},"btnBgColor":{"type":"string","default":"#111111"},"btnTextColor":{"type":"string","default":"#ffffff"},"btnHovBgColor":{"type":"string","default":"#333333"},"btnHovTextColor":{"type":"string","default":"#ffffff"},"shadowX":{"type":"number","default":0},"shadowY":{"type":"number","default":4},"shadowBlur":{"type":"number","default":12},"shadowSpread":{"type":"number","default":0},"shadowColor":{"type":"string","default":"rgba(0,0,0,0.1)"},"hShadowX":{"type":"number","default":0},"hShadowY":{"type":"number","default":8},"hShadowBlur":{"type":"number","default":20},"hShadowSpread":{"type":"number","default":0},"hShadowColor":{"type":"string","default":"rgba(0,0,0,0.2)"},"showTagDivider":{"type":"boolean","default":false},"dividerWidth":{"type":"number","default":100},"dividerHeight":{"type":"number","default":1},"dividerColor":{"type":"string","default":"#eeeeee"},"titleFontFamily":{"type":"string","default":"inherit"},"descFontFamily":{"type":"string","default":"inherit"},"tagFontFamily":{"type":"string","default":"inherit"},"iconListFontFamily":{"type":"string","default":"inherit"},"iconListFontWeight":{"type":"string","default":"400"},"iconListFontSize":{"type":"number","default":12},"iconListTextTransform":{"type":"string","default":"uppercase"},"showIconListIcon":{"type":"boolean","default":true},"iconListPaddingTop":{"type":"number","default":0},"iconListPaddingRight":{"type":"number","default":0},"iconListPaddingBottom":{"type":"number","default":0},"iconListPaddingLeft":{"type":"number","default":0},"iconListSubtitleGap":{"type":"number","default":10},"iconCardEndGap":{"type":"number","default":8},"iconLineGap":{"type":"number","default":10},"iconTextGap":{"type":"number","default":8}},"supports":{"align":true,"html":false},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ }
 

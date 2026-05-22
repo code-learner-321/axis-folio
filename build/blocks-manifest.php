@@ -161,7 +161,7 @@ return array(
 			),
 			'tagBorderRadius' => array(
 				'type' => 'number',
-				'default' => 999
+				'default' => 0
 			),
 			'enableLoadMore' => array(
 				'type' => 'boolean',

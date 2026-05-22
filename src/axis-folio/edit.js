@@ -117,7 +117,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         }
     };
 
-    // Updated Font List - Added Manrope along with standard popular open web fonts
     const fontOptions = [
         { label: 'Default', value: 'inherit' },
         { label: 'Arial', value: 'Arial, sans-serif' },
@@ -176,113 +175,25 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     };
 
     const editorStyles = {
-        containerLayout: { 
-            padding: '20px', 
-            boxSizing: 'border-box',
-            width: '100%' 
-        },
-        gridContainer: { 
-            display: 'grid', 
-            gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`, 
-            gap: `${gridGap}px`,
-            width: '100%',
-            boxSizing: 'border-box'
-        },
+        containerLayout: { padding: '20px', boxSizing: 'border-box', width: '100%' },
+        gridContainer: { display: 'grid', gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`, gap: `${gridGap}px`, width: '100%', boxSizing: 'border-box' },
         imageWrapper: { width: '100%', backgroundColor: 'transparent', minHeight: '220px', cursor: 'pointer', overflow: 'hidden', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' },
-        image: ( index ) => ( { 
-            width: '100%', 
-            height: '100%', 
-            objectFit: 'cover',
-            display: 'block',
-            transition: 'transform 0.35s ease-in-out',
-            transform: ( hasZoom && hoveredIndex === index ) ? `scale(${zoomScale})` : 'scale(1)'
-        } ),
-        tagItem: {
-            padding: '6px 10px',
-            borderRadius: typeof tagBorderRadius === 'number' ? `${tagBorderRadius}px` : '999px',
-            backgroundColor: tagBgColor || '#f1f1f1',
-            color: tagTextColor || '#6b6b6b',
-            fontSize: `${tagFontSize}px`,
-            fontFamily: tagFontFamily,
-            display: 'inline-block',
-            marginRight: '8px',
-            marginBottom: '8px',
-            boxShadow: 'none'
-        },
-        sectionDivider: {
-            borderTop: '1px solid #e6e6e6',
-            margin: '20px 0',
-            width: '100%'
-        },
-        previewSection: {
-            backgroundColor: '#f9fbfd',
-            padding: '18px 0 12px',
-            borderRadius: '12px',
-            border: '1px solid #dde7ef',
-            marginBottom: '18px',
-            boxShadow: '0 6px 20px rgba(30,40,50,0.06)'
-        },
-        previewHeading: {
-            fontSize: '14px',
-            fontWeight: '700',
-            margin: '0 0 16px',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color: '#39444d',
-            padding: '0 18px'
-        },
-        cardContent: {
-            backgroundColor: 'transparent',
-            padding: '18px',
-            borderBottomLeftRadius: '12px',
-            borderBottomRightRadius: '12px',
-            boxSizing: 'border-box'
-        },
-        editSection: {
-            backgroundColor: '#ffffff',
-            padding: '16px',
-            borderRadius: '12px',
-            border: '1px solid #e6e6e6'
-        },
-        sectionHeading: {
-            fontSize: '13px',
-            fontWeight: '700',
-            marginBottom: '12px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.04em',
-            color: '#39444d'
-        },
-        loadMorePreview: {
-            padding: '12px 30px',
-            backgroundColor: isBtnHovered ? btnHovBgColor : btnBgColor,
-            color: isBtnHovered ? btnHovTextColor : btnTextColor,
-            borderRadius: `${btnBorderRadius}px`,
-            border: 'none',
-            display: 'inline-block',
-            fontWeight: '600',
-            marginTop: '20px',
-            transition: 'all 0.3s ease-in-out',
-            cursor: 'pointer'
-        },
-        divider: {
-            width: `${dividerWidth}%`,
-            height: `${dividerHeight}px`,
-            backgroundColor: dividerColor,
-            margin: '15px 0'
-        }
+        image: ( index ) => ( { width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.35s ease-in-out', transform: ( hasZoom && hoveredIndex === index ) ? `scale(${zoomScale})` : 'scale(1)' } ),
+        tagItem: { padding: '6px 10px', borderRadius: typeof tagBorderRadius === 'number' ? `${tagBorderRadius}px` : '999px', backgroundColor: tagBgColor || '#f1f1f1', color: tagTextColor || '#6b6b6b', fontSize: `${tagFontSize}px`, fontFamily: tagFontFamily, display: 'inline-block', marginRight: '8px', marginBottom: '8px', boxShadow: 'none' },
+        sectionDivider: { borderTop: '1px solid #e6e6e6', margin: '20px 0', width: '100%' },
+        previewSection: { backgroundColor: '#f9fbfd', padding: '18px 0 12px', borderRadius: '12px', border: '1px solid #dde7ef', marginBottom: '18px', boxShadow: '0 6px 20px rgba(30,40,50,0.06)' },
+        previewHeading: { fontSize: '14px', fontWeight: '700', margin: '0 0 16px', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#39444d', padding: '0 18px' },
+        cardContent: { backgroundColor: 'transparent', padding: '18px', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', boxSizing: 'border-box' },
+        editSection: { backgroundColor: '#ffffff', padding: '16px', borderRadius: '12px', border: '1px solid #e6e6e6' },
+        sectionHeading: { fontSize: '13px', fontWeight: '700', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.04em', color: '#39444d' },
+        loadMorePreview: { padding: '12px 30px', backgroundColor: isBtnHovered ? btnHovBgColor : btnBgColor, color: isBtnHovered ? btnHovTextColor : btnTextColor, borderRadius: `${btnBorderRadius}px`, border: 'none', display: 'inline-block', fontWeight: '600', marginTop: '20px', transition: 'all 0.3s ease-in-out', cursor: 'pointer' },
+        divider: { width: `${dividerWidth}%`, height: `${dividerHeight}px`, backgroundColor: dividerColor, margin: '15px 0' }
     }; 
 
     return (
         <div { ...blockProps }>
             <InspectorControls>
-                <TabPanel
-                    className="axis-folio-tabs"
-                    activeClass="is-active"
-                    tabs={ [
-                        { name: 'settings', title: __( 'Settings', 'axis-folio' ) },
-                        { name: 'styles', title: __( 'Styles', 'axis-folio' ) },
-                    ] }
-                >
+                <TabPanel className="axis-folio-tabs" activeClass="is-active" tabs={ [ { name: 'settings', title: __( 'Settings', 'axis-folio' ) }, { name: 'styles', title: __( 'Styles', 'axis-folio' ) } ] }>
                     { ( tab ) => (
                         <>
                             { tab.name === 'settings' && (
@@ -310,175 +221,38 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         <RangeControl label={ __( 'Divider Width (%)', 'axis-folio' ) } value={ dividerWidth } onChange={ ( v ) => setAttributes( { dividerWidth: v } ) } min={ 1 } max={ 100 } />
                                         <RangeControl label={ __( 'Divider Height (px)', 'axis-folio' ) } value={ dividerHeight } onChange={ ( v ) => setAttributes( { dividerHeight: v } ) } min={ 1 } max={ 10 } />
                                     </PanelBody>
-
-                                    <PanelBody title={ __( 'typography', 'axis-folio' ) } initialOpen={ false }>
+                                    <PanelBody title={ __( 'Edit Controls Styles', 'axis-folio' ) } initialOpen={ false }>
                                         <p><strong>{ __( 'Title', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ titleFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { titleFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ titleFontSize } onChange={ ( v ) => setAttributes( { titleFontSize: v } ) } min={ 10 } max={ 100 } />
-                                        <BoxControl
-                                            label={ __( 'Padding', 'axis-folio' ) }
-                                            values={ {
-                                                top: titlePaddingTop ? `${ titlePaddingTop }px` : '0px',
-                                                right: titlePaddingRight ? `${ titlePaddingRight }px` : '0px',
-                                                bottom: titlePaddingBottom ? `${ titlePaddingBottom }px` : '0px',
-                                                left: titlePaddingLeft ? `${ titlePaddingLeft }px` : '0px',
-                                            } }
-                                            onChange={ ( values ) => setAttributes( {
-                                                titlePaddingTop: parseInt( values.top, 10 ) || 0,
-                                                titlePaddingRight: parseInt( values.right, 10 ) || 0,
-                                                titlePaddingBottom: parseInt( values.bottom, 10 ) || 0,
-                                                titlePaddingLeft: parseInt( values.left, 10 ) || 0,
-                                            } ) }
-                                            units={ [ 'px' ] }
-                                            inputProps={ { min: 0, max: 80 } }
-                                        />
+                                        <BoxControl label={ __( 'Padding', 'axis-folio' ) } values={ { top: titlePaddingTop ? `${ titlePaddingTop }px` : '0px', right: titlePaddingRight ? `${ titlePaddingRight }px` : '0px', bottom: titlePaddingBottom ? `${ titlePaddingBottom }px` : '0px', left: titlePaddingLeft ? `${ titlePaddingLeft }px` : '0px' } } onChange={ ( values ) => setAttributes( { titlePaddingTop: parseInt( values.top, 10 ) || 0, titlePaddingRight: parseInt( values.right, 10 ) || 0, titlePaddingBottom: parseInt( values.bottom, 10 ) || 0, titlePaddingLeft: parseInt( values.left, 10 ) || 0 } ) } units={ [ 'px' ] } inputProps={ { min: 0, max: 80 } } />
                                         <p><strong>{ __( 'description', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ descFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { descFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ descFontSize } onChange={ ( v ) => setAttributes( { descFontSize: v } ) } min={ 10 } max={ 100 } />
-                                        <BoxControl
-                                            label={ __( 'Padding', 'axis-folio' ) }
-                                            values={ {
-                                                top: descPaddingTop ? `${ descPaddingTop }px` : '0px',
-                                                right: descPaddingRight ? `${ descPaddingRight }px` : '0px',
-                                                bottom: descPaddingBottom ? `${ descPaddingBottom }px` : '0px',
-                                                left: descPaddingLeft ? `${ descPaddingLeft }px` : '0px',
-                                            } }
-                                            onChange={ ( values ) => setAttributes( {
-                                                descPaddingTop: parseInt( values.top, 10 ) || 0,
-                                                descPaddingRight: parseInt( values.right, 10 ) || 0,
-                                                descPaddingBottom: parseInt( values.bottom, 10 ) || 0,
-                                                descPaddingLeft: parseInt( values.left, 10 ) || 0,
-                                            } ) }
-                                            units={ [ 'px' ] }
-                                            inputProps={ { min: 0, max: 80 } }
-                                        />
+                                        <BoxControl label={ __( 'Padding', 'axis-folio' ) } values={ { top: descPaddingTop ? `${ descPaddingTop }px` : '0px', right: descPaddingRight ? `${ descPaddingRight }px` : '0px', bottom: descPaddingBottom ? `${ descPaddingBottom }px` : '0px', left: descPaddingLeft ? `${ descPaddingLeft }px` : '0px' } } onChange={ ( values ) => setAttributes( { descPaddingTop: parseInt( values.top, 10 ) || 0, descPaddingRight: parseInt( values.right, 10 ) || 0, descPaddingBottom: parseInt( values.bottom, 10 ) || 0, descPaddingLeft: parseInt( values.left, 10 ) || 0 } ) } units={ [ 'px' ] } inputProps={ { min: 0, max: 80 } } />
                                         <p><strong>{ __( 'tags', 'axis-folio' ) }</strong></p>
                                         <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ tagFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { tagFontFamily: v } ) } />
                                         <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ tagFontSize } onChange={ ( v ) => setAttributes( { tagFontSize: v } ) } min={ 8 } max={ 30 } />
                                         <RangeControl label={ __( 'border radius', 'axis-folio' ) } value={ tagBorderRadius } onChange={ ( v ) => setAttributes( { tagBorderRadius: v } ) } min={ 0 } max={ 50 } />
-                                        <BoxControl
-                                            label={ __( 'Padding', 'axis-folio' ) }
-                                            values={ {
-                                                top: tagPaddingTop ? `${ tagPaddingTop }px` : '0px',
-                                                right: tagPaddingRight ? `${ tagPaddingRight }px` : '0px',
-                                                bottom: tagPaddingBottom ? `${ tagPaddingBottom }px` : '0px',
-                                                left: tagPaddingLeft ? `${ tagPaddingLeft }px` : '0px',
-                                            } }
-                                            onChange={ ( values ) => setAttributes( {
-                                                tagPaddingTop: parseInt( values.top, 10 ) || 0,
-                                                tagPaddingRight: parseInt( values.right, 10 ) || 0,
-                                                tagPaddingBottom: parseInt( values.bottom, 10 ) || 0,
-                                                tagPaddingLeft: parseInt( values.left, 10 ) || 0,
-                                            } ) }
-                                            units={ [ 'px' ] }
-                                            inputProps={ { min: 0, max: 80 } }
-                                        />
+                                        <BoxControl label={ __( 'Padding', 'axis-folio' ) } values={ { top: tagPaddingTop ? `${ tagPaddingTop }px` : '0px', right: tagPaddingRight ? `${ tagPaddingRight }px` : '0px', bottom: tagPaddingBottom ? `${ tagPaddingBottom }px` : '0px', left: tagPaddingLeft ? `${ tagPaddingLeft }px` : '0px' } } onChange={ ( values ) => setAttributes( { tagPaddingTop: parseInt( values.top, 10 ) || 0, tagPaddingRight: parseInt( values.right, 10 ) || 0, tagPaddingBottom: parseInt( values.bottom, 10 ) || 0, tagPaddingLeft: parseInt( values.left, 10 ) || 0 } ) } units={ [ 'px' ] } inputProps={ { min: 0, max: 80 } } />
                                     </PanelBody>
-
                                     <PanelBody title={ __( 'Type styles', 'axis-folio' ) } initialOpen={ false }>
-                                        <ToggleControl
-                                            label={ __( 'Show icon', 'axis-folio' ) }
-                                            help={ __( 'Display the icon between the line and type text.', 'axis-folio' ) }
-                                            checked={ showIconListIcon }
-                                            onChange={ ( v ) => setAttributes( { showIconListIcon: v } ) }
-                                        />
-                                        <RangeControl
-                                            label={ __( 'Card end to line gap', 'axis-folio' ) }
-                                            value={ iconCardEndGap }
-                                            onChange={ ( v ) => setAttributes( { iconCardEndGap: v } ) }
-                                            min={ 0 }
-                                            max={ 80 }
-                                        />
-                                        <SelectControl
-                                            label={ __( 'font family', 'axis-folio' ) }
-                                            value={ iconListFontFamily }
-                                            options={ fontOptions }
-                                            onChange={ ( v ) => setAttributes( { iconListFontFamily: v } ) }
-                                        />
-                                        <SelectControl
-                                            label={ __( 'font weight', 'axis-folio' ) }
-                                            value={ iconListFontWeight }
-                                            options={ [
-                                                { label: __( 'Light', 'axis-folio' ), value: '300' },
-                                                { label: __( 'Normal', 'axis-folio' ), value: '400' },
-                                                { label: __( 'Medium', 'axis-folio' ), value: '500' },
-                                                { label: __( 'Semi Bold', 'axis-folio' ), value: '600' },
-                                                { label: __( 'Bold', 'axis-folio' ), value: '700' },
-                                            ] }
-                                            onChange={ ( v ) => setAttributes( { iconListFontWeight: v } ) }
-                                        />
-                                        <RangeControl
-                                            label={ __( 'font size', 'axis-folio' ) }
-                                            value={ iconListFontSize }
-                                            onChange={ ( v ) => setAttributes( { iconListFontSize: v } ) }
-                                            min={ 8 }
-                                            max={ 48 }
-                                        />
-                                        <SelectControl
-                                            label={ __( 'text transform', 'axis-folio' ) }
-                                            value={ iconListTextTransform }
-                                            options={ [
-                                                { label: __( 'None', 'axis-folio' ), value: 'none' },
-                                                { label: __( 'Uppercase', 'axis-folio' ), value: 'uppercase' },
-                                                { label: __( 'Capitalize', 'axis-folio' ), value: 'capitalize' },
-                                                { label: __( 'Lowercase', 'axis-folio' ), value: 'lowercase' },
-                                            ] }
-                                            onChange={ ( v ) => setAttributes( { iconListTextTransform: v } ) }
-                                        />
-                                        <BoxControl
-                                            label={ __( 'Padding', 'axis-folio' ) }
-                                            values={ {
-                                                top: iconListPaddingTop ? `${ iconListPaddingTop }px` : '0px',
-                                                right: iconListPaddingRight ? `${ iconListPaddingRight }px` : '0px',
-                                                bottom: iconListPaddingBottom ? `${ iconListPaddingBottom }px` : '0px',
-                                                left: iconListPaddingLeft ? `${ iconListPaddingLeft }px` : '0px',
-                                            } }
-                                            onChange={ ( values ) => setAttributes( {
-                                                iconListPaddingTop: parseInt( values.top, 10 ) || 0,
-                                                iconListPaddingRight: parseInt( values.right, 10 ) || 0,
-                                                iconListPaddingBottom: parseInt( values.bottom, 10 ) || 0,
-                                                iconListPaddingLeft: parseInt( values.left, 10 ) || 0,
-                                            } ) }
-                                            units={ [ 'px' ] }
-                                            inputProps={ { min: 0, max: 80 } }
-                                        />
-                                        { showIconListIcon ? (
-                                            <>
-                                                <RangeControl
-                                                    label={ __( 'Icon to text gap', 'axis-folio' ) }
-                                                    value={ iconTextGap }
-                                                    onChange={ ( v ) => setAttributes( { iconTextGap: v } ) }
-                                                    min={ 0 }
-                                                    max={ 80 }
-                                                />
-                                                <RangeControl
-                                                    label={ __( 'Line to icon gap', 'axis-folio' ) }
-                                                    value={ iconLineGap }
-                                                    onChange={ ( v ) => setAttributes( { iconLineGap: v } ) }
-                                                    min={ 0 }
-                                                    max={ 80 }
-                                                />
-                                            </>
-                                        ) : (
-                                            <RangeControl
-                                                label={ __( 'Line to text gap', 'axis-folio' ) }
-                                                value={ iconLineGap }
-                                                onChange={ ( v ) => setAttributes( { iconLineGap: v } ) }
-                                                min={ 0 }
-                                                max={ 80 }
-                                            />
-                                        ) }
+                                        <ToggleControl label={ __( 'Show icon', 'axis-folio' ) } help={ __( 'Display the icon between the line and type text.', 'axis-folio' ) } checked={ showIconListIcon } onChange={ ( v ) => setAttributes( { showIconListIcon: v } ) } />
+                                        <RangeControl label={ __( 'Card end to line gap', 'axis-folio' ) } value={ iconCardEndGap } onChange={ ( v ) => setAttributes( { iconCardEndGap: v } ) } min={ 0 } max={ 80 } />
+                                        <SelectControl label={ __( 'font family', 'axis-folio' ) } value={ iconListFontFamily } options={ fontOptions } onChange={ ( v ) => setAttributes( { iconListFontFamily: v } ) } />
+                                        <SelectControl label={ __( 'font weight', 'axis-folio' ) } value={ iconListFontWeight } options={ [ { label: __( 'Light', 'axis-folio' ), value: '300' }, { label: __( 'Normal', 'axis-folio' ), value: '400' }, { label: __( 'Medium', 'axis-folio' ), value: '500' }, { label: __( 'Semi Bold', 'axis-folio' ), value: '600' }, { label: __( 'Bold', 'axis-folio' ), value: '700' } ] } onChange={ ( v ) => setAttributes( { iconListFontWeight: v } ) } />
+                                        <RangeControl label={ __( 'font size', 'axis-folio' ) } value={ iconListFontSize } onChange={ ( v ) => setAttributes( { iconListFontSize: v } ) } min={ 8 } max={ 48 } />
+                                        <SelectControl label={ __( 'text transform', 'axis-folio' ) } value={ iconListTextTransform } options={ [ { label: __( 'None', 'axis-folio' ), value: 'none' }, { label: __( 'Uppercase', 'axis-folio' ), value: 'uppercase' }, { label: __( 'Capitalize', 'axis-folio' ), value: 'capitalize' }, { label: __( 'Lowercase', 'axis-folio' ), value: 'lowercase' } ] } onChange={ ( v ) => setAttributes( { iconListTextTransform: v } ) } />
+                                        <BoxControl label={ __( 'Padding', 'axis-folio' ) } values={ { top: iconListPaddingTop ? `${ iconListPaddingTop }px` : '0px', right: iconListPaddingRight ? `${ iconListPaddingRight }px` : '0px', bottom: iconListPaddingBottom ? `${ iconListPaddingBottom }px` : '0px', left: iconListPaddingLeft ? `${ iconListPaddingLeft }px` : '0px' } } onChange={ ( values ) => setAttributes( { iconListPaddingTop: parseInt( values.top, 10 ) || 0, iconListPaddingRight: parseInt( values.right, 10 ) || 0, iconListPaddingBottom: parseInt( values.bottom, 10 ) || 0, iconListPaddingLeft: parseInt( values.left, 10 ) || 0 } ) } units={ [ 'px' ] } inputProps={ { min: 0, max: 80 } } />
+                                        { showIconListIcon ? ( <><RangeControl label={ __( 'Icon to text gap', 'axis-folio' ) } value={ iconTextGap } onChange={ ( v ) => setAttributes( { iconTextGap: v } ) } min={ 0 } max={ 80 } /><RangeControl label={ __( 'Line to icon gap', 'axis-folio' ) } value={ iconLineGap } onChange={ ( v ) => setAttributes( { iconLineGap: v } ) } min={ 0 } max={ 80 } /></> ) : ( <RangeControl label={ __( 'Line to text gap', 'axis-folio' ) } value={ iconLineGap } onChange={ ( v ) => setAttributes( { iconLineGap: v } ) } min={ 0 } max={ 80 } /> ) }
                                     </PanelBody>
-
                                     <PanelBody title={ __( 'image controls', 'axis-folio' ) } initialOpen={ false }>
                                         <ToggleControl label={ __( 'enable image zoom', 'axis-folio' ) } checked={ hasZoom } onChange={ ( v ) => setAttributes( { hasZoom: v } ) } />
                                         <RangeControl label={ __( 'zoom scale', 'axis-folio' ) } value={ zoomScale } onChange={ ( v ) => setAttributes( { zoomScale: v } ) } min={ 1 } max={ 2 } step={ 0.1 } />
                                     </PanelBody>
-
                                     <PanelBody title={ __( 'button styles', 'axis-folio' ) } initialOpen={ false }>
                                         <RangeControl label={ __( 'Button Border Radius', 'axis-folio' ) } value={ btnBorderRadius } onChange={ ( v ) => setAttributes( { btnBorderRadius: v } ) } min={ 0 } max={ 50 } />
                                     </PanelBody>
-
                                     <PanelBody title={ __( 'shadow controls', 'axis-folio' ) } initialOpen={ false }>
                                         <p><strong>{ __( 'Standard State', 'axis-folio' ) }</strong></p>
                                         <RangeControl label={ __( 'Blur', 'axis-folio' ) } value={ shadowBlur } onChange={ ( v ) => setAttributes( { shadowBlur: v } ) } min={ 0 } max={ 50 } />
@@ -491,109 +265,68 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         <RangeControl label={ __( 'Hover Offset X', 'axis-folio' ) } value={ hShadowX } onChange={ ( v ) => setAttributes( { hShadowX: v } ) } min={ -50 } max={ 50 } />
                                         <RangeControl label={ __( 'Hover Offset Y', 'axis-folio' ) } value={ hShadowY } onChange={ ( v ) => setAttributes( { hShadowY: v } ) } min={ -50 } max={ 50 } />
                                     </PanelBody>
-
-                                    <PanelColorSettings
-                                        title={ __( 'Color Palette', 'axis-folio' ) }
-                                        initialOpen={ false }
-                                        colorSettings={ [
-                                            { label: __( 'card background', 'axis-folio' ), value: cardBgColor, onChange: ( v ) => setAttributes( { cardBgColor: v } ) },
-                                            { label: __( 'hover card background', 'axis-folio' ), value: hCardBgColor, onChange: ( v ) => setAttributes( { hCardBgColor: v } ) },
-                                            { label: __( 'shadow color', 'axis-folio' ), value: shadowColor, onChange: ( v ) => setAttributes( { shadowColor: v } ) },
-                                            { label: __( 'hover shadow color', 'axis-folio' ), value: hShadowColor, onChange: ( v ) => setAttributes( { hShadowColor: v } ) },
-                                            { label: __( 'type text color', 'axis-folio' ), value: iconListTextColor, onChange: ( v ) => setAttributes( { iconListTextColor: v } ) },
-                                            { label: __( 'tag background', 'axis-folio' ), value: tagBgColor, onChange: ( v ) => setAttributes( { tagBgColor: v } ) },
-                                            { label: __( 'tag text color', 'axis-folio' ), value: tagTextColor, onChange: ( v ) => setAttributes( { tagTextColor: v } ) },
-                                            { label: __( 'divider color', 'axis-folio' ), value: dividerColor, onChange: ( v ) => setAttributes( { dividerColor: v } ) },
-                                            { label: __( 'button background', 'axis-folio' ), value: btnBgColor, onChange: ( v ) => setAttributes( { btnBgColor: v } ) },
-                                            { label: __( 'button text color', 'axis-folio' ), value: btnTextColor, onChange: ( v ) => setAttributes( { btnTextColor: v } ) },
-                                            { label: __( 'button hover background', 'axis-folio' ), value: btnHovBgColor, onChange: ( v ) => setAttributes( { btnHovBgColor: v } ) },
-                                            { label: __( 'button hover text color', 'axis-folio' ), value: btnHovTextColor, onChange: ( v ) => setAttributes( { btnHovTextColor: v } ) },
-                                        ] }
-                                    />
+                                    <PanelColorSettings title={ __( 'Color Palette', 'axis-folio' ) } initialOpen={ false } colorSettings={ [ { label: __( 'card background', 'axis-folio' ), value: cardBgColor, onChange: ( v ) => setAttributes( { cardBgColor: v } ) }, { label: __( 'hover card background', 'axis-folio' ), value: hCardBgColor, onChange: ( v ) => setAttributes( { hCardBgColor: v } ) }, { label: __( 'shadow color', 'axis-folio' ), value: shadowColor, onChange: ( v ) => setAttributes( { shadowColor: v } ) }, { label: __( 'hover shadow color', 'axis-folio' ), value: hShadowColor, onChange: ( v ) => setAttributes( { hShadowColor: v } ) }, { label: __( 'type text color', 'axis-folio' ), value: iconListTextColor, onChange: ( v ) => setAttributes( { iconListTextColor: v } ) }, { label: __( 'tag background', 'axis-folio' ), value: tagBgColor, onChange: ( v ) => setAttributes( { tagBgColor: v } ) }, { label: __( 'tag text color', 'axis-folio' ), value: tagTextColor, onChange: ( v ) => setAttributes( { tagTextColor: v } ) }, { label: __( 'divider color', 'axis-folio' ), value: dividerColor, onChange: ( v ) => setAttributes( { dividerColor: v } ) }, { label: __( 'button background', 'axis-folio' ), value: btnBgColor, onChange: ( v ) => setAttributes( { btnBgColor: v } ) }, { label: __( 'button text color', 'axis-folio' ), value: btnTextColor, onChange: ( v ) => setAttributes( { btnTextColor: v } ) }, { label: __( 'button hover background', 'axis-folio' ), value: btnHovBgColor, onChange: ( v ) => setAttributes( { btnHovBgColor: v } ) }, { label: __( 'button hover text color', 'axis-folio' ), value: btnHovTextColor, onChange: ( v ) => setAttributes( { btnHovTextColor: v } ) } ] } />
                                 </>
                             ) }
                         </>
                     ) }
                 </TabPanel>
             </InspectorControls>
-
             <div style={ editorStyles.containerLayout }>
                 <div style={ editorStyles.gridContainer }>
                     { safeItems.map( ( item, index ) => {
                         const itemTags = String( item.tags ?? '' );
                         const tagsArray = itemTags.split( ',' ).map( ( t ) => t.trim() ).filter( Boolean );
-                        const previewBgColor = hoveredIndex === index
-                            ? ( hCardBgColor || cardBgColor || editorStyles.previewSection.backgroundColor )
-                            : ( cardBgColor || editorStyles.previewSection.backgroundColor );
+                        const previewBgColor = hoveredIndex === index ? ( hCardBgColor || cardBgColor || editorStyles.previewSection.backgroundColor ) : ( cardBgColor || editorStyles.previewSection.backgroundColor );
                         return (
-                            <div 
-                                key={ index } 
-                                className="item-card-wrapper"
-                                style={ { ...getCardStyle( index ), opacity: draggedIndex === index ? 0.5 : 1 } }
-                                onMouseEnter={ () => setHoveredIndex( index ) }
-                                onMouseLeave={ () => setHoveredIndex( null ) }
-                            >
+                            <div key={ index } className="item-card-wrapper" style={ { ...getCardStyle( index ), opacity: draggedIndex === index ? 0.5 : 1 } } onMouseEnter={ () => setHoveredIndex( index ) } onMouseLeave={ () => setHoveredIndex( null ) }>
                                 <div style={ { ...editorStyles.previewSection, backgroundColor: previewBgColor } }>
                                     <div style={ editorStyles.previewHeading }>{ __( 'PREVIEW', 'axis-folio' ) }</div>
                                     <div style={ { padding: '0 18px 10px', background: 'transparent', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 } }>
-                                        <div
-                                            onMouseDown={ (e) => handleDragHandleMouseDown( e, index ) }
-                                            onMouseEnter={ () => handleMouseEnterCard( index ) }
-                                            style={ { cursor: draggedIndex === null ? 'grab' : draggedIndex === index ? 'grabbing' : 'grab', padding: '4px 8px', display: 'flex', alignItems: 'center' } }
-                                            title="Drag to reorder"
-                                        >
+                                        <div onMouseDown={ (e) => handleDragHandleMouseDown( e, index ) } onMouseEnter={ () => handleMouseEnterCard( index ) } style={ { cursor: draggedIndex === null ? 'grab' : draggedIndex === index ? 'grabbing' : 'grab', padding: '4px 8px', display: 'flex', alignItems: 'center' } } title="Drag to reorder">
                                             <Dashicon icon="menu" size={ 20 } style={ { color: '#666' } } />
                                         </div>
                                         <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
                                     </div>
                                     <MediaUploadCheck>
-                                        <MediaUpload
-                                            onSelect={ ( media ) => updateItem( index, 'url', media.url ) }
-                                            allowedTypes={ [ 'image' ] }
-                                            render={ ( { open } ) => (
-                                                <>
-                                                    <div style={ { ...editorStyles.imageWrapper, backgroundColor: previewBgColor } } onClick={ open }>
-                                                        { item.url 
-                                                            ? <img src={ item.url } style={ editorStyles.image( index ) } alt="" /> 
-                                                            : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> 
-                                                        }
-                                                    </div>
-                                                    <div style={ { marginTop: '12px', textAlign: 'center', background: 'transparent', padding: '0 18px' } }>
-                                                        <Button variant="secondary" onClick={ open }>
-                                                            { item.url ? __( 'Change Image', 'axis-folio' ) : __( 'Upload Image', 'axis-folio' ) }
-                                                        </Button>
-                                                    </div>
-                                                </>
-                                            ) }
-                                        />
+                                        <MediaUpload onSelect={ ( media ) => updateItem( index, 'url', media.url ) } allowedTypes={ [ 'image' ] } render={ ( { open } ) => (
+                                            <>
+                                                <div style={ { ...editorStyles.imageWrapper, backgroundColor: previewBgColor } } onClick={ open }>
+                                                    { item.url ? <img src={ item.url } style={ editorStyles.image( index ) } alt="" /> : <div style={ { padding: '40px', textAlign: 'center' } }><Dashicon icon="format-image" /></div> }
+                                                </div>
+                                                <div style={ { marginTop: '12px', textAlign: 'center', background: 'transparent', padding: '0 18px' } }>
+                                                    <Button variant="secondary" onClick={ open }>{ item.url ? __( 'Change Image', 'axis-folio' ) : __( 'Upload Image', 'axis-folio' ) }</Button>
+                                                </div>
+                                            </>
+                                        ) } />
                                     </MediaUploadCheck>
                                     <div style={ editorStyles.cardContent }>
                                         <div style={ { marginBottom: '8px' } }>
-                                            <div style={ { display: 'flex', flexDirection: 'column', padding: buildPadding( iconListPaddingTop, iconListPaddingRight, iconListPaddingBottom, iconListPaddingLeft, 0 ), marginBottom: '12px' } }>
-                                                <div style={ { display: 'flex', alignItems: 'center', paddingLeft: `${ iconCardEndGap }px`, gap: `${ iconLineGap }px`, color: iconListTextColor || titleColor, opacity: item.iconList || item.iconType ? 1 : 0.5 } }>
-                                                    <span style={ { width: '56px', height: '2px', backgroundColor: dividerColor || '#6b7280', display: 'inline-block', borderRadius: '999px', flexShrink: 0 } }></span>
-                                                    <div style={ { display: 'inline-flex', alignItems: 'center', gap: showIconListIcon ? `${ iconTextGap }px` : 0 } }>
-                                                        { showIconListIcon && (
-                                                            <Dashicon icon={ item.iconType || 'arrow-right-alt2' } size={ 16 } />
-                                                        ) }
-                                                        <span style={ { fontFamily: iconListFontFamily, fontWeight: iconListFontWeight, fontSize: `${ iconListFontSize }px`, textTransform: iconListTextTransform, letterSpacing: '0.1em' } }>{ item.iconList || __( 'Type', 'axis-folio' ) }</span>
+                                            { item.iconList && (
+                                                <div style={ { display: 'flex', flexDirection: 'column', padding: buildPadding( iconListPaddingTop, iconListPaddingRight, iconListPaddingBottom, iconListPaddingLeft, 0 ), marginBottom: '12px' } }>
+                                                    <div style={ { display: 'flex', alignItems: 'center', paddingLeft: `${ iconCardEndGap }px`, gap: `${ iconLineGap }px`, color: iconListTextColor || titleColor, opacity: item.iconList || item.iconType ? 1 : 0.5 } }>
+                                                        <span style={ { width: '56px', height: '2px', backgroundColor: dividerColor || '#6b7280', display: 'inline-block', borderRadius: '999px', flexShrink: 0 } }></span>
+                                                        <div style={ { display: 'inline-flex', alignItems: 'center', gap: showIconListIcon ? `${ iconTextGap }px` : 0 } }>
+                                                            { showIconListIcon && ( <Dashicon icon={ item.iconType || 'arrow-right-alt2' } size={ 16 } /> ) }
+                                                            <span style={ { fontFamily: iconListFontFamily, fontWeight: iconListFontWeight, fontSize: `${ iconListFontSize }px`, textTransform: iconListTextTransform, letterSpacing: '0.1em' } }>{ item.iconList || __( 'Type', 'axis-folio' ) }</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div style={ { fontFamily: titleFontFamily, fontSize: `${ titleFontSize }px`, fontWeight: '700', color: titleColor, marginBottom: '6px', padding: buildPadding( titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft, 0 ) } }>
-                                                { item.title || __( 'Title', 'axis-folio' ) }
-                                            </div>
-                                            <div style={ { fontFamily: descFontFamily, fontSize: `${ descFontSize }px`, color: descColor, marginBottom: '12px', padding: buildPadding( descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft, 0 ) } }>
-                                                { item.description || __( 'Description', 'axis-folio' ) }
-                                            </div>
-                                            { showTagDivider && tagsArray.length > 0 && (
-                                                <div style={ editorStyles.divider }></div>
                                             ) }
+                                            { item.title && (
+                                                <div style={ { fontFamily: titleFontFamily, fontSize: `${ titleFontSize }px`, fontWeight: '700', color: titleColor, marginBottom: '6px', padding: buildPadding( titlePaddingTop, titlePaddingRight, titlePaddingBottom, titlePaddingLeft, 0 ) } }>
+                                                    { item.title }
+                                                </div>
+                                            ) }
+                                            { item.description && (
+                                                <div style={ { fontFamily: descFontFamily, fontSize: `${ descFontSize }px`, color: descColor, marginBottom: '12px', padding: buildPadding( descPaddingTop, descPaddingRight, descPaddingBottom, descPaddingLeft, 0 ) } }>
+                                                    { item.description }
+                                                </div>
+                                            ) }
+                                            { showTagDivider && tagsArray.length > 0 && ( <div style={ editorStyles.divider }></div> ) }
                                             { showTags && tagsArray.length > 0 && (
                                                 <div style={ { display: 'flex', flexWrap: 'wrap', gap: '6px', padding: buildPadding( tagPaddingTop, tagPaddingRight, tagPaddingBottom, tagPaddingLeft, 0 ) } }>
-                                                    { tagsArray.map( ( t, i ) => (
-                                                        <span key={ i } style={ editorStyles.tagItem }>{ t }</span>
-                                                    ) ) }
+                                                    { tagsArray.map( ( t, i ) => ( <span key={ i } style={ editorStyles.tagItem }>{ t }</span> ) ) }
                                                 </div>
                                             ) }
                                         </div>
@@ -604,12 +337,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                     <div style={ { display: 'grid', gap: '16px' } }>
                                         { showIconListIcon && (
                                             <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
-                                                <SelectControl
-                                                    label={ __( 'Icon', 'axis-folio' ) }
-                                                    value={ item.iconType }
-                                                    options={ iconOptions }
-                                                    onChange={ ( v ) => updateItem( index, 'iconType', v ) }
-                                                />
+                                                <SelectControl label={ __( 'Icon', 'axis-folio' ) } value={ item.iconType } options={ iconOptions } onChange={ ( v ) => updateItem( index, 'iconType', v ) } />
                                             </div>
                                         ) }
                                         <div style={ { borderTop: '1px solid #e6e6e6', paddingTop: '16px' } }>
@@ -632,21 +360,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         );
                     } ) }
                 </div>
-                
                 <div style={ { marginTop: '40px', textAlign: 'center', width: '100%' } }>
-                    <Button variant="primary" onClick={ addNewItem } icon="plus">
-                        { __( 'Add Portfolio Item', 'axis-folio' ) }
-                    </Button>
-
+                    <Button variant="primary" onClick={ addNewItem } icon="plus">{ __( 'Add Portfolio Item', 'axis-folio' ) }</Button>
                     { enableLoadMore && (
                         <div style={ { marginTop: '20px', borderTop: '1px dashed #ccc', paddingTop: '20px', width: '100%' } }>
-                            <button 
-                                style={ editorStyles.loadMorePreview }
-                                onMouseEnter={ () => setIsBtnHovered( true ) }
-                                onMouseLeave={ () => setIsBtnHovered( false ) }
-                            >
-                                { loadMoreText || __( 'Load More', 'axis-folio' ) }
-                            </button>
+                            <button style={ editorStyles.loadMorePreview } onMouseEnter={ () => setIsBtnHovered( true ) } onMouseLeave={ () => setIsBtnHovered( false ) }>{ loadMoreText || __( 'Load More', 'axis-folio' ) }</button>
                         </div>
                     ) }
                 </div>
