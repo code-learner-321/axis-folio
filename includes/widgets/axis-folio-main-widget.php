@@ -14,12 +14,25 @@ use Elementor\Utils;
 
 class Axis_Folio_Widget extends Widget_Base
 {
-    public function get_name() { return 'axis-folio-widget'; }
-    public function get_title() { return \esc_html__('Axis Folio Widget', 'axis-folio'); }
-    public function get_icon() { return 'eicon-inner-section'; }
-    public function get_categories() { return ['general']; }
+    public function get_name()
+    {
+        return 'axis-folio-widget';
+    }
+    public function get_title()
+    {
+        return \esc_html__('Axis Folio Widget', 'axis-folio');
+    }
+    public function get_icon()
+    {
+        return 'eicon-inner-section';
+    }
+    public function get_categories()
+    {
+        return ['general'];
+    }
 
-    public function get_style_depends() {
+    public function get_style_depends()
+    {
         return [
             'axis-folio-style',
             'elementor-icons-fa-solid',
@@ -28,11 +41,13 @@ class Axis_Folio_Widget extends Widget_Base
         ];
     }
 
-    public function get_script_depends() {
+    public function get_script_depends()
+    {
         return ['jquery', 'axis-folio-script'];
     }
 
-    protected function register_controls() {
+    protected function register_controls()
+    {
         // --- CONTENT SECTION ---
         $this->start_controls_section('content_section', [
             'label' => \esc_html__('Portfolio Items', 'axis-folio'),
@@ -40,16 +55,16 @@ class Axis_Folio_Widget extends Widget_Base
         ]);
 
         $repeater = new Repeater();
-        
+
         $repeater->add_control('list_title', [
-            'label' => \esc_html__('Title', 'axis-folio'), 
-            'type' => Controls_Manager::TEXT, 
+            'label' => \esc_html__('Title', 'axis-folio'),
+            'type' => Controls_Manager::TEXT,
             'default' => \esc_html__('Project Title', 'axis-folio')
         ]);
 
         $repeater->add_control('list_image', [
-            'label' => \esc_html__('Image', 'axis-folio'), 
-            'type' => Controls_Manager::MEDIA, 
+            'label' => \esc_html__('Image', 'axis-folio'),
+            'type' => Controls_Manager::MEDIA,
             'default' => ['url' => Utils::get_placeholder_image_src()]
         ]);
 
@@ -69,7 +84,6 @@ class Axis_Folio_Widget extends Widget_Base
             'type' => Controls_Manager::TEXT,
             'default' => \esc_html__('Development', 'axis-folio'),
         ]);
-
         // Prefix Line Width control inside repeater
         $repeater->add_control('title_line_width', [
             'label' => \esc_html__('Prefix Line Width', 'axis-folio'),
@@ -114,7 +128,7 @@ class Axis_Folio_Widget extends Widget_Base
         ]);
 
         $repeater->add_control('list_description', [
-            'label' => \esc_html__('Description', 'axis-folio'), 
+            'label' => \esc_html__('Description', 'axis-folio'),
             'type' => Controls_Manager::TEXTAREA
         ]);
 
@@ -129,7 +143,7 @@ class Axis_Folio_Widget extends Widget_Base
         ]);
 
         $repeater->add_control('list_tags', [
-            'label' => \esc_html__('Tags (Comma Separated)', 'axis-folio'), 
+            'label' => \esc_html__('Tags (Comma Separated)', 'axis-folio'),
             'type' => Controls_Manager::TEXT
         ]);
 
@@ -145,7 +159,7 @@ class Axis_Folio_Widget extends Widget_Base
             'type' => Controls_Manager::NUMBER,
             'default' => 4,
         ]);
-        
+
         $this->add_control('load_more_text', [
             'label' => \esc_html__('Button Text', 'axis-folio'),
             'type' => Controls_Manager::TEXT,
@@ -155,23 +169,23 @@ class Axis_Folio_Widget extends Widget_Base
 
         // --- STYLE: GRID & CARD ---
         $this->start_controls_section('style_grid', [
-            'label' => \esc_html__('Grid & Card', 'axis-folio'), 
+            'label' => \esc_html__('Grid & Card', 'axis-folio'),
             'tab' => Controls_Manager::TAB_STYLE
         ]);
-        
+
         $this->add_responsive_control('columns', [
             'label' => \esc_html__('Columns', 'axis-folio'),
             'type' => Controls_Manager::SELECT,
             'default' => '2',
-            'options' => ['1'=>'1', '2'=>'2', '3'=>'3', '4'=>'4'],
+            'options' => ['1' => '1', '2' => '2', '3' => '3', '4' => '4'],
             'selectors' => [
                 '{{WRAPPER}} .axis-masonry-container' => 'grid-template-columns: repeat({{VALUE}}, 1fr);',
             ],
         ]);
 
         $this->add_control('grid_gap', [
-            'label' => \esc_html__('Grid Gap', 'axis-folio'), 
-            'type' => Controls_Manager::SLIDER, 
+            'label' => \esc_html__('Grid Gap', 'axis-folio'),
+            'type' => Controls_Manager::SLIDER,
             'default' => ['size' => 20],
             'selectors' => [
                 '{{WRAPPER}} .axis-masonry-container' => 'grid-gap: {{SIZE}}{{UNIT}};',
@@ -179,8 +193,8 @@ class Axis_Folio_Widget extends Widget_Base
         ]);
 
         $this->add_control('card_bg', [
-            'label' => \esc_html__('Card Background', 'axis-folio'), 
-            'type' => Controls_Manager::COLOR, 
+            'label' => \esc_html__('Card Background', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
             'default' => '#ffffff',
             'selectors' => [
                 '{{WRAPPER}} .axis-ms-card' => 'background: {{VALUE}};',
@@ -221,7 +235,7 @@ class Axis_Folio_Widget extends Widget_Base
 
         // --- STYLE: HOVER EFFECTS ---
         $this->start_controls_section('style_hover', [
-            'label' => \esc_html__('Hover Effects', 'axis-folio'), 
+            'label' => \esc_html__('Hover Effects', 'axis-folio'),
             'tab' => Controls_Manager::TAB_STYLE
         ]);
         $this->add_control('hover_shadow_color', [
@@ -251,14 +265,24 @@ class Axis_Folio_Widget extends Widget_Base
             'label' => \esc_html__('Text Color', 'axis-folio'),
             'type' => Controls_Manager::COLOR,
             'default' => '#333333',
-            'selectors' => ['{{WRAPPER}} .axis-title-type-text' => 'color: {{VALUE}};'],
+            'selectors' => ['{{WRAPPER}} .axis-folio-type-text-typo' => 'color: {{VALUE}};'],
         ]);
-
-        $this->add_group_control(Group_Control_Typography::get_type(), [
-            'name' => 'type_text_typography',
-            'selector' => '{{WRAPPER}} .axis-title-type-text',
-        ]);
-
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name'     => 'type_text_typography', // This creates the control group
+                'label'    => \esc_html__('Typography', 'axis-folio'),
+                'selector' => '{{WRAPPER}} .axis-folio-type-text-typo',
+                'fields'   => [
+                    'typography' => [
+                        'default' => 'yes',
+                    ],
+                    'text_transform' => [
+                        'default' => 'uppercase', // Set default to uppercase
+                    ],
+                ],
+            ]
+        );
         $this->add_responsive_control('icon_text_gap', [
             'label' => \esc_html__('Gap Between Icon and Text', 'axis-folio'),
             'type' => Controls_Manager::SLIDER,
@@ -374,10 +398,10 @@ class Axis_Folio_Widget extends Widget_Base
 
         // --- STYLE: TITLE & TAGS ---
         $this->start_controls_section('style_title_tags', [
-            'label' => \esc_html__('Title & Tags', 'axis-folio'), 
+            'label' => \esc_html__('Title & Tags', 'axis-folio'),
             'tab' => Controls_Manager::TAB_STYLE
         ]);
-        
+
         $this->add_control('title_color', [
             'label' => \esc_html__('Title Color', 'axis-folio'),
             'type' => Controls_Manager::COLOR,
@@ -386,10 +410,10 @@ class Axis_Folio_Widget extends Widget_Base
         ]);
 
         $this->add_group_control(Group_Control_Typography::get_type(), [
-            'name' => 'title_typography', 
+            'name' => 'title_typography',
             'selector' => '{{WRAPPER}} .axis-ms-content h3'
         ]);
-        
+
         $this->add_control('tag_heading', [
             'label' => \esc_html__('Tag Styling', 'axis-folio'),
             'type' => Controls_Manager::HEADING,
@@ -397,16 +421,16 @@ class Axis_Folio_Widget extends Widget_Base
         ]);
 
         $this->add_control('tag_color', [
-            'label' => \esc_html__('Tag Color', 'axis-folio'), 
-            'type' => Controls_Manager::COLOR, 
-            'default' => '#61ce70', 
+            'label' => \esc_html__('Tag Color', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#61ce70',
             'selectors' => ['{{WRAPPER}} .axis-ms-tag' => 'color: {{VALUE}};']
         ]);
-        
+
         $this->add_control('tag_bg', [
-            'label' => \esc_html__('Tag Background', 'axis-folio'), 
-            'type' => Controls_Manager::COLOR, 
-            'default' => '#61ce7015', 
+            'label' => \esc_html__('Tag Background', 'axis-folio'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#61ce7015',
             'selectors' => ['{{WRAPPER}} .axis-ms-tag' => 'background-color: {{VALUE}};']
         ]);
 
@@ -419,7 +443,7 @@ class Axis_Folio_Widget extends Widget_Base
         ]);
 
         $this->add_group_control(Group_Control_Typography::get_type(), [
-            'name' => 'tag_typography', 
+            'name' => 'tag_typography',
             'selector' => '{{WRAPPER}} .axis-ms-tag'
         ]);
         $this->end_controls_section();
@@ -489,135 +513,148 @@ class Axis_Folio_Widget extends Widget_Base
         $this->end_controls_section();
     }
 
-    protected function render() {
+    protected function render()
+    {
         $settings = $this->get_settings_for_display();
         $id = $this->get_id();
         $items = $settings['portfolio_list'];
         $limit = intval($settings['items_to_show'] ?: 4);
-        
-        if ( empty( $items ) ) {
+
+        if (empty($items)) {
             return;
         }
-        ?>
+?>
 
         <div id="axis-wrapper-<?php echo esc_attr($id); ?>" class="axis-masonry-wrapper">
             <div class="axis-masonry-container" id="axis-grid-<?php echo esc_attr($id); ?>" data-limit="<?php echo esc_attr($limit); ?>">
-                <?php foreach ($items as $index => $item) : 
+                <?php foreach ($items as $index => $item) :
                     $visible = ($index < $limit) ? 'is-visible' : '';
                     $img_id = !empty($item['list_image']['id']) ? $item['list_image']['id'] : false;
                     $img_alt = $img_id ? get_post_meta($img_id, '_wp_attachment_image_alt', true) : '';
                     if (empty($img_alt)) $img_alt = $item['list_title'];
 
                     $link_key = 'link_' . $index;
-                    if ( ! empty( $item['list_url']['url'] ) ) {
-                        $this->add_link_attributes( $link_key, $item['list_url'] );
+                    if (! empty($item['list_url']['url'])) {
+                        $this->add_link_attributes($link_key, $item['list_url']);
                     }
+
+                    $item_class = 'elementor-repeater-item-' . $item['_id'];
+                    // NEW: Add this to register the repeater item so Elementor injects the CSS
+                    $this->add_render_attribute($item_class, 'class', $item_class);
 
                     $has_title = ! empty($item['list_title']);
                     $has_desc  = ! empty($item['list_description']);
                     $has_tags  = ! empty($item['list_tags']);
                     $has_type  = ! empty($item['list_type_text']);
-                    
+
                     // Evaluate middle icon switcher state inside specific item loop data
-                    $show_icon_element = ( !isset($item['show_title_icon']) || $item['show_title_icon'] === 'yes' );
-                    
+                    $show_icon_element = (!isset($item['show_title_icon']) || $item['show_title_icon'] === 'yes');
+
                     $icon_value = '';
-                    if ( $show_icon_element && ! empty( $item['title_icon']['value'] ) ) {
-                        if ( is_array( $item['title_icon']['value'] ) && isset( $item['title_icon']['value']['id'] ) ) {
+                    if ($show_icon_element && ! empty($item['title_icon']['value'])) {
+                        if (is_array($item['title_icon']['value']) && isset($item['title_icon']['value']['id'])) {
                             $icon_value = $item['title_icon']['value']['id'];
-                        } elseif ( is_string( $item['title_icon']['value'] ) ) {
+                        } elseif (is_string($item['title_icon']['value'])) {
                             $icon_value = $item['title_icon']['value'];
                         }
                     }
 
-                    $has_icon  = ! empty( $icon_value );
+                    $has_icon  = ! empty($icon_value);
                     $line_size = isset($item['title_line_width']['size']) ? $item['title_line_width']['size'] : 40;
                     $line_unit = isset($item['title_line_width']['unit']) ? $item['title_line_width']['unit'] : 'px';
                     $accent_color = !empty($item['title_accent_color']) ? $item['title_accent_color'] : '#333333';
-                    
+
                     // Evaluate structural item separator switcher toggle state directly from the repeater loop field
-                    $show_item_line = ( !isset($item['show_item_separator']) || $item['show_item_separator'] === 'yes' );
-                    
-                    $has_any_text = ( $has_title || $has_desc || $has_tags || $has_type || $has_icon || $line_size > 0 );
+                    $show_item_line = (!isset($item['show_item_separator']) || $item['show_item_separator'] === 'yes');
+
+                    //  $has_any_text = ( $has_title || $has_desc || $has_tags || $has_type || $has_icon || $line_size > 0 );
+                    // $has_any_text = ( $has_title || $has_desc || $has_tags || $has_type > 0 );
                 ?>
                     <div class="axis-ms-item <?php echo esc_attr($visible); ?>">
                         <div class="axis-ms-card">
-                            <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
-                                <a <?php echo $this->get_render_attribute_string( $link_key ); ?>>
-                            <?php endif; ?>
+                            <?php if (! empty($item['list_url']['url'])) : ?>
+                                <a <?php echo $this->get_render_attribute_string($link_key); ?>>
+                                <?php endif; ?>
 
-                            <?php if (!empty($item['list_image']['url'])) : ?>
-                                <div class="axis-img-wrapper">
-                                    <img src="<?php echo esc_url($item['list_image']['url']); ?>" alt="<?php echo esc_attr($img_alt); ?>" class="ms-img">
-                                </div>
-                            <?php endif; ?>
-                            
-                            <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
+                                <?php if (!empty($item['list_image']['url'])) : ?>
+                                    <div class="axis-img-wrapper">
+                                        <img src="<?php echo esc_url($item['list_image']['url']); ?>" alt="<?php echo esc_attr($img_alt); ?>" class="ms-img">
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (! empty($item['list_url']['url'])) : ?>
                                 </a>
                             <?php endif; ?>
 
-                            <?php if ( $has_any_text ) : ?>
-                            <div class="axis-ms-content">
-                                
-                                <?php if ( $has_type || $has_icon || $line_size > 0 ) : ?>
-                                <div class="axis-meta-row" style="display: flex; align-items: center; flex-wrap: wrap;">
-                                    <?php if ( $line_size > 0 ) : ?>
-                                        <span class="axis-title-prefix-line" style="display: inline-block; width: <?php echo esc_attr($line_size . $line_unit); ?>; height: 2px; background-color: <?php echo esc_attr($accent_color); ?>; flex-shrink: 0;"></span>
+                            <?php if ($has_title || $has_desc || $has_tags || $has_type > 0) { ?>
+                                <div class="axis-ms-content">
+
+                                    <?php if ($has_type > 0) { ?>
+                                        <div class="axis-meta-row" style="display: flex; align-items: center; flex-wrap: wrap;">
+                                            <?php if ($line_size > 0) : ?>
+                                                <span class="axis-title-prefix-line" style="display: inline-block; width: <?php echo esc_attr($line_size . $line_unit); ?>; height: 2px; background-color: <?php echo esc_attr($accent_color); ?>; flex-shrink: 0;"></span>
+                                            <?php endif; ?>
+
+                                            <?php if ($has_icon) : ?>
+                                                <span class="axis-title-icon" style="color: <?php echo esc_attr($accent_color); ?>; display: inline-flex; align-items: center;">
+                                                    <?php
+                                                    \Elementor\Icons_Manager::render_icon($item['title_icon'], ['aria-hidden' => 'true']);
+
+                                                    if (is_string($icon_value) && ! empty($icon_value)) {
+                                                        echo '<i class="' . esc_attr($icon_value) . '" aria-hidden="true" style="font-style: normal; font-variant: normal; text-rendering: auto; -webkit-font-smoothing: antialiased;"></i>';
+                                                    }
+                                                    ?>
+                                                </span>
+                                            <?php endif; ?>
+
+                                            <?php if ($has_type) : ?>
+                                                <!-- Change the div to use the render attribute -->
+                                                <div <?php echo $this->get_render_attribute_string($item_class); ?>>
+                                                    <span class="axis-folio-type-text-typo"><?php echo esc_html($item['list_type_text']); ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php } else {
+                                        print "";
+                                    } ?>
+
+                                    <?php if ($has_title) : ?>
+                                        <h3>
+                                            <?php if (! empty($item['list_url']['url'])) : ?>
+                                                <a <?php echo $this->get_render_attribute_string($link_key); ?> style="color: inherit; text-decoration: none;">
+                                                <?php endif; ?>
+                                                <?php echo esc_html($item['list_title']); ?>
+                                                <?php if (! empty($item['list_url']['url'])) : ?>
+                                                </a>
+                                            <?php endif; ?>
+                                        </h3>
                                     <?php endif; ?>
 
-                                    <?php if ( $has_icon ) : ?>
-                                        <span class="axis-title-icon" style="color: <?php echo esc_attr($accent_color); ?>; display: inline-flex; align-items: center;">
-                                            <?php 
-                                            \Elementor\Icons_Manager::render_icon( $item['title_icon'], [ 'aria-hidden' => 'true' ] ); 
-                                            
-                                            if ( is_string( $icon_value ) && ! empty( $icon_value ) ) {
-                                                echo '<i class="' . esc_attr( $icon_value ) . '" aria-hidden="true" style="font-style: normal; font-variant: normal; text-rendering: auto; -webkit-font-smoothing: antialiased;"></i>';
+                                    <?php if ($has_desc) : ?>
+                                        <p class="axis-ms-description"><?php echo esc_html($item['list_description']); ?></p>
+                                    <?php endif; ?>
+
+                                    <?php if ($show_item_line) : ?>
+                                        <hr class="axis-ms-divider">
+                                    <?php endif; ?>
+
+                                    <?php if ($has_tags) : ?>
+                                        <div class="axis-ms-tags-container">
+                                            <?php
+                                            $tags = explode(',', $item['list_tags']);
+                                            foreach ($tags as $tag) {
+                                                $trimmed = trim($tag);
+                                                if (!empty($trimmed)) {
+                                                    echo '<span class="axis-ms-tag">' . esc_html($trimmed) . '</span>';
+                                                }
                                             }
                                             ?>
-                                        </span>
-                                    <?php endif; ?>
-
-                                    <?php if ( $has_type ) : ?>
-                                        <span class="axis-title-type-text" style="font-weight: 500; text-transform: uppercase;"><?php echo esc_html($item['list_type_text']); ?></span>
+                                        </div>
                                     <?php endif; ?>
                                 </div>
-                                <?php endif; ?>
-
-                                <?php if ( $has_title ) : ?>
-                                <h3>
-                                    <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
-                                        <a <?php echo $this->get_render_attribute_string( $link_key ); ?> style="color: inherit; text-decoration: none;">
-                                    <?php endif; ?>
-                                    <?php echo esc_html($item['list_title']); ?>
-                                    <?php if ( ! empty( $item['list_url']['url'] ) ) : ?>
-                                        </a>
-                                    <?php endif; ?>
-                                </h3>
-                                <?php endif; ?>
-                                
-                                <?php if ( $has_desc ) : ?>
-                                    <p class="axis-ms-description"><?php echo esc_html($item['list_description']); ?></p>
-                                <?php endif; ?>
-                                
-                                <?php if ( $show_item_line ) : ?>
-                                    <hr class="axis-ms-divider">
-                                <?php endif; ?>
-
-                                <?php if ( $has_tags ) : ?>
-                                <div class="axis-ms-tags-container">
-                                    <?php 
-                                    $tags = explode(',', $item['list_tags']);
-                                    foreach ($tags as $tag) {
-                                        $trimmed = trim($tag);
-                                        if (!empty($trimmed)) {
-                                            echo '<span class="axis-ms-tag">' . esc_html($trimmed) . '</span>';
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                                <?php endif; ?>
-                            </div>
-                            <?php endif; ?>
+                            <?php } else {
+                                print "";
+                            } ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -631,6 +668,6 @@ class Axis_Folio_Widget extends Widget_Base
                 </div>
             <?php endif; ?>
         </div>
-        <?php
+<?php
     }
 }
