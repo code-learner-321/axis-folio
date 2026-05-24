@@ -59,7 +59,7 @@ class Axis_Folio_Widget extends Widget_Base
         $repeater->add_control('list_title', [
             'label' => \esc_html__('Title', 'axis-folio'),
             'type' => Controls_Manager::TEXT,
-            'default' => \esc_html__('Project Title', 'axis-folio')
+            'default' => \esc_html__('', 'axis-folio')
         ]);
 
         $repeater->add_control('list_image', [
@@ -82,7 +82,7 @@ class Axis_Folio_Widget extends Widget_Base
         $repeater->add_control('list_type_text', [
             'label' => \esc_html__('Type Text', 'axis-folio'),
             'type' => Controls_Manager::TEXT,
-            'default' => \esc_html__('Development', 'axis-folio'),
+            'default' => \esc_html__('', 'axis-folio'),
         ]);
         // Prefix Line Width control inside repeater
         $repeater->add_control('title_line_width', [
@@ -273,14 +273,6 @@ class Axis_Folio_Widget extends Widget_Base
                 'name'     => 'type_text_typography', // This creates the control group
                 'label'    => \esc_html__('Typography', 'axis-folio'),
                 'selector' => '{{WRAPPER}} .axis-folio-type-text-typo',
-                'fields'   => [
-                    'typography' => [
-                        'default' => 'yes',
-                    ],
-                    'text_transform' => [
-                        'default' => 'uppercase', // Set default to uppercase
-                    ],
-                ],
             ]
         );
         $this->add_responsive_control('icon_text_gap', [
@@ -538,10 +530,6 @@ class Axis_Folio_Widget extends Widget_Base
                         $this->add_link_attributes($link_key, $item['list_url']);
                     }
 
-                    $item_class = 'elementor-repeater-item-' . $item['_id'];
-                    // NEW: Add this to register the repeater item so Elementor injects the CSS
-                    $this->add_render_attribute($item_class, 'class', $item_class);
-
                     $has_title = ! empty($item['list_title']);
                     $has_desc  = ! empty($item['list_description']);
                     $has_tags  = ! empty($item['list_tags']);
@@ -566,9 +554,7 @@ class Axis_Folio_Widget extends Widget_Base
 
                     // Evaluate structural item separator switcher toggle state directly from the repeater loop field
                     $show_item_line = (!isset($item['show_item_separator']) || $item['show_item_separator'] === 'yes');
-
-                    //  $has_any_text = ( $has_title || $has_desc || $has_tags || $has_type || $has_icon || $line_size > 0 );
-                    // $has_any_text = ( $has_title || $has_desc || $has_tags || $has_type > 0 );
+                    
                 ?>
                     <div class="axis-ms-item <?php echo esc_attr($visible); ?>">
                         <div class="axis-ms-card">
@@ -608,10 +594,7 @@ class Axis_Folio_Widget extends Widget_Base
                                             <?php endif; ?>
 
                                             <?php if ($has_type) : ?>
-                                                <!-- Change the div to use the render attribute -->
-                                                <div <?php echo $this->get_render_attribute_string($item_class); ?>>
-                                                    <span class="axis-folio-type-text-typo"><?php echo esc_html($item['list_type_text']); ?></span>
-                                                </div>
+                                                <span class="axis-folio-type-text-typo"><?php echo esc_html($item['list_type_text']); ?></span>
                                             <?php endif; ?>
                                         </div>
                                     <?php } else {
