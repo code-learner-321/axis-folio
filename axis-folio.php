@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Axis Folio
- * Description:       Native Masonry Portfolio Block with dynamic gaps, zoom, and advanced shadow controls.
+ * Description:       Axis Folio is a lightweight, high-performance plugin offering responsive masonry layouts for Gutenberg and Elementor users.
  * Version:           2.0.0
  * Author:            Najubudeen
  */
