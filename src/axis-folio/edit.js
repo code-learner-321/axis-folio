@@ -17,6 +17,7 @@ import {
     SelectControl,
     TabPanel,
     BoxControl,
+    IconButton,
 } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 
@@ -181,7 +182,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         image: ( index ) => ( { width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.35s ease-in-out', transform: ( hasZoom && hoveredIndex === index ) ? `scale(${zoomScale})` : 'scale(1)' } ),
         tagItem: { padding: '6px 10px', borderRadius: typeof tagBorderRadius === 'number' ? `${tagBorderRadius}px` : '999px', backgroundColor: tagBgColor || '#f1f1f1', color: tagTextColor || '#6b6b6b', fontSize: `${tagFontSize}px`, fontFamily: tagFontFamily, display: 'inline-block', marginRight: '8px', marginBottom: '8px', boxShadow: 'none' },
         sectionDivider: { borderTop: '1px solid #e6e6e6', margin: '20px 0', width: '100%' },
-        previewSection: { backgroundColor: '#f9fbfd', padding: '18px 0 12px', borderRadius: '12px', border: '1px solid #dde7ef', marginBottom: '18px', boxShadow: '0 6px 20px rgba(30,40,50,0.06)' },
+        previewSection: { position: 'relative', backgroundColor: '#f9fbfd', padding: '18px 0 12px', borderRadius: '12px', border: '1px solid #dde7ef', marginBottom: '18px', boxShadow: '0 6px 20px rgba(30,40,50,0.06)' },
         previewHeading: { fontSize: '14px', fontWeight: '700', margin: '0 0 16px', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#39444d', padding: '0 18px' },
         cardContent: { backgroundColor: 'transparent', padding: '18px', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', boxSizing: 'border-box' },
         editSection: { backgroundColor: '#ffffff', padding: '16px', borderRadius: '12px', border: '1px solid #e6e6e6' },
@@ -286,7 +287,31 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                         <div onMouseDown={ (e) => handleDragHandleMouseDown( e, index ) } onMouseEnter={ () => handleMouseEnterCard( index ) } style={ { cursor: draggedIndex === null ? 'grab' : draggedIndex === index ? 'grabbing' : 'grab', padding: '4px 8px', display: 'flex', alignItems: 'center' } } title="Drag to reorder">
                                             <Dashicon icon="menu" size={ 20 } style={ { color: '#666' } } />
                                         </div>
-                                        <Button isDestructive onClick={ () => removeItem( index ) } icon="trash" />
+                                        <div style={ { position: 'absolute', top: '12px', right: '12px', zIndex: 20 } }>
+                                            <button
+                                                type="button"
+                                                onClick={ () => removeItem( index ) }
+                                                aria-label={ __( 'Delete item', 'axis-folio' ) }
+                                                style={ {
+                                                    padding: '6px',
+                                                    borderRadius: '0',
+                                                    backgroundColor: 'transparent',
+                                                    border: 'none',
+                                                    boxShadow: 'none',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    cursor: 'pointer',
+                                                } }
+                                            >
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={ { display: 'block' } }>
+                                                    <path d="M3 6H5H21" stroke="#d32f2f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M8 6V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V6M19 6V20C19 20.5523 18.5523 21 18 21H6C5.44772 21 5 20.5523 5 20V6H19Z" stroke="#d32f2f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M10 11V17" stroke="#d32f2f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M14 11V17" stroke="#d32f2f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                     <MediaUploadCheck>
                                         <MediaUpload onSelect={ ( media ) => updateItem( index, 'url', media.url ) } allowedTypes={ [ 'image' ] } render={ ( { open } ) => (
